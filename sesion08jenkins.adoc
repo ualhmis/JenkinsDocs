@@ -122,7 +122,7 @@ Para comenzar a trabajar en esta sesión, será necesario haber realizado las ac
 
 == Instalación de plugins adicionales
 
-Vamos a instalar varios plugins adicionales en Jenkins, si aun no están instalados:  Github integration, Maven Integration, Cobertura,Jacoco (comprobar antes si no están instalados ya), Greenballs, Code Coverage ApiJavaDoc, Warnings Next Generation, Embeddable Build Status Plugin, xUnit, etc.
+Vamos a instalar varios plugins adicionales en Jenkins, si aun no están instalados:  Github integration, Maven Integration, Cobertura,Jacoco (comprobar antes si no están instalados ya), Greenballs, Code Coverage Api, JavaDoc, Warnings Next Generation, Embeddable Build Status Plugin, xUnit, etc.
 
 Haz clic en __Manage Jenkins__ > __Manage Plugins__. En la pestaña __Available__ busca __Github integration__, seleccionaló y pulsa en __Download now and install after restart__.
 
@@ -267,11 +267,89 @@ image::new-connect-four-build-results.png[role="thumb", align="center"]
 
 == Creación de un Proyecto Maven
 
+. Crea un nuevo proyecto Maven.
+
+.Nuevo proyecto Maven: sesion07
+image::new-maven.png[role="thumb", align="center"]
+
+[start=2]
+. Indica la URL del proyecto en Github
+
+.URL del proyecto en Github
+image::new-maven-github-url.png[role="thumb", align="center"]
+
+[start=3]
+. Selecciona Git como control de código fuente. Indica la URL del repositorio. 
+
+.URL del repositorio en Github
+image::new-maven-github-repo.png[role="thumb", align="center"]
+
+[WARNING]
+====
+En caso de que sea un repositorio privado tendrás que proporcionar unas *credenciales*. Aunque *no es recomendable*, puedes introducir tus credenciales usuario/contraseña de Github. Sin embargo, es mejor *usar pareja de claves SSH*, aunque es igual de _mala práctica_ meter tu clave privada personal en Jenkins. Por ello, la _buena práctica_ consiste en *crear una nueva pareja de claves* SSH exclusiva para que Jenkins pueda leer el repositorio privado, añadir la *clave pública* al repositorio en GitHub (exclusivamente al repositorio concreto, no a nuestro usuario de GitHub), y por último añadir la *clave privada* como credencial en Jenkins para que pueda leer ese repositorio privado de GitHub.
+====
+
+[start=4]
+. En la sección de disparadores de la construcción (build trigers) marca la opción de hook con Github: 
+
+.Build con Github hook
+image::new-maven-github-hook.png[role="thumb", align="center"]
+
+[WARNING]
+====
+Recuerda configurar también el _webhook_ en el repo en GitHub (se hizo ya en la sesión 05).
+====
+
+[start=5]
+. En la sección de _build_, añade la ruta correcta al archivo `pom.xml` y por último añade los goals: `clean pagkage`
 
 
+.Build con Maven
+image::new-maven-build-goals.png[role="thumb", align="center"]
 
-== Creacion de un Proyecto Pipeline
+[start=6]
+. Guarda los cambios
 
+. *Construir ahora*. 
+Por consola se visualiza el resultado de la ejecución de maven.
+
+En los proyectos Maven, no hace falta configurar la publicación de los test de JUnit, se hace de forma predeterminada a partir de la segunda construcción. 
+
+.Resultados de la construcción
+image::new-maven-build-results.png[role="thumb", align="center"]
+
+[start=8]
+. Añade los *resultados de la cobertura* obtenidos con *JaCoCO*: entra de nuevo en la configuración del proyecto, en _post-build actions_ añade una acción a ejecutar después y selecciona _Record JaCoCo coverage report_
+
+.Añadir el informe de cobertura con JaCoCO
+image::maven-postbuild-jacoco.png[role="thumb", align="center"]
+
+[start=9]
+. Configura la ruta correcta a los fuentes: `**/src/`
+
+.Configuración de JaCoCo
+image::maven-postbuild-jacoco-config.png[role="thumb", align="center"]
+
+[start=10]
+. Guarda los cambios y construye el proyecto. Al actualizar el proyecto verás la gráfica de Cobertura. Si ejecutas un par de builds la gráfica muestra la linea de evolución. 
+
+.Añadir el informe de cobertura con JaCoCo
+image::maven-postbuild-jacoco-grafica.png[role="thumb", align="center"]
+
+Y si haces clic en la gráfica, verás el informe detallado.
+
+.Detalle de cobertura con JaCoCo
+image::maven-postbuild-jacoco-details.png[role="thumb", align="center"]
+
+
+== Creación de un Proyecto Pipeline
+
+.Por completar
+****
+De aquí en adelante está por completar. En breve lo actualizaré.
+
+Gracias por vuestra paciencia.
+****
 
 
 

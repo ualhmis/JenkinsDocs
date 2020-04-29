@@ -456,7 +456,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#_tipos_de_proyectos_en_jenkins">4. Tipos de proyectos en Jenkins</a></li>
 <li><a href="#_creación_de_un_proyecto_con_ant">5. Creación de un Proyecto con Ant</a></li>
 <li><a href="#_creación_de_un_proyecto_maven">6. Creación de un Proyecto Maven</a></li>
-<li><a href="#_creacion_de_un_proyecto_pipeline">7. Creacion de un Proyecto Pipeline</a></li>
+<li><a href="#_creación_de_un_proyecto_pipeline">7. Creación de un Proyecto Pipeline</a></li>
 <li><a href="#_ejemplo_1_aplicación_web_java">8. Ejemplo 1: Aplicación web Java.</a>
 <ul class="sectlevel2">
 <li><a href="#_creación_de_proyecto_jenkins_con_pipelines">8.1. Creación de proyecto Jenkins con pipelines</a></li>
@@ -630,7 +630,7 @@ La entrega será mediante el envío de un informe y el acceso al profesor a los 
 <h2 id="_instalación_de_plugins_adicionales">3. Instalación de plugins adicionales</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>Vamos a instalar varios plugins adicionales en Jenkins, si aun no están instalados:  Github integration, Maven Integration, Cobertura,Jacoco (comprobar antes si no están instalados ya), Greenballs, Code Coverage ApiJavaDoc, Warnings Next Generation, Embeddable Build Status Plugin, xUnit, etc.</p>
+<p>Vamos a instalar varios plugins adicionales en Jenkins, si aun no están instalados:  Github integration, Maven Integration, Cobertura,Jacoco (comprobar antes si no están instalados ya), Greenballs, Code Coverage Api, JavaDoc, Warnings Next Generation, Embeddable Build Status Plugin, xUnit, etc.</p>
 </div>
 <div class="paragraph">
 <p>Haz clic en <em>Manage Jenkins</em> &gt; <em>Manage Plugins</em>. En la pestaña <em>Available</em> busca <em>Github integration</em>, seleccionaló y pulsa en <em>Download now and install after restart</em>.</p>
@@ -916,13 +916,183 @@ Para ver una gráfica de resultados de los Test debemos ejecutar al menos 2 cons
 <div class="sect1">
 <h2 id="_creación_de_un_proyecto_maven">6. Creación de un Proyecto Maven</h2>
 <div class="sectionbody">
-
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Crea un nuevo proyecto Maven.</p>
+</li>
+</ol>
+</div>
+<div class="imageblock text-center thumb">
+<div class="content">
+<img src="images/new-maven.png" alt="new maven">
+</div>
+<div class="title">Fig. 17. Nuevo proyecto Maven: sesion07</div>
+</div>
+<div class="olist arabic">
+<ol class="arabic" start="2">
+<li>
+<p>Indica la URL del proyecto en Github</p>
+</li>
+</ol>
+</div>
+<div class="imageblock text-center thumb">
+<div class="content">
+<img src="images/new-maven-github-url.png" alt="new maven github url">
+</div>
+<div class="title">Fig. 18. URL del proyecto en Github</div>
+</div>
+<div class="olist arabic">
+<ol class="arabic" start="3">
+<li>
+<p>Selecciona Git como control de código fuente. Indica la URL del repositorio.</p>
+</li>
+</ol>
+</div>
+<div class="imageblock text-center thumb">
+<div class="content">
+<img src="images/new-maven-github-repo.png" alt="new maven github repo">
+</div>
+<div class="title">Fig. 19. URL del repositorio en Github</div>
+</div>
+<div class="admonitionblock warning">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-warning" title="Warning"></i>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>En caso de que sea un repositorio privado tendrás que proporcionar unas <strong>credenciales</strong>. Aunque <strong>no es recomendable</strong>, puedes introducir tus credenciales usuario/contraseña de Github. Sin embargo, es mejor <strong>usar pareja de claves SSH</strong>, aunque es igual de <em>mala práctica</em> meter tu clave privada personal en Jenkins. Por ello, la <em>buena práctica</em> consiste en <strong>crear una nueva pareja de claves</strong> SSH exclusiva para que Jenkins pueda leer el repositorio privado, añadir la <strong>clave pública</strong> al repositorio en GitHub (exclusivamente al repositorio concreto, no a nuestro usuario de GitHub), y por último añadir la <strong>clave privada</strong> como credencial en Jenkins para que pueda leer ese repositorio privado de GitHub.</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+<div class="olist arabic">
+<ol class="arabic" start="4">
+<li>
+<p>En la sección de disparadores de la construcción (build trigers) marca la opción de hook con Github:</p>
+</li>
+</ol>
+</div>
+<div class="imageblock text-center thumb">
+<div class="content">
+<img src="images/new-maven-github-hook.png" alt="new maven github hook">
+</div>
+<div class="title">Fig. 20. Build con Github hook</div>
+</div>
+<div class="admonitionblock warning">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-warning" title="Warning"></i>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>Recuerda configurar también el <em>webhook</em> en el repo en GitHub (se hizo ya en la sesión 05).</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+<div class="olist arabic">
+<ol class="arabic" start="5">
+<li>
+<p>En la sección de <em>build</em>, añade la ruta correcta al archivo <code>pom.xml</code> y por último añade los goals: <code>clean pagkage</code></p>
+</li>
+</ol>
+</div>
+<div class="imageblock text-center thumb">
+<div class="content">
+<img src="images/new-maven-build-goals.png" alt="new maven build goals">
+</div>
+<div class="title">Fig. 21. Build con Maven</div>
+</div>
+<div class="olist arabic">
+<ol class="arabic" start="6">
+<li>
+<p>Guarda los cambios</p>
+</li>
+<li>
+<p><strong>Construir ahora</strong>.
+Por consola se visualiza el resultado de la ejecución de maven.</p>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p>En los proyectos Maven, no hace falta configurar la publicación de los test de JUnit, se hace de forma predeterminada a partir de la segunda construcción.</p>
+</div>
+<div class="imageblock text-center thumb">
+<div class="content">
+<img src="images/new-maven-build-results.png" alt="new maven build results">
+</div>
+<div class="title">Fig. 22. Resultados de la construcción</div>
+</div>
+<div class="olist arabic">
+<ol class="arabic" start="8">
+<li>
+<p>Añade los <strong>resultados de la cobertura</strong> obtenidos con <strong>JaCoCO</strong>: entra de nuevo en la configuración del proyecto, en <em>post-build actions</em> añade una acción a ejecutar después y selecciona <em>Record JaCoCo coverage report</em></p>
+</li>
+</ol>
+</div>
+<div class="imageblock text-center thumb">
+<div class="content">
+<img src="images/maven-postbuild-jacoco.png" alt="maven postbuild jacoco">
+</div>
+<div class="title">Fig. 23. Añadir el informe de cobertura con JaCoCO</div>
+</div>
+<div class="olist arabic">
+<ol class="arabic" start="9">
+<li>
+<p>Configura la ruta correcta a los fuentes: <code>**/src/</code></p>
+</li>
+</ol>
+</div>
+<div class="imageblock text-center thumb">
+<div class="content">
+<img src="images/maven-postbuild-jacoco-config.png" alt="maven postbuild jacoco config">
+</div>
+<div class="title">Fig. 24. Configuración de JaCoCo</div>
+</div>
+<div class="olist arabic">
+<ol class="arabic" start="10">
+<li>
+<p>Guarda los cambios y construye el proyecto. Al actualizar el proyecto verás la gráfica de Cobertura. Si ejecutas un par de builds la gráfica muestra la linea de evolución.</p>
+</li>
+</ol>
+</div>
+<div class="imageblock text-center thumb">
+<div class="content">
+<img src="images/maven-postbuild-jacoco-grafica.png" alt="maven postbuild jacoco grafica">
+</div>
+<div class="title">Fig. 25. Añadir el informe de cobertura con JaCoCo</div>
+</div>
+<div class="paragraph">
+<p>Y si haces clic en la gráfica, verás el informe detallado.</p>
+</div>
+<div class="imageblock text-center thumb">
+<div class="content">
+<img src="images/maven-postbuild-jacoco-details.png" alt="maven postbuild jacoco details">
+</div>
+<div class="title">Fig. 26. Detalle de cobertura con JaCoCo</div>
+</div>
 </div>
 </div>
 <div class="sect1">
-<h2 id="_creacion_de_un_proyecto_pipeline">7. Creacion de un Proyecto Pipeline</h2>
+<h2 id="_creación_de_un_proyecto_pipeline">7. Creación de un Proyecto Pipeline</h2>
 <div class="sectionbody">
-
+<div class="sidebarblock">
+<div class="content">
+<div class="title">Por completar</div>
+<div class="paragraph">
+<p>De aquí en adelante está por completar. En breve lo actualizaré.</p>
+</div>
+<div class="paragraph">
+<p>Gracias por vuestra paciencia.</p>
+</div>
+</div>
+</div>
 </div>
 </div>
 <div class="sect1">
@@ -946,7 +1116,7 @@ Para ver una gráfica de resultados de los Test debemos ejecutar al menos 2 cons
 <div class="content">
 <img src="images/new-item-pipeline-petclinic.png" alt="new item pipeline petclinic">
 </div>
-<div class="title">Fig. 17. New Item, PetClinic pipeline</div>
+<div class="title">Fig. 27. New Item, PetClinic pipeline</div>
 </div>
 <div class="paragraph">
 <p>En el bloque Pipeline, pega la configuración siguiente:</p>
@@ -1021,7 +1191,7 @@ Para ver una gráfica de resultados de los Test debemos ejecutar al menos 2 cons
 <div class="content">
 <img src="images/petclinic-pipeline-build-1.png" alt="petclinic pipeline build 1">
 </div>
-<div class="title">Fig. 18. Construcción del pipeline PetClinic</div>
+<div class="title">Fig. 28. Construcción del pipeline PetClinic</div>
 </div>
 <div class="paragraph">
 <p>Si realizamos una segunda ejecución, ya aparecerá la gráfica de evolución de los tests de JUnit.</p>
@@ -1046,13 +1216,13 @@ Para ver una gráfica de resultados de los Test debemos ejecutar al menos 2 cons
 <div class="content">
 <img src="images/jacoco-local-results.png" alt="jacoco local results">
 </div>
-<div class="title">Fig. 19. Archivos generados por Jacoco</div>
+<div class="title">Fig. 29. Archivos generados por Jacoco</div>
 </div>
 <div class="imageblock text-center thumb">
 <div class="content">
 <img src="images/jacoco-local-html.png" alt="jacoco local html">
 </div>
-<div class="title">Fig. 20. Informe html de la cobertura Jacoco</div>
+<div class="title">Fig. 30. Informe html de la cobertura Jacoco</div>
 </div>
 <div class="paragraph">
 <p>Y si haces clic en el nombre de una clase, verás el código coloreado:</p>
@@ -1061,7 +1231,7 @@ Para ver una gráfica de resultados de los Test debemos ejecutar al menos 2 cons
 <div class="content">
 <img src="images/plugins-jacoco-class-details.png" alt="plugins jacoco class details">
 </div>
-<div class="title">Fig. 21. Detalle la cobertura de las lineas de código</div>
+<div class="title">Fig. 31. Detalle la cobertura de las lineas de código</div>
 </div>
 <div class="colist arabic">
 <table>
@@ -1093,13 +1263,13 @@ Para ver una gráfica de resultados de los Test debemos ejecutar al menos 2 cons
 <div class="content">
 <img src="images/plugins-jacoco-install.png" alt="plugins jacoco install">
 </div>
-<div class="title">Fig. 22. Instalación del plugin Jacoco</div>
+<div class="title">Fig. 32. Instalación del plugin Jacoco</div>
 </div>
 <div class="imageblock text-center thumb">
 <div class="content">
 <img src="images/plugins-code-coverage-api-install.png" alt="plugins code coverage api install">
 </div>
-<div class="title">Fig. 23. Instalación del plugin Code Coverage API</div>
+<div class="title">Fig. 33. Instalación del plugin Code Coverage API</div>
 </div>
 <div class="olist arabic">
 <ol class="arabic" start="2">
@@ -1139,7 +1309,7 @@ Para ver una gráfica de resultados de los Test debemos ejecutar al menos 2 cons
 <div class="content">
 <img src="images/plugins-jacoco-dashboard-result.png" alt="plugins jacoco dashboard result">
 </div>
-<div class="title">Fig. 24. Informe de cobertura en el dashboard</div>
+<div class="title">Fig. 34. Informe de cobertura en el dashboard</div>
 </div>
 <div class="paragraph">
 <p>Haciendo clic sobre la gráfica accedes a los detalles:</p>
@@ -1148,7 +1318,7 @@ Para ver una gráfica de resultados de los Test debemos ejecutar al menos 2 cons
 <div class="content">
 <img src="images/plugins-jacoco-details-result.png" alt="plugins jacoco details result">
 </div>
-<div class="title">Fig. 25. Detalle de de cobertura</div>
+<div class="title">Fig. 35. Detalle de de cobertura</div>
 </div>
 </div>
 <div class="sect2">
@@ -1188,7 +1358,7 @@ Para ver una gráfica de resultados de los Test debemos ejecutar al menos 2 cons
 <div class="content">
 <img src="images/checkstyle-report-html.png" alt="checkstyle report html">
 </div>
-<div class="title">Fig. 26. Informe de CheckStyle</div>
+<div class="title">Fig. 36. Informe de CheckStyle</div>
 </div>
 <div class="paragraph">
 <p>Sería labor del equipo de desarrollo revisar los errores detectados y tratar de corregirlos, siempre que realmente supongan una mejora para la calidad del código.</p>
@@ -1224,13 +1394,13 @@ Para ver una gráfica de resultados de los Test debemos ejecutar al menos 2 cons
 <div class="content">
 <img src="images/checkstyle-report-dashboard.png" alt="checkstyle report dashboard">
 </div>
-<div class="title">Fig. 27. Pipeline con la nueva fase de Análisis</div>
+<div class="title">Fig. 37. Pipeline con la nueva fase de Análisis</div>
 </div>
 <div class="imageblock text-center thumb">
 <div class="content">
 <img src="images/checkstyle-report-details.png" alt="checkstyle report details">
 </div>
-<div class="title">Fig. 28. Detalles del informe de CheckStyle</div>
+<div class="title">Fig. 38. Detalles del informe de CheckStyle</div>
 </div>
 <div class="sidebarblock">
 <div class="content">
@@ -1265,7 +1435,7 @@ Para ver una gráfica de resultados de los Test debemos ejecutar al menos 2 cons
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2020-04-29 13:09:00 +0200
+Last updated 2020-04-29 15:04:21 +0200
 </div>
 </div>
 <style>
