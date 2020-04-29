@@ -1,0 +1,480 @@
+////
+Codificación, idioma, tabla de contenidos, tipo de documento
+////
+:encoding: utf-8
+:lang: es
+:toc: right
+:toc-title: Tabla de contenidos
+:keywords: CI/CD Jenkins Pipelines NodeJs Docker KeystoneJs
+:doctype: book
+:icons: font
+
+////
+/// activar btn:
+////
+:experimental:
+
+:source-highlighter: rouge
+:rouge-linenums-mode: inline
+
+// :highlightjsdir: ./highlight
+
+:figure-caption: Fig.
+:imagesdir: images
+
+
+////
+Nombre y título del trabajo
+////
+= Actividad 8. Integración Continua con Jenkins
+
+Computación en la nube servicios y aplicaciones.
+Version 1.0, Abril-2020.
+Joaquín Cañadas <jjcanada@ual.es>
+
+// Entrar en modo no numerado de apartados
+:numbered!: 
+
+[abstract]
+////
+COLOCA A CONTINUACION EL RESUMEN
+////
+Integración Continua con Jenkins.
+
+////
+COLOCA A CONTINUACION LOS OBJETIVOS
+////
+.Objetivos
+* Construcción automatizada de proyectos Java basados en Maven usando Jenkins como servidor de Integración Continua
+* Diseño de los pasos de construcción con Jenkins Pipelines
+* Configurar _Webhooks_ para la integración de GitHub y Jenkins
+* Generación y visualización de los informes de evolución del proyecto
+
+.Realización y entrega
+****
+La realización de estas actividades se realizará de forma individual. Serán la base para actividades posteriores que ser harán en equipo. Cada miembro del equipo debe tener sus ejercicios individuales en el Jenkins del equipo. 
+La entrega será mediante el envío de un informe y el acceso al profesor a los servicios configurados, para la revisión y evaluación de los mismos. 
+****
+
+// Entrar en modo numerado de apartados
+:numbered:
+
+
+
+== Introducción a la Integración Continua con Jenkins
+
+https://www.jenkins.io/[Jenkins CI] es un sistema de Integración Continua open source, desarrollado por https://en.wikipedia.org/wiki/Kohsuke_Kawaguchi[Kohsuke Kawaguchi], desarrollador de la ex Sun Microsystems y posteriormente de Oracle. En 2010 fundó CloudBees, empresa que da soporte empresarial de Jenkins.
+
+Jenkins proporciona integración continua en el desarrollo de software, es decir, permite configurar y agendar la ejecución de las tareas que componen toda y/o cada una de las partes que conforman el ciclo de vida de un proyecto. Para dar una idea de esto, basta pensar en los famosos https://en.wikipedia.org/wiki/Daily_build[_night-builds_], los cuales son compilaciones, validaciones y liberaciones de versiones beta que realizan algunos sistemas durante las noches de forma automática sobre lo que han ido trabajando los desarrolladores durante el día.
+
+Jenkins nace como _fork_ del sistema predecesor https://es.wikipedia.org/wiki/Hudson_(software)[Hudson CI], del mismo autor, como alternativa open source desde que Sun  fue adquirida por Oracle y cambiada su licencia.
+
+Jenkins posee una interminable lista de plugins, los cuales le permiten definir tareas que pueden integrarse con herramientas de control de versiones (Subversion, Git, ...), ejecutar proyectos basados en Apache Maven, Apache Ant, Microsoft MSBuild, shell y batch scripts, y muchas otras. Además permite ejecutar tareas adicionales previa y posteriormente a la construcción, como por ejemplo preparar el entorno, realizar un despliegue o compactar y subir binarios a un servidor por SSH.
+
+Para cada proyecto, Jenkins guarda un historial de cambios realizados por build o versión, almacena quién lo realizo y cuales archivos fueron manipulados, y sus comentarios al respecto. 
+
+[TIP]
+====
+Existen otras muchas herramientas de integración continua y despliegue continuo (CI/CD), como https://travis-ci.org/[Travis CI], https://about.gitlab.com/gitlab-ci/[Gitlab CI], https://circleci.com/[Circle CI], https://semaphoreci.com/[Semaphore CI], https://appveyor.com/[Appveyor], https://azure.microsoft.com/en-gb/services/devops/pipelines/?nav=min[Azure DevOps], y muchas más. 
+====
+
+=== Principales características
+
+1. Automatiza la construcción del software, periódicamente o en base a unas condiciones. En proyectos Maven se puede simular una construcción similar a un equipo que sólo tuviese instalado Java y Maven (y el correspondiente sistema operativo); de este modo, se __elimina el perverso efecto de la contaminación de los equipos de desarrollo__.
+
+2. Centraliza la información referida a la construcción del software y al estado y _salud_ del proyecto: 
+  - Estado de la construcción.
+  - Informes sobre la construcción.
+  - Informes sobre las pruebas.
+  - _Site_ del proyecto.
+
+3.	Gestiona la interacción con otras herramientas, como por ejemplo [_SonarQube_](https://sonarcloud.io/), de mide de calidad del software.
+
+=== ¿Por qué usarlo?
+
+1. Simplifica significativamente (a un par de clicks y dentro de un entorno web lo que lo hace fácilmente accesible desde cualquier parte) los procesos involucrados en el ciclo de vida de un proyecto, ya sean  simples o repetitivos, largos y complejos como puede ser de generación de binarios, integrando el trabajo de varios desarrolladores, ejecución de pruebas automatizadas, generación de informes, publicación en pagina web, notificación a clientes de versiones beta, etc.
+
+2. Da un marco de simplicidad sobre la integración continua gracias a las diferentes posibilidades de notificaciones de éxitos y errores entre procesos, por lo que con la formación adecuada sobre los mismos se puede asegurar una altísima calidad de software desde el primer día, evitando errores, demoras y a un mínimo coste.
+
+3. Debido a los múltiples sistemas de notificaciones por cual optar (ya sea por mail, chat, slack, twitter, etc), es sencillo estar siempre informado y poder tomar decisiones rápidamente.
+
+
+=== CI/CD y DevOps
+
+La integración continua forma parte de un proceso más amplio conocido como *entrega continua* o *despliegue continuo* (Continuous Delivery, Continuous Deployment), que además abarca el despliegue automatizado de proyectos en distintos entornos de ejecución. Por ello, frecuentemente en la bibliografía se hace referencia como https://es.wikipedia.org/wiki/CI/CD[*CI/CD*], de sus siglas en inglés: _Continuous Integration_ _and_ _Continuous Delivery_.
+
+CI/CD es una práctica fundamental dentro de la metodología https://es.wikipedia.org/wiki/DevOps[DevOps] en ingeniería del software.  
+
+
+== Prerrequisitos
+
+Para comenzar a trabajar en esta sesión, será necesario haber realizado las actividades anteriores de JUnit y Maven. Además, se debe disponer de crédito en Azure, y es necesario disponer de una máquina virtual con Jenkins instalado y un usuario con permisos (todo ello realizado en sesiones anteriores). Igualmente, se dispone de usuario en GitHub y los repositorios git en GitHub de los proyectos Java de las sesiones anteriores. También, debes tener una pareja de claves SSH personal en la carpeta `HOME` del usuario de tu equipo (`~`).
+
+[source,subs="verbatim,quotes"]
+----
+~/.ssh/
+├── id_rsa <1>
+└── id_rsa.pub <2>
+----
+<1> clave privada
+<2> clave pública
+
+
+== Instalación de plugins adicionales
+
+Vamos a instalar varios plugins adicionales en Jenkins, si aun no están instalados:  Github integration, Maven Integration, Cobertura,Jacoco (comprobar antes si no están instalados ya), Greenballs, Code Coverage ApiJavaDoc, Warnings Next Generation, Embeddable Build Status Plugin, xUnit, etc.
+
+Haz clic en __Manage Jenkins__ > __Manage Plugins__. En la pestaña __Available__ busca __Github integration__, seleccionaló y pulsa en __Download now and install after restart__.
+
+.Instalación del plugin Github integration
+image::jenkins-plugins-github-integration.png[role="thumb", align="center"]
+
+Repite los pasos para los plugins _Maven Integration_, _Cobertura_ __Green Balls__, _JavaDoc_ y _xUnit_.
+
+Necesitaremos visualizar el resultado de la cobertura en Jenkins. Para ello instala el plugin de JaCoCo (Java Code Coverage) y el plugin Code Coverage API.
+
+.Instalación del plugin Jacoco
+image::plugins-jacoco-install.png[role="thumb", align="center"]
+
+.Instalación del plugin Code Coverage API
+image::plugins-code-coverage-api-install.png[role="thumb", align="center"]
+
+Para visualizar el resultado del análisis estático de código, necesitaremos el plugin https://github.com/jenkinsci/warnings-ng-plugin/blob/master/doc/Documentation.md#declarative-pipeline-configuration[Warnings Next Generation]. Procede de la misma forma.
+
+Instala además el https://plugins.jenkins.io/embeddable-build-status/[Embeddable Build Status Plugin], que nos permitirá visualizar en el archivo README.md del proyecto, o en cualquier otro sitio, un pequeño _badge_ o insignia con el estado de build del proyecto.
+
+._Badge_ con el estado del build
+image::badge-build-status.png[role="thumb", align="center"]
+
+Por último, marca __Restart Jenkins__ para completar la instalación. Tras unos segundos, vuelve a iniciar sesión y tendrás los plugins instalados. 
+
+.Reiniciar para completar la instalación
+image::jenkins-plugins-restart.png[role="thumb", align="center"]
+
+[TIP]
+====
+El plugin Embeddable Build Status necesita dar acceso al usuario anónimo en la configuración de seguridad de Jenkins, para que se pueda leer el estado de construcción del proyecto:
+
+.Acceso al usuario anómimo
+image::build-status-access.png[role="thumb", align="center"]
+====
+
+
+[IMPORTANT]
+====
+Además de los plugins, para que la máquina virtual de Jenkins funcione correctamente al aumentar la carga de trabajo, es necesario *añadir memoria Swap* (en disco), al menos *2 Gb*. Aquí tienes los pasos: https://www.digitalocean.com/community/tutorials/how-to-add-swap-space-on-ubuntu-18-04[How To Add Swap Space on Ubuntu 18.04].
+====
+
+
+== Tipos de proyectos en Jenkins
+
+En Jenkins existen varios tipos de proyectos. Al hacer clic en nuevo elemento, aparece la vista de creación de nuevo proyecto, en la que debemos introducir el nombre del proyecto y su tipo. Los 3 principales tipos son:
+
+- *Estilo libre (Freestyle project)*: es el más flexible en su configuración. Permite construir proyectos en cualquier tecnología, en función de las herramientas (tools) y plugins que tengas instalados. Se utiliza cuando deseemos ejecutar fundamentalmente comandos desde la _shell_. En la sesión de despliegue automatizado de la web del equipo (sesión 05) usamos proyectos de este tipo. 
+
+- *Proyecto Maven*: se utiliza para construir proyectos Java basados en Maven. De forma predeterminada incluye un paso en el que añadir los _goals_ de maven que se deseen ejecutar en la construccion del proyecto.
+
+- *Pipeline*: un _pipeline_ o tubería identifica los pasos o fases (_stages_) que se van a ejecutar en el proceso de construcción del proyecto. Cada fase tiene definido cómo se ejecuta, y los resultados que produce. La ejecución de las fases es secuencial, aunque también se pueden configurar fases https://www.jenkins.io/blog/2017/09/25/declarative-1/[en paralelo].  
+
+.Nuevo proyecto. Tipos principales de proyectos
+image::001-project-types.png[role="thumb", align="center"]
+
+En esta actividad vamos a construir en Jenkins un proyecto estilo libre en Ant, y los proyectos Java mavenizados de las sesiones anteriores de dos formas: 
+
+  . Utilizando la forma clásica, creando un proyecto tipo Maven.
+
+  . Utilizando la descripción en pases mediante _pipeline_. 
+
+Comencemos por la primera forma.
+
+== Creación de un Proyecto con Ant
+
+Comenzaremos con un ejemplo sencillo en Java denominado ConnectFour. Este proyecto se construye con Ant, y está disponible aquí: 
+https://github.com/ualhmis/connect-four.git
+
+[TIP]
+====
+Este ejercicio ConnectFour debe ser realizado individualmente por cada uno de los miembros del equipo.
+====
+
+[TIP]
+====
+Si deseas hacer cambios, por ejemplo para corregir los tests que fallan, primero _forkea_ el repositorio a tu cuenta de GitHub
+====
+
+. Creamos una nueva tarea de tipo estilo libre: el nombre debe ser *connectFour-nombreMiembro*
+
+.Nuevo proyecto estilo libre: Connect-four
+image::new-connect-four.png[role="thumb", align="center"]
+
+[start=2]
+
+. Jenkins conecta al repositorio donde están los fuentes para descargarlos. Selecciona Git, y añade esta URL: https://github.com/ualhmis/connect-four.git. Al tratarse de un repositorio público no necesita credenciales.
+
+.Git repositorio URL
+image::new-connect-four-git-url.png[role="thumb", align="center"]
+
+[start=3]
+
+. Archivo de construcción (build): en la ejecución de la tarea, elegimos Ant
+
+.Build. Ant
+image::new-connect-four-build-ant.png[role="thumb", align="center"]
+
+[start=4]
+
+. Seleccionamos la versión de Ant instalada (no dejar “por defecto” porque da error), y en Destinos escribimos *all*
+
+.Seleccionar Ant version. Targets _all_
+image::new-connect-four-build-all.png[role="thumb", align="center"]
+
+[start=4]
+
+. Acciones a ejecutar después: Publicamos los resultados de los test JUnit y la documentación JavaDoc
+
+.Acciones a ejecutar despues: JUnit
+image::new-connect-four-postbuild-junit.png[role="thumb", align="center"]
+
+Y añadimos la ruta del archivo con los resultados de los test JUnit en xml: `target/test-results/*.xml`
+
+.Test report XML
+image::new-connect-four-postbuild-junit-xml.png[role="thumb", align="center"]
+
+[start=5]
+. Igualmente, añadimos otra acción a ejecutar después para JavaDoc
+
+.Javadoc
+image::new-connect-four-postbuild-javadoc.png[role="thumb", align="center"]
+
+
+Y añadimos la ruta donde se han generado los archivos JavaDoc: `target/docs`
+
+.Ruta a Javadoc
+image::new-connect-four-postbuild-javadoc-target.png[role="thumb", align="center"]
+
+[start=6]
+. Guardamos
+
+. *Construir ahora*. 
+Por consola se visualiza el resultado de la ejecución de las tareas Ant configuradas en el archivo `build.xml` del proyecto.
+
+
+El resultado es bola amarilla, porque fallan un par de tests. 
+Para ver una gráfica de resultados de los Test debemos ejecutar al menos 2 construcciones.
+
+.Connect-four: Resultado de la construcción
+image::new-connect-four-build-results.png[role="thumb", align="center"]
+
+== Creación de un Proyecto Maven
+
+
+
+
+== Creacion de un Proyecto Pipeline
+
+
+
+
+
+== Ejemplo 1: Aplicación web Java. 
+
+Una vez que hemos configurado correctamente nuestro entorno de CI/CD con Jenkins, vamos a estudiar varios ejemplos tanto en Java como en NodeJs.
+
+Recordemos que *Maven* es una herramienta software para la gestión y construcción de proyectos Java. https://maven.apache.org/[Apache Maven] estandariza la configuración de un proyecto en todo su ciclo de vida, como son todas las fases de compilación, ejecución de pruebas, empaquetado, etc. Maven permite la gestión de dependencias entre módulos y distintas versiones de librerías, simplemente indicando los módulos que componen el proyecto, y las dependencias utiliza el software que estamos desarrollando, en un fichero XML de configuración llamado POM (Project Object Model).
+
+
+
+=== Creación de proyecto Jenkins con pipelines
+
+Una vez que hemos probado la ejecución y funcionamiento de la aplicación PetClinic en local, vamos a configurar el proyecto en el servidor Jenkins de CI/CD para que este se encargue de  la construcción y el despliegue automatizados.
+
+Conecta a tu Jenkins, y crea un nuevo item de tipo Pipeline. Dale el nombre 'spring-petclinic-pipeline':
+
+.New Item, PetClinic pipeline
+image::new-item-pipeline-petclinic.png[role="thumb", align="center"]
+
+En el bloque Pipeline, pega la configuración siguiente:
+
+[source,groovy]
+----
+pipeline {
+  agent any <1>
+
+  tools {
+    // Previamente has debido instalar Maven con el nombre "Default Maven"
+    maven "Default Maven" <2>
+  }
+
+  stages { <3>
+    stage('Git fetch') { <4>
+      steps {
+        // Get some code from a GitHub repository
+        git 'https://github.com/spring-projects/spring-petclinic.git'
+      }
+    }
+    stage('Compile, Test, Package') { <5>
+      steps {
+        // Run goal 'package' includes compile, test and package.
+        sh "mvn clean package"
+      }
+      post { <6>
+        // If Maven was able to run the tests, even if some of the test
+        // failed, record the test results and archive the jar file.
+        success {
+          junit '**/target/surefire-reports/TEST-*.xml'
+          archiveArtifacts 'target/*.jar'
+        }
+      }
+    }
+  }
+}
+----
+<1> agente o nodo de Jenkins en que ejecuta la construcción del  proyecto. En el ejemplo, `any` indica que se ejecutará cualquier nodo, en nuestro caso será en __master__ ya que es el único nodo que hay definido en nuestro Jenkins.
+<2> como herramienta para la construcción se usará maven. Pon aquí el nombre que diste a tu instalación de Maven configurada previamente en Tools Configuration. 
+<3> Bloque de `stages`: fases o etapas que conforman el pipeline
+<4> Fase de descarga del repositorio git
+<5> Fase de compilación, ejecución de test y empaquetado de la aplicación. Se realizarán con los __goals__ `clean package`: primero se elimina todo lo generado en la construcción anterior, y a continuación se lanza la construcción con `package` tal y como está definida en el archivo `pom.xml`.
+<6> Paso posterior que guarda los resultados de los test de JUnit para generar la gráfica de evolución de los test.
+
+Tras ejecutar el pipeline, con "Build now", el resultado debe ser el siguiente:
+
+.Construcción del pipeline PetClinic
+image::petclinic-pipeline-build-1.png[role="thumb", align="center"]
+
+Si realizamos una segunda ejecución, ya aparecerá la gráfica de evolución de los tests de JUnit. 
+
+=== Informe de Cobertura de código
+
+Jenkins nos permite publicar métricas asociadas al proyecto. Una de ellas, es la cobertura de código ejecutado por las pruebas. 
+
+****
+La *Cobertura* de código nos indica el porcentaje de código de producción que está siendo ejecutado por los test. Es deseable tener un valor de cobertura lo más próximo posible al 100%
+****
+
+El proyecto PetClinic contiene 40 test unitarios en JUnit, y está configurado (ver `pom.xml`) para que se calcule la cobertura cuando se lanzan los tests mediante el plugin JaCoCo (Java Code Coverage). Puedes visualizar el resultado de la cobertura en tu construcción local, en la carpeta `target/site/jacoco`: 
+
+.Archivos generados por Jacoco
+image::jacoco-local-results.png[role="thumb", align="center"]
+
+.Informe html de la cobertura Jacoco
+image::jacoco-local-html.png[role="thumb", align="center"]
+
+Y si haces clic en el nombre de una clase, verás el código coloreado: 
+
+.Detalle la cobertura de las lineas de código
+image::plugins-jacoco-class-details.png[role="thumb", align="center"]
+<1> Las lineas [lime-background]#verdes# están cubiertas, es decir, han sido ejecutadas por al menos 1 test.
+<2> Las lineas [yellow-background]#amarillas# están parcialmente cubiertas (__missed branches__): un resultado de la condición (verdadero/falso) ha sido ejecutado por algún test pero el otro no ha sido ejecutado por ningún test.
+<3> Las líneas [red-background]#rojas# no están cubiertas, no han sido ejecutadas por ningún test.
+
+
+Para visualizar el resultado de la cobertura en Jenkins: 
+
+. Instala el plugin de Jacoco y el plugin Code Coverage API
+
+.Instalación del plugin Jacoco
+image::plugins-jacoco-install.png[role="thumb", align="center"]
+
+.Instalación del plugin Code Coverage API
+image::plugins-code-coverage-api-install.png[role="thumb", align="center"]
+
+[start=2]
+
+. Añade las dos siguientes linea al bloque `post` para que se guarde y muestre el informe de cobertura.
+
+[source,groovy]
+----
+  ...
+  success {
+    junit '**/target/surefire-reports/TEST-*.xml'
+    archiveArtifacts 'target/*.jar'
+    jacoco(execPattern: 'target/jacoco.exec') <1>
+    publishCoverage adapters: [jacocoAdapter('target/site/jacoco/jacoco.xml')] <2>
+  }
+  ...
+----
+
+<1> Añade el informe Coverage Trend
+<2> Añade el informe Coverage Report
+
+Tras la construcción de nuevo del proyecto, verás la gráfica de los resultados de los test y debajo la gráfica de evolución de cobertura: 
+
+.Informe de cobertura en el dashboard
+image::plugins-jacoco-dashboard-result.png[role="thumb", align="center"]
+
+Haciendo clic sobre la gráfica accedes a los detalles: 
+
+.Detalle de de cobertura
+image::plugins-jacoco-details-result.png[role="thumb", align="center"]
+
+
+=== Análisis estático de código: __Checkstyle__
+
+Para mantener y aumentar la calidad de nuestro código debemos ayudarnos, entre otras herramientas, de técnicas de análisis estático de código. Básicamente, se encargan de buscar defectos en el código sin necesidad de que este se ejecute. En Java una de las más habituales es Checkstyle, aunque hay otras como FindBugs, PMD, y SonarQube que integra a los anteriores. 
+
+****
+*CheckStyle* valida el estilo del código respecto al estilo oficial de Java.
+****
+
+El proyecto PetClinic tiene configurado el plugin de CheckStyle en el `pom.xml`: 
+
+[source,xml]
+----
+    ...
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-checkstyle-plugin</artifactId>
+        <version>3.1.0</version>
+        ...
+      </plugin>
+    ...
+----
+
+Para ejectutar CheckStyle en local, ejecuta el comando de maven (`mvn`) con los siguietnes __goals__: `mvn checkstyle:checkstyle site -DgenerateReports=false`
+
+Tras la ejecución, en la carpeta `target/site/` verás el archivo `checkstyle.html`:
+
+.Informe de CheckStyle
+image::checkstyle-report-html.png[role="thumb", align="center"]
+
+Sería labor del equipo de desarrollo revisar los errores detectados y tratar de corregirlos, siempre que realmente supongan una mejora para la calidad del código. 
+
+Para ejecutar y visualizar el informe en Jenkins: 
+
+. Instalar el plugin https://github.com/jenkinsci/warnings-ng-plugin/blob/master/doc/Documentation.md#declarative-pipeline-configuration[Warnings Next Generation].
+. Añadir al pipeline un nuevo `stage` con la siguiente descripción: 
+
+
+[source,groovy]
+----
+	stage ('Analysis') {
+      steps {
+		  // Warnings next generation plugin required
+		  sh "mvn checkstyle:checkstyle site -DgenerateReports=false"
+		  recordIssues enabledForFailure: true, tool: checkStyle() 
+	  }
+	}
+----
+
+Tras la construcción, el pipeline tiene una nueva fase y además en el menú tenemos acceso al informe de CheckStyle.
+
+.Pipeline con la nueva fase de Análisis
+image::checkstyle-report-dashboard.png[role="thumb", align="center"]
+
+.Detalles del informe de CheckStyle
+image::checkstyle-report-details.png[role="thumb", align="center"]
+
+.Saber más...
+****
+Si estás interesado en profundizar en este tema, te recomiendo integrar https://www.sonarqube.org/[SonarQube] con Jenkins, ya que SonarQube realiza un análisis mucho más detallado de la calidad y seguridad del código, realizando tanto análisis estático de código (CheckStyle y otros), como de análisis de seguridad (vulnerabilidades), y definiendo lo que denomina https://docs.sonarqube.org/latest/user-guide/quality-gates/[__Quality Gates__] que permiten definir condiciones que se deben cumplir basadas en los valores de las métricas del proyecto (por ejemplo, que la cobertura de código sea mayor del 80%). Puedes encontrar mucha documentación online sobre cómo hacerlo:
+
+- https://docs.sonarqube.org/latest/setup/get-started-2-minutes/[Instalar SonarQube] como aplicación o como contenedor Docker (recomendado)
+- Instalar el plugin https://plugins.jenkins.io/sonar/[SonarQube Scanner for Jenkins]
+- https://docs.sonarqube.org/latest/analysis/scan/sonarscanner-for-jenkins/#header-1[Configurar] SonarQube Scanner for Jenkins
+- https://docs.sonarqube.org/latest/analysis/scan/sonarscanner-for-jenkins/#header-5[Añadir al pipeline] la fase de análisis de Sonar
+
+Además, Si tu proyecto está en un repositorio público en GitHub, puedes ahorrarte tener que instalar tu propio SonarQube utilizando https://sonarcloud.io/[SonarCloud], el servicio de SonarQube en la nube (SaaS) gratuito para proyectos públicos, con el que evitas tener que instalar y mantener tu propio SonarQube. Incluso puedes configurar SonarCloud y Jenkins para que  https://blog.jdriven.com/2019/08/sonarcloud-github-pull-request-analysis-from-jenkins/[analizar los __pull request__] de tu repositorio y conocer el resultado del análisis de Sonar antes de hacer el __merge__ del pull request.
+****
+
+
+
