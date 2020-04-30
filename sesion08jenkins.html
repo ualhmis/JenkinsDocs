@@ -456,12 +456,11 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#_tipos_de_proyectos_en_jenkins">4. Tipos de proyectos en Jenkins</a></li>
 <li><a href="#_creación_de_un_proyecto_con_ant">5. Creación de un Proyecto con Ant</a></li>
 <li><a href="#_creación_de_un_proyecto_maven">6. Creación de un Proyecto Maven</a></li>
-<li><a href="#_creación_de_un_proyecto_pipeline">7. Creación de un Proyecto Pipeline</a></li>
-<li><a href="#_ejemplo_1_aplicación_web_java">8. Ejemplo 1: Aplicación web Java.</a>
+<li><a href="#_creación_de_un_proyecto_pipeline">7. Creación de un Proyecto Pipeline</a>
 <ul class="sectlevel2">
-<li><a href="#_creación_de_proyecto_jenkins_con_pipelines">8.1. Creación de proyecto Jenkins con pipelines</a></li>
-<li><a href="#_informe_de_cobertura_de_código">8.2. Informe de Cobertura de código</a></li>
-<li><a href="#_análisis_estático_de_código_checkstyle">8.3. Análisis estático de código: <em>Checkstyle</em></a></li>
+<li><a href="#_diseño_del_pipeline">7.1. Diseño del <em>pipeline</em></a></li>
+<li><a href="#_informe_de_cobertura_de_código">7.2. Informe de Cobertura de código</a></li>
+<li><a href="#_análisis_estático_de_código_checkstyle">7.3. Análisis estático de código: <em>Checkstyle</em></a></li>
 </ul>
 </li>
 </ul>
@@ -916,10 +915,13 @@ Para ver una gráfica de resultados de los Test debemos ejecutar al menos 2 cons
 <div class="sect1">
 <h2 id="_creación_de_un_proyecto_maven">6. Creación de un Proyecto Maven</h2>
 <div class="sectionbody">
+<div class="paragraph">
+<p>Para ese ejercicio, cada uno debe usar el repositorio de la práctica 7 donde se ha trabajado con Maven.</p>
+</div>
 <div class="olist arabic">
 <ol class="arabic">
 <li>
-<p>Crea un nuevo proyecto Maven.</p>
+<p>Crea un nuevo proyecto Maven. El nombre debe ser <strong>ej07-maven-nombreMiembro</strong>.</p>
 </li>
 </ol>
 </div>
@@ -932,7 +934,7 @@ Para ver una gráfica de resultados de los Test debemos ejecutar al menos 2 cons
 <div class="olist arabic">
 <ol class="arabic" start="2">
 <li>
-<p>Indica la URL del proyecto en Github</p>
+<p>Indica la URL del proyecto en Github. Utiliza aquí la URL de tu proyecto de la <strong>práctica 7</strong>.</p>
 </li>
 </ol>
 </div>
@@ -1082,44 +1084,23 @@ Por consola se visualiza el resultado de la ejecución de maven.</p>
 <div class="sect1">
 <h2 id="_creación_de_un_proyecto_pipeline">7. Creación de un Proyecto Pipeline</h2>
 <div class="sectionbody">
-<div class="sidebarblock">
-<div class="content">
-<div class="title">Por completar</div>
 <div class="paragraph">
-<p>De aquí en adelante está por completar. En breve lo actualizaré.</p>
-</div>
-<div class="paragraph">
-<p>Gracias por vuestra paciencia.</p>
-</div>
-</div>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="_ejemplo_1_aplicación_web_java">8. Ejemplo 1: Aplicación web Java.</h2>
-<div class="sectionbody">
-<div class="paragraph">
-<p>Una vez que hemos configurado correctamente nuestro entorno de CI/CD con Jenkins, vamos a estudiar varios ejemplos tanto en Java como en NodeJs.</p>
-</div>
-<div class="paragraph">
-<p>Recordemos que <strong>Maven</strong> es una herramienta software para la gestión y construcción de proyectos Java. <a href="https://maven.apache.org/">Apache Maven</a> estandariza la configuración de un proyecto en todo su ciclo de vida, como son todas las fases de compilación, ejecución de pruebas, empaquetado, etc. Maven permite la gestión de dependencias entre módulos y distintas versiones de librerías, simplemente indicando los módulos que componen el proyecto, y las dependencias utiliza el software que estamos desarrollando, en un fichero XML de configuración llamado POM (Project Object Model).</p>
+<p>Para ese ejercicio, cada estudiante debe usar, de nuevo, el repositorio de la práctica 7 donde se ha trabajado con Maven. Vamos a configurar el proyecto Jenkins que construya el mismo repositorio de la sección anterior, pero esta vez vamos a utilizar <em>pipelines</em>.</p>
 </div>
 <div class="sect2">
-<h3 id="_creación_de_proyecto_jenkins_con_pipelines">8.1. Creación de proyecto Jenkins con pipelines</h3>
-<div class="paragraph">
-<p>Una vez que hemos probado la ejecución y funcionamiento de la aplicación PetClinic en local, vamos a configurar el proyecto en el servidor Jenkins de CI/CD para que este se encargue de  la construcción y el despliegue automatizados.</p>
-</div>
-<div class="paragraph">
-<p>Conecta a tu Jenkins, y crea un nuevo item de tipo Pipeline. Dale el nombre 'spring-petclinic-pipeline':</p>
-</div>
-<div class="imageblock text-center thumb">
-<div class="content">
-<img src="images/new-item-pipeline-petclinic.png" alt="new item pipeline petclinic">
-</div>
-<div class="title">Fig. 27. New Item, PetClinic pipeline</div>
-</div>
-<div class="paragraph">
-<p>En el bloque Pipeline, pega la configuración siguiente:</p>
+<h3 id="_diseño_del_pipeline">7.1. Diseño del <em>pipeline</em></h3>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Crea un nuevo proyecto y dale el nombre y selecciona tipo <em>pipeline</em>. El nombre debe ser <strong>ej07-pipeline-nombreMiembro</strong>.</p>
+</li>
+<li>
+<p>Indica la URL del proyecto en Github. Utiliza aquí la URL de tu proyecto de la <strong>práctica 7</strong>.</p>
+</li>
+<li>
+<p>En la sección Pipeline, disponemos de un cuadro de texto en el que añadir la descripción de nuestro pipeline utilizando la sintaxis <em>declarativa</em> que Jenkins proporciona. Vamos a ver cómo hacerlo.</p>
+</li>
+</ol>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -1127,31 +1108,12 @@ Por consola se visualiza el resultado de la ejecución de maven.</p>
   <span class="n">agent</span> <span class="n">any</span> <i class="conum" data-value="1"></i><b>(1)</b>
 
   <span class="n">tools</span> <span class="o">{</span>
-    <span class="c1">// Previamente has debido instalar Maven con el nombre "Default Maven"</span>
+    <span class="c1">// Nombre dado a la instalación de Maven en "Global Tool configuration"</span>
     <span class="n">maven</span> <span class="s2">"Default Maven"</span> <i class="conum" data-value="2"></i><b>(2)</b>
   <span class="o">}</span>
 
   <span class="n">stages</span> <span class="o">{</span> <i class="conum" data-value="3"></i><b>(3)</b>
-    <span class="n">stage</span><span class="o">(</span><span class="s1">'Git fetch'</span><span class="o">)</span> <span class="o">{</span> <i class="conum" data-value="4"></i><b>(4)</b>
-      <span class="n">steps</span> <span class="o">{</span>
-        <span class="c1">// Get some code from a GitHub repository</span>
-        <span class="n">git</span> <span class="s1">'https://github.com/spring-projects/spring-petclinic.git'</span>
-      <span class="o">}</span>
-    <span class="o">}</span>
-    <span class="n">stage</span><span class="o">(</span><span class="s1">'Compile, Test, Package'</span><span class="o">)</span> <span class="o">{</span> <i class="conum" data-value="5"></i><b>(5)</b>
-      <span class="n">steps</span> <span class="o">{</span>
-        <span class="c1">// Run goal 'package' includes compile, test and package.</span>
-        <span class="n">sh</span> <span class="s2">"mvn clean package"</span>
-      <span class="o">}</span>
-      <span class="n">post</span> <span class="o">{</span> <i class="conum" data-value="6"></i><b>(6)</b>
-        <span class="c1">// If Maven was able to run the tests, even if some of the test</span>
-        <span class="c1">// failed, record the test results and archive the jar file.</span>
-        <span class="n">success</span> <span class="o">{</span>
-          <span class="n">junit</span> <span class="s1">'**/target/surefire-reports/TEST-*.xml'</span>
-          <span class="n">archiveArtifacts</span> <span class="s1">'target/*.jar'</span>
-        <span class="o">}</span>
-      <span class="o">}</span>
-    <span class="o">}</span>
+   <span class="o">...</span>
   <span class="o">}</span>
 <span class="o">}</span></code></pre>
 </div>
@@ -1170,122 +1132,107 @@ Por consola se visualiza el resultado de la ejecución de maven.</p>
 <td><i class="conum" data-value="3"></i><b>3</b></td>
 <td>Bloque de <code>stages</code>: fases o etapas que conforman el pipeline</td>
 </tr>
-<tr>
-<td><i class="conum" data-value="4"></i><b>4</b></td>
-<td>Fase de descarga del repositorio git</td>
-</tr>
-<tr>
-<td><i class="conum" data-value="5"></i><b>5</b></td>
-<td>Fase de compilación, ejecución de test y empaquetado de la aplicación. Se realizarán con los <em>goals</em> <code>clean package</code>: primero se elimina todo lo generado en la construcción anterior, y a continuación se lanza la construcción con <code>package</code> tal y como está definida en el archivo <code>pom.xml</code>.</td>
-</tr>
-<tr>
-<td><i class="conum" data-value="6"></i><b>6</b></td>
-<td>Paso posterior que guarda los resultados de los test de JUnit para generar la gráfica de evolución de los test.</td>
-</tr>
 </table>
 </div>
 <div class="paragraph">
-<p>Tras ejecutar el pipeline, con "Build now", el resultado debe ser el siguiente:</p>
+<p>A continuación se muestra cómo definir cada fase o <em>stage</em> una a una  dentro del bloque <em>stages</em>:</p>
 </div>
-<div class="imageblock text-center thumb">
+<div class="listingblock">
 <div class="content">
-<img src="images/petclinic-pipeline-build-1.png" alt="petclinic pipeline build 1">
+<pre class="rouge highlight"><code data-lang="groovy"><span class="n">pipeline</span> <span class="o">{</span>
+  <span class="n">agent</span> <span class="n">any</span>
+
+  <span class="n">tools</span> <span class="o">{</span>
+    <span class="c1">// Nombre dado a la instalación de Maven en "Tools configuration"</span>
+    <span class="n">maven</span> <span class="s2">"Default Maven"</span>
+  <span class="o">}</span>
+
+  <span class="n">stages</span> <span class="o">{</span>
+    <span class="n">stage</span><span class="o">(</span><span class="s1">'Git fetch'</span><span class="o">)</span> <span class="o">{</span> <i class="conum" data-value="1"></i><b>(1)</b>
+      <span class="n">steps</span> <span class="o">{</span>
+        <span class="c1">// Get some code from a GitHub repository</span>
+        <span class="n">git</span> <span class="s1">'https://github.com/ualhmis/MavenEjercicios.git'</span>
+      <span class="o">}</span>
+    <span class="o">}</span>
+    <span class="n">stage</span><span class="o">(</span><span class="s1">'Compile, Test, Package'</span><span class="o">)</span> <span class="o">{</span> <i class="conum" data-value="2"></i><b>(2)</b>
+      <span class="n">steps</span> <span class="o">{</span>
+        <span class="c1">// When necessary, use '-f path-to/pom.xml' to give the path to pom.xml</span>
+        <span class="c1">// Run goal 'package'. It includes compile, test and package.</span>
+        <span class="n">sh</span> <span class="s2">"mvn  -f sesion07Maven/pom.xml clean package"</span> <i class="conum" data-value="3"></i><b>(3)</b>
+      <span class="o">}</span>
+      <span class="n">post</span> <span class="o">{</span> <i class="conum" data-value="3"></i><b>(3)</b>
+        <span class="c1">// Record the test results and archive the jar file.</span>
+        <span class="n">success</span> <span class="o">{</span>
+          <span class="n">junit</span> <span class="s1">'**/target/surefire-reports/TEST-*.xml'</span>
+          <span class="n">archiveArtifacts</span> <span class="s1">'**/target/*.jar'</span>
+        <span class="o">}</span>
+      <span class="o">}</span>
+    <span class="o">}</span>
+  <span class="o">}</span>
+<span class="o">}</span></code></pre>
 </div>
-<div class="title">Fig. 28. Construcción del pipeline PetClinic</div>
-</div>
-<div class="paragraph">
-<p>Si realizamos una segunda ejecución, ya aparecerá la gráfica de evolución de los tests de JUnit.</p>
-</div>
-</div>
-<div class="sect2">
-<h3 id="_informe_de_cobertura_de_código">8.2. Informe de Cobertura de código</h3>
-<div class="paragraph">
-<p>Jenkins nos permite publicar métricas asociadas al proyecto. Una de ellas, es la cobertura de código ejecutado por las pruebas.</p>
-</div>
-<div class="sidebarblock">
-<div class="content">
-<div class="paragraph">
-<p>La <strong>Cobertura</strong> de código nos indica el porcentaje de código de producción que está siendo ejecutado por los test. Es deseable tener un valor de cobertura lo más próximo posible al 100%</p>
-</div>
-</div>
-</div>
-<div class="paragraph">
-<p>El proyecto PetClinic contiene 40 test unitarios en JUnit, y está configurado (ver <code>pom.xml</code>) para que se calcule la cobertura cuando se lanzan los tests mediante el plugin JaCoCo (Java Code Coverage). Puedes visualizar el resultado de la cobertura en tu construcción local, en la carpeta <code>target/site/jacoco</code>:</p>
-</div>
-<div class="imageblock text-center thumb">
-<div class="content">
-<img src="images/jacoco-local-results.png" alt="jacoco local results">
-</div>
-<div class="title">Fig. 29. Archivos generados por Jacoco</div>
-</div>
-<div class="imageblock text-center thumb">
-<div class="content">
-<img src="images/jacoco-local-html.png" alt="jacoco local html">
-</div>
-<div class="title">Fig. 30. Informe html de la cobertura Jacoco</div>
-</div>
-<div class="paragraph">
-<p>Y si haces clic en el nombre de una clase, verás el código coloreado:</p>
-</div>
-<div class="imageblock text-center thumb">
-<div class="content">
-<img src="images/plugins-jacoco-class-details.png" alt="plugins jacoco class details">
-</div>
-<div class="title">Fig. 31. Detalle la cobertura de las lineas de código</div>
 </div>
 <div class="colist arabic">
 <table>
 <tr>
 <td><i class="conum" data-value="1"></i><b>1</b></td>
-<td>Las lineas <span class="lime-background">verdes</span> están cubiertas, es decir, han sido ejecutadas por al menos 1 test.</td>
+<td>Fase de descarga del <strong>repositorio git</strong></td>
 </tr>
 <tr>
 <td><i class="conum" data-value="2"></i><b>2</b></td>
-<td>Las lineas <span class="yellow-background">amarillas</span> están parcialmente cubiertas (<em>missed branches</em>): un resultado de la condición (verdadero/falso) ha sido ejecutado por algún test pero el otro no ha sido ejecutado por ningún test.</td>
+<td>Fase de build: <strong>compilación, test y empaquetado</strong> de la aplicación. Se ejecutarán los <em>goals</em> <code>clean package</code>: primero se elimina todo lo generado en la construcción anterior, y a continuación se lanza la construcción con <code>package</code> tal y como está definida en el archivo <code>pom.xml</code>.</td>
 </tr>
 <tr>
 <td><i class="conum" data-value="3"></i><b>3</b></td>
-<td>Las líneas <span class="red-background">rojas</span> no están cubiertas, no han sido ejecutadas por ningún test.</td>
+<td>Cuando sea necesario, indique el path al archivo <code>pom.xml</code> con el parámetro <code>-f path-to/pom.xml</code></td>
+</tr>
+<tr>
+<td><i class="conum" data-value="4"></i><b>4</b></td>
+<td>Paso <strong>posterior al build</strong>, que guarda los resultados de los test de JUnit para generar la gráfica de evolución de los test. Además, <a href="https://www.jenkins.io/doc/pipeline/steps/core/#archiveartifacts-archive-the-artifacts">archiva el empaquetado</a> <code>.jar</code> para que pueda ser descargado posteriormente</td>
 </tr>
 </table>
 </div>
+<div class="imageblock text-center thumb">
+<div class="content">
+<img src="images/new-pipeline-definition.png" alt="new pipeline definition">
+</div>
+<div class="title">Fig. 27. Definición del <em>pipeline</em></div>
+</div>
+<div class="olist arabic">
+<ol class="arabic" start="4">
+<li>
+<p>Guarda los cambios y construye.</p>
+</li>
+<li>
+<p>Tras ejecutar el pipeline, con "Build now", el resultado debe ser el siguiente:</p>
+</li>
+</ol>
+</div>
+<div class="imageblock text-center thumb">
+<div class="content">
+<img src="images/new-pipeline-results.png" alt="new pipeline results">
+</div>
+<div class="title">Fig. 28. Resultados del <em>pipeline</em></div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_informe_de_cobertura_de_código">7.2. Informe de Cobertura de código</h3>
 <div class="paragraph">
-<p>Para visualizar el resultado de la cobertura en Jenkins:</p>
-</div>
-<div class="olist arabic">
-<ol class="arabic">
-<li>
-<p>Instala el plugin de Jacoco y el plugin Code Coverage API</p>
-</li>
-</ol>
-</div>
-<div class="imageblock text-center thumb">
-<div class="content">
-<img src="images/plugins-jacoco-install.png" alt="plugins jacoco install">
-</div>
-<div class="title">Fig. 32. Instalación del plugin Jacoco</div>
-</div>
-<div class="imageblock text-center thumb">
-<div class="content">
-<img src="images/plugins-code-coverage-api-install.png" alt="plugins code coverage api install">
-</div>
-<div class="title">Fig. 33. Instalación del plugin Code Coverage API</div>
-</div>
-<div class="olist arabic">
-<ol class="arabic" start="2">
-<li>
-<p>Añade las dos siguientes linea al bloque <code>post</code> para que se guarde y muestre el informe de cobertura.</p>
-</li>
-</ol>
+<p>Para visualizar informe de cobertura en el pipeline, añade las dos siguientes linea al bloque <code>post</code>:</p>
 </div>
 <div class="listingblock">
 <div class="content">
 <pre class="rouge highlight"><code data-lang="groovy">  <span class="o">...</span>
   <span class="n">success</span> <span class="o">{</span>
     <span class="n">junit</span> <span class="s1">'**/target/surefire-reports/TEST-*.xml'</span>
-    <span class="n">archiveArtifacts</span> <span class="s1">'target/*.jar'</span>
-    <span class="n">jacoco</span><span class="o">(</span><span class="nl">execPattern:</span> <span class="s1">'target/jacoco.exec'</span><span class="o">)</span> <i class="conum" data-value="1"></i><b>(1)</b>
-    <span class="n">publishCoverage</span> <span class="nl">adapters:</span> <span class="o">[</span><span class="n">jacocoAdapter</span><span class="o">(</span><span class="s1">'target/site/jacoco/jacoco.xml'</span><span class="o">)]</span> <i class="conum" data-value="2"></i><b>(2)</b>
+    <span class="n">archiveArtifacts</span> <span class="s1">'**/target/*.jar'</span>
+    <span class="n">jacoco</span><span class="o">(</span> <i class="conum" data-value="1"></i><b>(1)</b>
+      <span class="nl">execPattern:</span> <span class="s1">'**/target/jacoco.exec'</span><span class="o">,</span>
+      <span class="nl">classPattern:</span> <span class="s1">'**/target/classes'</span><span class="o">,</span>
+      <span class="nl">sourcePattern:</span> <span class="s1">'**/src/'</span><span class="o">,</span>
+      <span class="nl">exclusionPattern:</span> <span class="s1">'**/test/'</span>
+    <span class="o">)</span>
+    <span class="n">publishCoverage</span> <span class="nl">adapters:</span> <span class="o">[</span><span class="n">jacocoAdapter</span><span class="o">(</span><span class="s1">'**/target/site/jacoco/jacoco.xml'</span><span class="o">)]</span> <i class="conum" data-value="2"></i><b>(2)</b>
   <span class="o">}</span>
   <span class="o">...</span></code></pre>
 </div>
@@ -1303,88 +1250,37 @@ Por consola se visualiza el resultado de la ejecución de maven.</p>
 </table>
 </div>
 <div class="paragraph">
-<p>Tras la construcción de nuevo del proyecto, verás la gráfica de los resultados de los test y debajo la gráfica de evolución de cobertura:</p>
+<p>Tras la construcción de nuevo del proyecto, verás la gráfica de los resultados de los test y debajo la gráfica de evolución de cobertura.</p>
 </div>
 <div class="imageblock text-center thumb">
 <div class="content">
-<img src="images/plugins-jacoco-dashboard-result.png" alt="plugins jacoco dashboard result">
+<img src="images/new-pipeline-coverage-results.png" alt="new pipeline coverage results">
 </div>
-<div class="title">Fig. 34. Informe de cobertura en el dashboard</div>
-</div>
-<div class="paragraph">
-<p>Haciendo clic sobre la gráfica accedes a los detalles:</p>
-</div>
-<div class="imageblock text-center thumb">
-<div class="content">
-<img src="images/plugins-jacoco-details-result.png" alt="plugins jacoco details result">
-</div>
-<div class="title">Fig. 35. Detalle de de cobertura</div>
+<div class="title">Fig. 29. Resultados de la cobertura</div>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_análisis_estático_de_código_checkstyle">8.3. Análisis estático de código: <em>Checkstyle</em></h3>
+<h3 id="_análisis_estático_de_código_checkstyle">7.3. Análisis estático de código: <em>Checkstyle</em></h3>
 <div class="paragraph">
 <p>Para mantener y aumentar la calidad de nuestro código debemos ayudarnos, entre otras herramientas, de técnicas de análisis estático de código. Básicamente, se encargan de buscar defectos en el código sin necesidad de que este se ejecute. En Java una de las más habituales es Checkstyle, aunque hay otras como FindBugs, PMD, y SonarQube que integra a los anteriores.</p>
 </div>
-<div class="sidebarblock">
-<div class="content">
 <div class="paragraph">
-<p><strong>CheckStyle</strong> valida el estilo del código respecto al estilo oficial de Java.</p>
-</div>
-</div>
-</div>
-<div class="paragraph">
-<p>El proyecto PetClinic tiene configurado el plugin de CheckStyle en el <code>pom.xml</code>:</p>
+<p>Para ejecutar y visualizar el análisis de Checkstyle, añade un nuevo <em>stage</em> ap pipeline:</p>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="rouge highlight"><code data-lang="xml">    ...
-      <span class="nt">&lt;plugin&gt;</span>
-        <span class="nt">&lt;groupId&gt;</span>org.apache.maven.plugins<span class="nt">&lt;/groupId&gt;</span>
-        <span class="nt">&lt;artifactId&gt;</span>maven-checkstyle-plugin<span class="nt">&lt;/artifactId&gt;</span>
-        <span class="nt">&lt;version&gt;</span>3.1.0<span class="nt">&lt;/version&gt;</span>
-        ...
-      <span class="nt">&lt;/plugin&gt;</span>
-    ...</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>Para ejectutar CheckStyle en local, ejecuta el comando de maven (<code>mvn</code>) con los siguietnes <em>goals</em>: <code>mvn checkstyle:checkstyle site -DgenerateReports=false</code></p>
-</div>
-<div class="paragraph">
-<p>Tras la ejecución, en la carpeta <code>target/site/</code> verás el archivo <code>checkstyle.html</code>:</p>
-</div>
-<div class="imageblock text-center thumb">
-<div class="content">
-<img src="images/checkstyle-report-html.png" alt="checkstyle report html">
-</div>
-<div class="title">Fig. 36. Informe de CheckStyle</div>
-</div>
-<div class="paragraph">
-<p>Sería labor del equipo de desarrollo revisar los errores detectados y tratar de corregirlos, siempre que realmente supongan una mejora para la calidad del código.</p>
-</div>
-<div class="paragraph">
-<p>Para ejecutar y visualizar el informe en Jenkins:</p>
-</div>
-<div class="olist arabic">
-<ol class="arabic">
-<li>
-<p>Instalar el plugin <a href="https://github.com/jenkinsci/warnings-ng-plugin/blob/master/doc/Documentation.md#declarative-pipeline-configuration">Warnings Next Generation</a>.</p>
-</li>
-<li>
-<p>Añadir al pipeline un nuevo <code>stage</code> con la siguiente descripción:</p>
-</li>
-</ol>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="rouge highlight"><code data-lang="groovy">	<span class="n">stage</span> <span class="o">(</span><span class="s1">'Analysis'</span><span class="o">)</span> <span class="o">{</span>
-      <span class="n">steps</span> <span class="o">{</span>
-		  <span class="c1">// Warnings next generation plugin required</span>
-		  <span class="n">sh</span> <span class="s2">"mvn checkstyle:checkstyle site -DgenerateReports=false"</span>
-		  <span class="n">recordIssues</span> <span class="nl">enabledForFailure:</span> <span class="kc">true</span><span class="o">,</span> <span class="nl">tool:</span> <span class="n">checkStyle</span><span class="o">()</span>
-	  <span class="o">}</span>
-	<span class="o">}</span></code></pre>
+<pre class="rouge highlight"><code data-lang="groovy">  <span class="n">stage</span> <span class="o">(</span><span class="s1">'Analysis'</span><span class="o">)</span> <span class="o">{</span>
+    <span class="n">steps</span> <span class="o">{</span>
+	  <span class="c1">// Warnings next generation plugin required</span>
+	  <span class="n">sh</span> <span class="s2">"mvn -f sesion07Maven/pom.xml checkstyle:checkstyle site -DgenerateReports=false"</span>
+    <span class="o">}</span>
+    <span class="n">post</span> <span class="o">{</span>
+      <span class="c1">// Record the test results and archive the jar file.</span>
+      <span class="n">success</span> <span class="o">{</span>
+        <span class="n">recordIssues</span> <span class="nl">enabledForFailure:</span> <span class="kc">true</span><span class="o">,</span> <span class="nl">tool:</span> <span class="n">checkStyle</span><span class="o">()</span>
+      <span class="o">}</span>
+    <span class="o">}</span>
+  <span class="o">}</span></code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -1392,21 +1288,55 @@ Por consola se visualiza el resultado de la ejecución de maven.</p>
 </div>
 <div class="imageblock text-center thumb">
 <div class="content">
-<img src="images/checkstyle-report-dashboard.png" alt="checkstyle report dashboard">
+<img src="images/new-pipeline-checkstyle-report-dashboard.png" alt="new pipeline checkstyle report dashboard">
 </div>
-<div class="title">Fig. 37. Pipeline con la nueva fase de Análisis</div>
+<div class="title">Fig. 30. Pipeline con la nueva fase de Análisis</div>
 </div>
 <div class="imageblock text-center thumb">
 <div class="content">
-<img src="images/checkstyle-report-details.png" alt="checkstyle report details">
+<img src="images/new-pipeline-checkstyle-report-details.png" alt="new pipeline checkstyle report details">
 </div>
-<div class="title">Fig. 38. Detalles del informe de CheckStyle</div>
+<div class="title">Fig. 31. Detalles del informe de CheckStyle</div>
+</div>
+<div class="paragraph">
+<p>Como parte del ejercicio, completa por ti mismo la publicación del resto de informes de análisis estático de código generados en la sesión 7. Se publican a través del plugin <a href="https://www.jenkins.io/doc/pipeline/steps/warnings-ng/">Warnings Next Generation</a>.</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>PMD: añade el <em>goal</em> adecuado en la ejecución de maven y añade la publicación del informe:</p>
+</li>
+</ul>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="groovy"><span class="n">recordIssues</span> <span class="nl">enabledForFailure:</span> <span class="kc">true</span><span class="o">,</span> <span class="nl">tool:</span> <span class="n">pmdParser</span><span class="o">()</span></code></pre>
+</div>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>CPD: añade la publicación del informe:</p>
+</li>
+</ul>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="groovy"><span class="n">recordIssues</span> <span class="nl">enabledForFailure:</span> <span class="kc">true</span><span class="o">,</span> <span class="nl">tool:</span> <span class="n">cpd</span><span class="o">()</span></code></pre>
+</div>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Etc.</p>
+</li>
+</ul>
 </div>
 <div class="sidebarblock">
 <div class="content">
 <div class="title">Saber más&#8230;&#8203;</div>
 <div class="paragraph">
-<p>Si estás interesado en profundizar en este tema, te recomiendo integrar <a href="https://www.sonarqube.org/">SonarQube</a> con Jenkins, ya que SonarQube realiza un análisis mucho más detallado de la calidad y seguridad del código, realizando tanto análisis estático de código (CheckStyle y otros), como de análisis de seguridad (vulnerabilidades), y definiendo lo que denomina <a href="https://docs.sonarqube.org/latest/user-guide/quality-gates/"><em>Quality Gates</em></a> que permiten definir condiciones que se deben cumplir basadas en los valores de las métricas del proyecto (por ejemplo, que la cobertura de código sea mayor del 80%). Puedes encontrar mucha documentación online sobre cómo hacerlo:</p>
+<p>Si estás interesado en profundizar en este tema, en la asignatura Procesos de Ingeniería del Software II, de 4º curso, lo estudiareis en profundidad. En cualquier caso, adelanto que es recomendable integrar <a href="https://www.sonarqube.org/">SonarQube</a> con Jenkins, ya que SonarQube realiza un análisis mucho más detallado de la calidad y seguridad del código, realizando tanto análisis estático de código (CheckStyle y otros), como de análisis de seguridad (vulnerabilidades), y definiendo lo que denomina <a href="https://docs.sonarqube.org/latest/user-guide/quality-gates/"><em>Quality Gates</em></a> que permiten definir condiciones que se deben cumplir basadas en los valores de las métricas del proyecto (por ejemplo, que la cobertura de código sea mayor del 80%). Puedes encontrar mucha documentación online sobre cómo hacerlo:</p>
 </div>
 <div class="ulist">
 <ul>
@@ -1435,7 +1365,7 @@ Por consola se visualiza el resultado de la ejecución de maven.</p>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2020-04-29 15:05:18 +0200
+Last updated 2020-04-30 11:45:26 +0200
 </div>
 </div>
 <style>

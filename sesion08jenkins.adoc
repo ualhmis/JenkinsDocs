@@ -267,13 +267,15 @@ image::new-connect-four-build-results.png[role="thumb", align="center"]
 
 == Creación de un Proyecto Maven
 
-. Crea un nuevo proyecto Maven.
+Para ese ejercicio, cada uno debe usar el repositorio de la práctica 7 donde se ha trabajado con Maven.
+
+. Crea un nuevo proyecto Maven. El nombre debe ser *ej07-maven-nombreMiembro*.
 
 .Nuevo proyecto Maven: sesion07
 image::new-maven.png[role="thumb", align="center"]
 
 [start=2]
-. Indica la URL del proyecto en Github
+. Indica la URL del proyecto en Github. Utiliza aquí la URL de tu proyecto de la *práctica 7*.
 
 .URL del proyecto en Github
 image::new-maven-github-url.png[role="thumb", align="center"]
@@ -344,34 +346,16 @@ image::maven-postbuild-jacoco-details.png[role="thumb", align="center"]
 
 == Creación de un Proyecto Pipeline
 
-.Por completar
-****
-De aquí en adelante está por completar. En breve lo actualizaré.
+Para ese ejercicio, cada estudiante debe usar, de nuevo, el repositorio de la práctica 7 donde se ha trabajado con Maven. Vamos a configurar el proyecto Jenkins que construya el mismo repositorio de la sección anterior, pero esta vez vamos a utilizar _pipelines_.
 
-Gracias por vuestra paciencia.
-****
+=== Diseño del _pipeline_
 
+. Crea un nuevo proyecto y dale el nombre y selecciona tipo _pipeline_. El nombre debe ser *ej07-pipeline-nombreMiembro*.
 
+. Indica la URL del proyecto en Github. Utiliza aquí la URL de tu proyecto de la *práctica 7*.
 
+. En la sección Pipeline, disponemos de un cuadro de texto en el que añadir la descripción de nuestro pipeline utilizando la sintaxis _declarativa_ que Jenkins proporciona. Vamos a ver cómo hacerlo. 
 
-== Ejemplo 1: Aplicación web Java. 
-
-Una vez que hemos configurado correctamente nuestro entorno de CI/CD con Jenkins, vamos a estudiar varios ejemplos tanto en Java como en NodeJs.
-
-Recordemos que *Maven* es una herramienta software para la gestión y construcción de proyectos Java. https://maven.apache.org/[Apache Maven] estandariza la configuración de un proyecto en todo su ciclo de vida, como son todas las fases de compilación, ejecución de pruebas, empaquetado, etc. Maven permite la gestión de dependencias entre módulos y distintas versiones de librerías, simplemente indicando los módulos que componen el proyecto, y las dependencias utiliza el software que estamos desarrollando, en un fichero XML de configuración llamado POM (Project Object Model).
-
-
-
-=== Creación de proyecto Jenkins con pipelines
-
-Una vez que hemos probado la ejecución y funcionamiento de la aplicación PetClinic en local, vamos a configurar el proyecto en el servidor Jenkins de CI/CD para que este se encargue de  la construcción y el despliegue automatizados.
-
-Conecta a tu Jenkins, y crea un nuevo item de tipo Pipeline. Dale el nombre 'spring-petclinic-pipeline':
-
-.New Item, PetClinic pipeline
-image::new-item-pipeline-petclinic.png[role="thumb", align="center"]
-
-En el bloque Pipeline, pega la configuración siguiente:
 
 [source,groovy]
 ----
@@ -379,95 +363,89 @@ pipeline {
   agent any <1>
 
   tools {
-    // Previamente has debido instalar Maven con el nombre "Default Maven"
+    // Nombre dado a la instalación de Maven en "Global Tool configuration"
     maven "Default Maven" <2>
   }
 
   stages { <3>
-    stage('Git fetch') { <4>
-      steps {
-        // Get some code from a GitHub repository
-        git 'https://github.com/spring-projects/spring-petclinic.git'
-      }
-    }
-    stage('Compile, Test, Package') { <5>
-      steps {
-        // Run goal 'package' includes compile, test and package.
-        sh "mvn clean package"
-      }
-      post { <6>
-        // If Maven was able to run the tests, even if some of the test
-        // failed, record the test results and archive the jar file.
-        success {
-          junit '**/target/surefire-reports/TEST-*.xml'
-          archiveArtifacts 'target/*.jar'
-        }
-      }
-    }
+   ... 
   }
 }
 ----
 <1> agente o nodo de Jenkins en que ejecuta la construcción del  proyecto. En el ejemplo, `any` indica que se ejecutará cualquier nodo, en nuestro caso será en __master__ ya que es el único nodo que hay definido en nuestro Jenkins.
 <2> como herramienta para la construcción se usará maven. Pon aquí el nombre que diste a tu instalación de Maven configurada previamente en Tools Configuration. 
 <3> Bloque de `stages`: fases o etapas que conforman el pipeline
-<4> Fase de descarga del repositorio git
-<5> Fase de compilación, ejecución de test y empaquetado de la aplicación. Se realizarán con los __goals__ `clean package`: primero se elimina todo lo generado en la construcción anterior, y a continuación se lanza la construcción con `package` tal y como está definida en el archivo `pom.xml`.
-<6> Paso posterior que guarda los resultados de los test de JUnit para generar la gráfica de evolución de los test.
 
-Tras ejecutar el pipeline, con "Build now", el resultado debe ser el siguiente:
+A continuación se muestra cómo definir cada fase o _stage_ una a una  dentro del bloque _stages_:
 
-.Construcción del pipeline PetClinic
-image::petclinic-pipeline-build-1.png[role="thumb", align="center"]
+[source,groovy]
+----
+pipeline {
+  agent any 
 
-Si realizamos una segunda ejecución, ya aparecerá la gráfica de evolución de los tests de JUnit. 
+  tools {
+    // Nombre dado a la instalación de Maven en "Tools configuration"
+    maven "Default Maven"
+  }
+
+  stages { 
+    stage('Git fetch') { <1>
+      steps {
+        // Get some code from a GitHub repository
+        git 'https://github.com/ualhmis/MavenEjercicios.git'
+      }
+    }
+    stage('Compile, Test, Package') { <2>
+      steps {
+        // When necessary, use '-f path-to/pom.xml' to give the path to pom.xml
+        // Run goal 'package'. It includes compile, test and package.
+        sh "mvn  -f sesion07Maven/pom.xml clean package" <3>
+      }
+      post { <3>
+        // Record the test results and archive the jar file.
+        success {
+          junit '**/target/surefire-reports/TEST-*.xml'
+          archiveArtifacts '**/target/*.jar'
+        }
+      }
+    }
+  }
+}
+----
+<1> Fase de descarga del *repositorio git*
+<2> Fase de build: *compilación, test y empaquetado* de la aplicación. Se ejecutarán los __goals__ `clean package`: primero se elimina todo lo generado en la construcción anterior, y a continuación se lanza la construcción con `package` tal y como está definida en el archivo `pom.xml`.
+<3> Cuando sea necesario, indique el path al archivo `pom.xml` con el parámetro `-f path-to/pom.xml`
+<4> Paso *posterior al build*, que guarda los resultados de los test de JUnit para generar la gráfica de evolución de los test. Además, https://www.jenkins.io/doc/pipeline/steps/core/#archiveartifacts-archive-the-artifacts[archiva el empaquetado] `.jar` para que pueda ser descargado posteriormente
+
+.Definición del _pipeline_
+image::new-pipeline-definition.png[role="thumb", align="center"]
+
+[start=4]
+. Guarda los cambios y construye.
+
+. Tras ejecutar el pipeline, con "Build now", el resultado debe ser el siguiente:
+
+.Resultados del _pipeline_
+image::new-pipeline-results.png[role="thumb", align="center"]
+
 
 === Informe de Cobertura de código
 
-Jenkins nos permite publicar métricas asociadas al proyecto. Una de ellas, es la cobertura de código ejecutado por las pruebas. 
-
-****
-La *Cobertura* de código nos indica el porcentaje de código de producción que está siendo ejecutado por los test. Es deseable tener un valor de cobertura lo más próximo posible al 100%
-****
-
-El proyecto PetClinic contiene 40 test unitarios en JUnit, y está configurado (ver `pom.xml`) para que se calcule la cobertura cuando se lanzan los tests mediante el plugin JaCoCo (Java Code Coverage). Puedes visualizar el resultado de la cobertura en tu construcción local, en la carpeta `target/site/jacoco`: 
-
-.Archivos generados por Jacoco
-image::jacoco-local-results.png[role="thumb", align="center"]
-
-.Informe html de la cobertura Jacoco
-image::jacoco-local-html.png[role="thumb", align="center"]
-
-Y si haces clic en el nombre de una clase, verás el código coloreado: 
-
-.Detalle la cobertura de las lineas de código
-image::plugins-jacoco-class-details.png[role="thumb", align="center"]
-<1> Las lineas [lime-background]#verdes# están cubiertas, es decir, han sido ejecutadas por al menos 1 test.
-<2> Las lineas [yellow-background]#amarillas# están parcialmente cubiertas (__missed branches__): un resultado de la condición (verdadero/falso) ha sido ejecutado por algún test pero el otro no ha sido ejecutado por ningún test.
-<3> Las líneas [red-background]#rojas# no están cubiertas, no han sido ejecutadas por ningún test.
-
-
-Para visualizar el resultado de la cobertura en Jenkins: 
-
-. Instala el plugin de Jacoco y el plugin Code Coverage API
-
-.Instalación del plugin Jacoco
-image::plugins-jacoco-install.png[role="thumb", align="center"]
-
-.Instalación del plugin Code Coverage API
-image::plugins-code-coverage-api-install.png[role="thumb", align="center"]
-
-[start=2]
-
-. Añade las dos siguientes linea al bloque `post` para que se guarde y muestre el informe de cobertura.
+Para visualizar informe de cobertura en el pipeline, añade las dos siguientes linea al bloque `post`:
 
 [source,groovy]
 ----
   ...
   success {
     junit '**/target/surefire-reports/TEST-*.xml'
-    archiveArtifacts 'target/*.jar'
-    jacoco(execPattern: 'target/jacoco.exec') <1>
-    publishCoverage adapters: [jacocoAdapter('target/site/jacoco/jacoco.xml')] <2>
+    archiveArtifacts '**/target/*.jar'
+    jacoco( <1>
+      execPattern: '**/target/jacoco.exec',
+      classPattern: '**/target/classes',
+      sourcePattern: '**/src/',
+      exclusionPattern: '**/test/'
+    )
+    publishCoverage adapters: [jacocoAdapter('**/target/site/jacoco/jacoco.xml')] <2>
   }
   ...
 ----
@@ -475,76 +453,63 @@ image::plugins-code-coverage-api-install.png[role="thumb", align="center"]
 <1> Añade el informe Coverage Trend
 <2> Añade el informe Coverage Report
 
-Tras la construcción de nuevo del proyecto, verás la gráfica de los resultados de los test y debajo la gráfica de evolución de cobertura: 
+Tras la construcción de nuevo del proyecto, verás la gráfica de los resultados de los test y debajo la gráfica de evolución de cobertura. 
 
-.Informe de cobertura en el dashboard
-image::plugins-jacoco-dashboard-result.png[role="thumb", align="center"]
-
-Haciendo clic sobre la gráfica accedes a los detalles: 
-
-.Detalle de de cobertura
-image::plugins-jacoco-details-result.png[role="thumb", align="center"]
-
+.Resultados de la cobertura
+image::new-pipeline-coverage-results.png[role="thumb", align="center"]
 
 === Análisis estático de código: __Checkstyle__
 
 Para mantener y aumentar la calidad de nuestro código debemos ayudarnos, entre otras herramientas, de técnicas de análisis estático de código. Básicamente, se encargan de buscar defectos en el código sin necesidad de que este se ejecute. En Java una de las más habituales es Checkstyle, aunque hay otras como FindBugs, PMD, y SonarQube que integra a los anteriores. 
 
-****
-*CheckStyle* valida el estilo del código respecto al estilo oficial de Java.
-****
-
-El proyecto PetClinic tiene configurado el plugin de CheckStyle en el `pom.xml`: 
-
-[source,xml]
-----
-    ...
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-checkstyle-plugin</artifactId>
-        <version>3.1.0</version>
-        ...
-      </plugin>
-    ...
-----
-
-Para ejectutar CheckStyle en local, ejecuta el comando de maven (`mvn`) con los siguietnes __goals__: `mvn checkstyle:checkstyle site -DgenerateReports=false`
-
-Tras la ejecución, en la carpeta `target/site/` verás el archivo `checkstyle.html`:
-
-.Informe de CheckStyle
-image::checkstyle-report-html.png[role="thumb", align="center"]
-
-Sería labor del equipo de desarrollo revisar los errores detectados y tratar de corregirlos, siempre que realmente supongan una mejora para la calidad del código. 
-
-Para ejecutar y visualizar el informe en Jenkins: 
-
-. Instalar el plugin https://github.com/jenkinsci/warnings-ng-plugin/blob/master/doc/Documentation.md#declarative-pipeline-configuration[Warnings Next Generation].
-. Añadir al pipeline un nuevo `stage` con la siguiente descripción: 
+Para ejecutar y visualizar el análisis de Checkstyle, añade un nuevo _stage_ ap pipeline: 
 
 
 [source,groovy]
 ----
-	stage ('Analysis') {
-      steps {
-		  // Warnings next generation plugin required
-		  sh "mvn checkstyle:checkstyle site -DgenerateReports=false"
-		  recordIssues enabledForFailure: true, tool: checkStyle() 
-	  }
-	}
+  stage ('Analysis') {
+    steps {
+	  // Warnings next generation plugin required
+	  sh "mvn -f sesion07Maven/pom.xml checkstyle:checkstyle site -DgenerateReports=false"
+    }
+    post {
+      // Record the test results and archive the jar file.
+      success {
+        recordIssues enabledForFailure: true, tool: checkStyle() 
+      }
+    }
+  }
 ----
 
 Tras la construcción, el pipeline tiene una nueva fase y además en el menú tenemos acceso al informe de CheckStyle.
 
 .Pipeline con la nueva fase de Análisis
-image::checkstyle-report-dashboard.png[role="thumb", align="center"]
+image::new-pipeline-checkstyle-report-dashboard.png[role="thumb", align="center"]
 
 .Detalles del informe de CheckStyle
-image::checkstyle-report-details.png[role="thumb", align="center"]
+image::new-pipeline-checkstyle-report-details.png[role="thumb", align="center"]
+
+Como parte del ejercicio, completa por ti mismo la publicación del resto de informes de análisis estático de código generados en la sesión 7. Se publican a través del plugin https://www.jenkins.io/doc/pipeline/steps/warnings-ng/[Warnings Next Generation].
+
+- PMD: añade el _goal_ adecuado en la ejecución de maven y añade la publicación del informe:
+
+[source,groovy]
+----
+recordIssues enabledForFailure: true, tool: pmdParser() 
+----
+
+- CPD: añade la publicación del informe:
+
+[source,groovy]
+----
+recordIssues enabledForFailure: true, tool: cpd() 
+----
+
+- Etc.
 
 .Saber más...
 ****
-Si estás interesado en profundizar en este tema, te recomiendo integrar https://www.sonarqube.org/[SonarQube] con Jenkins, ya que SonarQube realiza un análisis mucho más detallado de la calidad y seguridad del código, realizando tanto análisis estático de código (CheckStyle y otros), como de análisis de seguridad (vulnerabilidades), y definiendo lo que denomina https://docs.sonarqube.org/latest/user-guide/quality-gates/[__Quality Gates__] que permiten definir condiciones que se deben cumplir basadas en los valores de las métricas del proyecto (por ejemplo, que la cobertura de código sea mayor del 80%). Puedes encontrar mucha documentación online sobre cómo hacerlo:
+Si estás interesado en profundizar en este tema, en la asignatura Procesos de Ingeniería del Software II, de 4º curso, lo estudiareis en profundidad. En cualquier caso, adelanto que es recomendable integrar https://www.sonarqube.org/[SonarQube] con Jenkins, ya que SonarQube realiza un análisis mucho más detallado de la calidad y seguridad del código, realizando tanto análisis estático de código (CheckStyle y otros), como de análisis de seguridad (vulnerabilidades), y definiendo lo que denomina https://docs.sonarqube.org/latest/user-guide/quality-gates/[__Quality Gates__] que permiten definir condiciones que se deben cumplir basadas en los valores de las métricas del proyecto (por ejemplo, que la cobertura de código sea mayor del 80%). Puedes encontrar mucha documentación online sobre cómo hacerlo:
 
 - https://docs.sonarqube.org/latest/setup/get-started-2-minutes/[Instalar SonarQube] como aplicación o como contenedor Docker (recomendado)
 - Instalar el plugin https://plugins.jenkins.io/sonar/[SonarQube Scanner for Jenkins]
