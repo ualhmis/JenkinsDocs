@@ -22,7 +22,6 @@ Codificación, idioma, tabla de contenidos, tipo de documento
 :figure-caption: Fig.
 :imagesdir: images
 
-
 ////
 Nombre y título del trabajo
 ////
@@ -269,6 +268,8 @@ image::new-connect-four-build-results.png[role="thumb", align="center"]
 
 Para ese ejercicio, cada uno debe usar el repositorio de la práctica 7 donde se ha trabajado con Maven.
 
+=== Construcción básica
+
 . Crea un nuevo proyecto Maven. El nombre debe ser *ej07-maven-nombreMiembro*.
 
 .Nuevo proyecto Maven: sesion07
@@ -320,6 +321,8 @@ En los proyectos Maven, no hace falta configurar la publicación de los test de 
 .Resultados de la construcción
 image::new-maven-build-results.png[role="thumb", align="center"]
 
+=== Informe de cobertura
+
 [start=8]
 . Añade los *resultados de la cobertura* obtenidos con *JaCoCO*: entra de nuevo en la configuración del proyecto, en _post-build actions_ añade una acción a ejecutar después y selecciona _Record JaCoCo coverage report_
 
@@ -342,6 +345,31 @@ Y si haces clic en la gráfica, verás el informe detallado.
 
 .Detalle de cobertura con JaCoCo
 image::maven-postbuild-jacoco-details.png[role="thumb", align="center"]
+
+=== Añadiendo Javadoc y Site
+
+[start=10]
+. Para generar la documentación en _Javadoc_ y publicarla en la página del proyecto, simplemente añade los _goals_ `javadoc:javadoc javadoc:aggregate`.
+
+. Para generar la documentación _Site_ de Maven y publicarla, simplemente añade el _goal_ `site`.
+
+.Javadoc y Site
+image::maven-postbuild-javadoc-site.png[role="thumb", align="center"]
+
+[start=12]
+. Para poder visualizar correctamente el _Site_, hay que cambiar la https://wiki.jenkins.io/display/JENKINS/Configuring+Content+Security+Policy#ConfiguringContentSecurityPolicy-TheDefaultRuleSet[configuración de seguridad] de Jenkins predeterminada que es muy restrictiva para prevenir de archivos HTML/JS maliciosos. Para modificar la configuración, abre la consola de scritps (_Manage Jenkins / Script Console_), y ejecuta estas líneas: 
+
+[source,groovy]
+----
+System.setProperty("hudson.model.DirectoryBrowserSupport.CSP", "sandbox; default-src 'none'; img-src 'self'; style-src 'self' 'unsafe-inline'; ")
+System.getProperty("hudson.model.DirectoryBrowserSupport.CSP")
+----
+
+.Script Console: permisos para visualizar _Site_
+image::maven-script-console-site.png[role="thumb", align="center"]
+
+[start=13]
+. Tras ello ya podrás visualizar correctamente. Pero ten en cuenta que cada vez que reinicies Jenkins esta configuración  se pierde y vuelve a la configuración predeterminada. 
 
 
 == Creación de un Proyecto Pipeline
@@ -401,7 +429,7 @@ pipeline {
         // Run goal 'package'. It includes compile, test and package.
         sh "mvn  -f sesion07Maven/pom.xml clean package" <3>
       }
-      post { <3>
+      post { <4>
         // Record the test results and archive the jar file.
         success {
           junit '**/target/surefire-reports/TEST-*.xml'
@@ -458,11 +486,11 @@ Tras la construcción de nuevo del proyecto, verás la gráfica de los resultado
 .Resultados de la cobertura
 image::new-pipeline-coverage-results.png[role="thumb", align="center"]
 
-=== Análisis estático de código: __Checkstyle__
+=== Análisis estático de código
 
 Para mantener y aumentar la calidad de nuestro código debemos ayudarnos, entre otras herramientas, de técnicas de análisis estático de código. Básicamente, se encargan de buscar defectos en el código sin necesidad de que este se ejecute. En Java una de las más habituales es Checkstyle, aunque hay otras como FindBugs, PMD, y SonarQube que integra a los anteriores. 
 
-Para ejecutar y visualizar el análisis de Checkstyle, añade un nuevo _stage_ ap pipeline: 
+Para ejecutar y visualizar el análisis de Checkstyle, añade un nuevo _stage_ al pipeline: 
 
 
 [source,groovy]
@@ -505,11 +533,86 @@ recordIssues enabledForFailure: true, tool: pmdParser()
 recordIssues enabledForFailure: true, tool: cpd() 
 ----
 
-- Etc.
+- FingBugs: repite el proceso.
+
+
+- SpotBugs: repite el proceso.
+
+El resultado final debe ser tal que así. Para que se ejecuten todos los análisis simplemente llamamos a `site` ya que todos los tenemos definidos en el bloque `<reporting>` del `pom.xml`.
+
+[source,groovy]
+----
+    stage ('Analysis') {
+      steps {
+	    // Warnings next generation plugin required
+	    sh "mvn -f sesion07Maven/pom.xml site"
+      }
+      post {
+        success {
+          recordIssues enabledForFailure: true, tool: checkStyle()
+          recordIssues enabledForFailure: true, tool: pmdParser() 
+          recordIssues enabledForFailure: true, tool: cpd()
+          recordIssues enabledForFailure: true, tool: findBugs()
+          recordIssues enabledForFailure: true, tool: spotBugs()
+        }
+      }
+    }
+----
+
+Como resultado debes ver las gráficas de cada una de estas 5 herramientas en la página del proyecto. Y haciendo clic en cada gráfica, así como en los enlaces del menú de la izquierda, se accede al detalle de cada informe.
+
+
+.Enlaces a los informes de análisis estático de código
+image::new-pipeline-analysis-links.png[role="thumb", align="center"]
+
+
+
+=== Dependency-check
+
+https://owasp.org/www-project-dependency-check/[Dependency Check] de https://owasp.org/[OWASP] (Open Web Application Security Project) es una herramienta que permite identificar las dependencias de nuestro proyecto y comprobar si hay alguna de ellas que tiene vulnerabilidades conocidas. En la práctica anterior configuramos el plugin `dependency-check-maven` en el bloque `<reporting>` del `pom.xml`, por lo que este https://jeremylong.github.io/DependencyCheck/dependency-check-maven/index.html[plugin se ejecuta] cuando llamamos al _goal_ `site`. Puesto que ya hemos ejecutado `site` en la fase anterior, no es necesario crear una nueva fase (_stage_) para generar el informe de Dependency-check, únicamente será necesario publicarlo en el pipeline. 
+
+. Instala el plugin https://plugins.jenkins.io/dependency-check-jenkins-plugin/[OWASP Dependency-Check] en Jenkins. 
+
+.Instalación del plugin Dependency-Check
+image::plugins-owasp-dependency-check-install.png[role="thumb", align="center"]
+
+[start=2]
+. Modifica el archivo `pom.xml` en tu proyecto y añade la siguiente línea para que genere el informe también en formato XML, que es el formato que lee el plugin:
+
+[source,xml,linenums,highlight=7]
+----
+			<plugin>
+				<groupId>org.owasp</groupId>
+				<artifactId>dependency-check-maven</artifactId>
+				<version>5.3.2</version>
+				<configuration>
+					<skipTestScope>false</skipTestScope>
+					<formats>HTML,XML</formats> <1>
+				</configuration>
+				...
+			</plugin>
+----
+<1> Genera el informe en HTML y XML
+
+[start=3]
+. Añade en el pipeline la siguiente linea para publicar el informe, en el mismo bloque pero antes que _checkstyle_, _pmd_, etc.
+
+[source,groovy]
+----
+dependencyCheckPublisher pattern: '**/target/site/dependency-check-report.xml'
+----
+
+[start=4]
+
+. Tras volver a construir el proyecto, aparecerá una nueva gráfica de _Dependency Check_ en el proyecto. Si no tienes problemas de seguridad en las dependencias, esta gráfica estará en blanco. El enlace al informe de dependencias no aparece en la página principal del proyecto, en el menú de enlaces como el resto, sino que tienes que hacer clic en el número del último build, y en la nueva página ya aparece el enlace el enlace:
+
+.Enlace al informe _Dependency-Check_
+image::new-pipeline-dependency-check-link.png[role="thumb", align="center"]
+
 
 .Saber más...
 ****
-Si estás interesado en profundizar en este tema, en la asignatura Procesos de Ingeniería del Software II, de 4º curso, lo estudiareis en profundidad. En cualquier caso, adelanto que es recomendable integrar https://www.sonarqube.org/[SonarQube] con Jenkins, ya que SonarQube realiza un análisis mucho más detallado de la calidad y seguridad del código, realizando tanto análisis estático de código (CheckStyle y otros), como de análisis de seguridad (vulnerabilidades), y definiendo lo que denomina https://docs.sonarqube.org/latest/user-guide/quality-gates/[__Quality Gates__] que permiten definir condiciones que se deben cumplir basadas en los valores de las métricas del proyecto (por ejemplo, que la cobertura de código sea mayor del 80%). Puedes encontrar mucha documentación online sobre cómo hacerlo:
+Si estás interesado en profundizar en este tema, en la asignatura http://cms.ual.es/UAL/estudios/grados/plandeestudios/asignaturas/asignatura/GRADO4015?idAss=40154308&idTit=4015[Procesos de Ingeniería del Software II], de 4º curso, lo estudiareis en profundidad. En cualquier caso, adelanto que es recomendable integrar https://www.sonarqube.org/[SonarQube] con Jenkins, ya que SonarQube realiza un análisis mucho más detallado de la calidad y seguridad del código, realizando tanto análisis estático de código (CheckStyle y otros), como de análisis de seguridad (vulnerabilidades), y definiendo lo que denomina https://docs.sonarqube.org/latest/user-guide/quality-gates/[__Quality Gates__] que permiten definir condiciones que se deben cumplir basadas en los valores de las métricas del proyecto (por ejemplo, que la cobertura de código sea mayor del 80%). Puedes encontrar mucha documentación online sobre cómo hacerlo:
 
 - https://docs.sonarqube.org/latest/setup/get-started-2-minutes/[Instalar SonarQube] como aplicación o como contenedor Docker (recomendado)
 - Instalar el plugin https://plugins.jenkins.io/sonar/[SonarQube Scanner for Jenkins]
@@ -521,3 +624,38 @@ Además, Si tu proyecto está en un repositorio público en GitHub, puedes ahorr
 
 
 
+=== Documentación Javadoc y Site
+
+La siguiente fase recomendada en el pipeline, de las https://stackoverflow.com/a/56149262[lista de fases genéricas], es la de generar la documentación
+
+Es necesario instalar previamente el plugin *HTML Publisher* de Jenkins.
+
+Añade esta fase al pipeline: 
+
+[source,groovy]
+----
+    stage ('Documentation') {
+      steps {
+	    sh "mvn -f sesion07Maven/pom.xml javadoc:javadoc javadoc:aggregate" <1>
+      }
+      post{
+        success {
+          step $class: 'JavadocArchiver', javadocDir: 'sesion07Maven/target/site/apidocs', keepAll: false <2>
+          publishHTML(target: [reportName: 'Maven Site', reportDir: 'sesion07Maven/target/site', reportFiles: 'index.html', keepAll: false]) <3>
+        }
+      }
+    }
+----
+<1> Llamada a javadoc desde Maven.
+<2> Publica los archivos html de Javadoc y añade el enlace en el menú.
+<3> Publica el _site_ y añade el enlace en el menú.
+
+.Enlaces a documentación Javadoc y Site
+image::new-pipeline-docs-links.png[role="thumb", align="center"]
+
+=== Jenkinsfile
+
+La descripción del pipeline puede guardarse en un archivo llamado `Jenkinsfile` y guardarse en el repositorio como otro archivo de código más. Si haces esto, al configurar el proyecto en Jenkins debes elegir la opción *Pipeline script from SCM* en la sección de definición del pipeline. A continuación, debes proporcionar la URL del repositorio donde se encuentra el archivo Jenkinsfile.
+
+.Configuración del pipeline con archivo _Jenkinsfile_
+image::new-pipeline-jenkinsfile.png[role="thumb", align="center"]

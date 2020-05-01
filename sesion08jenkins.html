@@ -455,12 +455,21 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#_instalación_de_plugins_adicionales">3. Instalación de plugins adicionales</a></li>
 <li><a href="#_tipos_de_proyectos_en_jenkins">4. Tipos de proyectos en Jenkins</a></li>
 <li><a href="#_creación_de_un_proyecto_con_ant">5. Creación de un Proyecto con Ant</a></li>
-<li><a href="#_creación_de_un_proyecto_maven">6. Creación de un Proyecto Maven</a></li>
+<li><a href="#_creación_de_un_proyecto_maven">6. Creación de un Proyecto Maven</a>
+<ul class="sectlevel2">
+<li><a href="#_construcción_básica">6.1. Construcción básica</a></li>
+<li><a href="#_informe_de_cobertura">6.2. Informe de cobertura</a></li>
+<li><a href="#_añadiendo_javadoc_y_site">6.3. Añadiendo Javadoc y Site</a></li>
+</ul>
+</li>
 <li><a href="#_creación_de_un_proyecto_pipeline">7. Creación de un Proyecto Pipeline</a>
 <ul class="sectlevel2">
 <li><a href="#_diseño_del_pipeline">7.1. Diseño del <em>pipeline</em></a></li>
 <li><a href="#_informe_de_cobertura_de_código">7.2. Informe de Cobertura de código</a></li>
-<li><a href="#_análisis_estático_de_código_checkstyle">7.3. Análisis estático de código: <em>Checkstyle</em></a></li>
+<li><a href="#_análisis_estático_de_código">7.3. Análisis estático de código</a></li>
+<li><a href="#_dependency_check">7.4. Dependency-check</a></li>
+<li><a href="#_documentación_javadoc_y_site">7.5. Documentación Javadoc y Site</a></li>
+<li><a href="#_jenkinsfile">7.6. Jenkinsfile</a></li>
 </ul>
 </li>
 </ul>
@@ -918,6 +927,8 @@ Para ver una gráfica de resultados de los Test debemos ejecutar al menos 2 cons
 <div class="paragraph">
 <p>Para ese ejercicio, cada uno debe usar el repositorio de la práctica 7 donde se ha trabajado con Maven.</p>
 </div>
+<div class="sect2">
+<h3 id="_construcción_básica">6.1. Construcción básica</h3>
 <div class="olist arabic">
 <ol class="arabic">
 <li>
@@ -1031,6 +1042,9 @@ Por consola se visualiza el resultado de la ejecución de maven.</p>
 </div>
 <div class="title">Fig. 22. Resultados de la construcción</div>
 </div>
+</div>
+<div class="sect2">
+<h3 id="_informe_de_cobertura">6.2. Informe de cobertura</h3>
 <div class="olist arabic">
 <ol class="arabic" start="8">
 <li>
@@ -1078,6 +1092,52 @@ Por consola se visualiza el resultado de la ejecución de maven.</p>
 <img src="images/maven-postbuild-jacoco-details.png" alt="maven postbuild jacoco details">
 </div>
 <div class="title">Fig. 26. Detalle de cobertura con JaCoCo</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_añadiendo_javadoc_y_site">6.3. Añadiendo Javadoc y Site</h3>
+<div class="olist arabic">
+<ol class="arabic" start="10">
+<li>
+<p>Para generar la documentación en <em>Javadoc</em> y publicarla en la página del proyecto, simplemente añade los <em>goals</em> <code>javadoc:javadoc javadoc:aggregate</code>.</p>
+</li>
+<li>
+<p>Para generar la documentación <em>Site</em> de Maven y publicarla, simplemente añade el <em>goal</em> <code>site</code>.</p>
+</li>
+</ol>
+</div>
+<div class="imageblock text-center thumb">
+<div class="content">
+<img src="images/maven-postbuild-javadoc-site.png" alt="maven postbuild javadoc site">
+</div>
+<div class="title">Fig. 27. Javadoc y Site</div>
+</div>
+<div class="olist arabic">
+<ol class="arabic" start="12">
+<li>
+<p>Para poder visualizar correctamente el <em>Site</em>, hay que cambiar la <a href="https://wiki.jenkins.io/display/JENKINS/Configuring+Content+Security+Policy#ConfiguringContentSecurityPolicy-TheDefaultRuleSet">configuración de seguridad</a> de Jenkins predeterminada que es muy restrictiva para prevenir de archivos HTML/JS maliciosos. Para modificar la configuración, abre la consola de scritps (<em>Manage Jenkins / Script Console</em>), y ejecuta estas líneas:</p>
+</li>
+</ol>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="groovy"><span class="n">System</span><span class="o">.</span><span class="na">setProperty</span><span class="o">(</span><span class="s2">"hudson.model.DirectoryBrowserSupport.CSP"</span><span class="o">,</span> <span class="s2">"sandbox; default-src 'none'; img-src 'self'; style-src 'self' 'unsafe-inline'; "</span><span class="o">)</span>
+<span class="n">System</span><span class="o">.</span><span class="na">getProperty</span><span class="o">(</span><span class="s2">"hudson.model.DirectoryBrowserSupport.CSP"</span><span class="o">)</span></code></pre>
+</div>
+</div>
+<div class="imageblock text-center thumb">
+<div class="content">
+<img src="images/maven-script-console-site.png" alt="maven script console site">
+</div>
+<div class="title">Fig. 28. Script Console: permisos para visualizar <em>Site</em></div>
+</div>
+<div class="olist arabic">
+<ol class="arabic" start="13">
+<li>
+<p>Tras ello ya podrás visualizar correctamente. Pero ten en cuenta que cada vez que reinicies Jenkins esta configuración  se pierde y vuelve a la configuración predeterminada.</p>
+</li>
+</ol>
+</div>
 </div>
 </div>
 </div>
@@ -1160,7 +1220,7 @@ Por consola se visualiza el resultado de la ejecución de maven.</p>
         <span class="c1">// Run goal 'package'. It includes compile, test and package.</span>
         <span class="n">sh</span> <span class="s2">"mvn  -f sesion07Maven/pom.xml clean package"</span> <i class="conum" data-value="3"></i><b>(3)</b>
       <span class="o">}</span>
-      <span class="n">post</span> <span class="o">{</span> <i class="conum" data-value="3"></i><b>(3)</b>
+      <span class="n">post</span> <span class="o">{</span> <i class="conum" data-value="4"></i><b>(4)</b>
         <span class="c1">// Record the test results and archive the jar file.</span>
         <span class="n">success</span> <span class="o">{</span>
           <span class="n">junit</span> <span class="s1">'**/target/surefire-reports/TEST-*.xml'</span>
@@ -1196,7 +1256,7 @@ Por consola se visualiza el resultado de la ejecución de maven.</p>
 <div class="content">
 <img src="images/new-pipeline-definition.png" alt="new pipeline definition">
 </div>
-<div class="title">Fig. 27. Definición del <em>pipeline</em></div>
+<div class="title">Fig. 29. Definición del <em>pipeline</em></div>
 </div>
 <div class="olist arabic">
 <ol class="arabic" start="4">
@@ -1212,7 +1272,7 @@ Por consola se visualiza el resultado de la ejecución de maven.</p>
 <div class="content">
 <img src="images/new-pipeline-results.png" alt="new pipeline results">
 </div>
-<div class="title">Fig. 28. Resultados del <em>pipeline</em></div>
+<div class="title">Fig. 30. Resultados del <em>pipeline</em></div>
 </div>
 </div>
 <div class="sect2">
@@ -1256,16 +1316,16 @@ Por consola se visualiza el resultado de la ejecución de maven.</p>
 <div class="content">
 <img src="images/new-pipeline-coverage-results.png" alt="new pipeline coverage results">
 </div>
-<div class="title">Fig. 29. Resultados de la cobertura</div>
+<div class="title">Fig. 31. Resultados de la cobertura</div>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_análisis_estático_de_código_checkstyle">7.3. Análisis estático de código: <em>Checkstyle</em></h3>
+<h3 id="_análisis_estático_de_código">7.3. Análisis estático de código</h3>
 <div class="paragraph">
 <p>Para mantener y aumentar la calidad de nuestro código debemos ayudarnos, entre otras herramientas, de técnicas de análisis estático de código. Básicamente, se encargan de buscar defectos en el código sin necesidad de que este se ejecute. En Java una de las más habituales es Checkstyle, aunque hay otras como FindBugs, PMD, y SonarQube que integra a los anteriores.</p>
 </div>
 <div class="paragraph">
-<p>Para ejecutar y visualizar el análisis de Checkstyle, añade un nuevo <em>stage</em> ap pipeline:</p>
+<p>Para ejecutar y visualizar el análisis de Checkstyle, añade un nuevo <em>stage</em> al pipeline:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -1290,13 +1350,13 @@ Por consola se visualiza el resultado de la ejecución de maven.</p>
 <div class="content">
 <img src="images/new-pipeline-checkstyle-report-dashboard.png" alt="new pipeline checkstyle report dashboard">
 </div>
-<div class="title">Fig. 30. Pipeline con la nueva fase de Análisis</div>
+<div class="title">Fig. 32. Pipeline con la nueva fase de Análisis</div>
 </div>
 <div class="imageblock text-center thumb">
 <div class="content">
 <img src="images/new-pipeline-checkstyle-report-details.png" alt="new pipeline checkstyle report details">
 </div>
-<div class="title">Fig. 31. Detalles del informe de CheckStyle</div>
+<div class="title">Fig. 33. Detalles del informe de CheckStyle</div>
 </div>
 <div class="paragraph">
 <p>Como parte del ejercicio, completa por ti mismo la publicación del resto de informes de análisis estático de código generados en la sesión 7. Se publican a través del plugin <a href="https://www.jenkins.io/doc/pipeline/steps/warnings-ng/">Warnings Next Generation</a>.</p>
@@ -1328,15 +1388,133 @@ Por consola se visualiza el resultado de la ejecución de maven.</p>
 <div class="ulist">
 <ul>
 <li>
-<p>Etc.</p>
+<p>FingBugs: repite el proceso.</p>
+</li>
+<li>
+<p>SpotBugs: repite el proceso.</p>
 </li>
 </ul>
+</div>
+<div class="paragraph">
+<p>El resultado final debe ser tal que así. Para que se ejecuten todos los análisis simplemente llamamos a <code>site</code> ya que todos los tenemos definidos en el bloque <code>&lt;reporting&gt;</code> del <code>pom.xml</code>.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="groovy">    <span class="n">stage</span> <span class="o">(</span><span class="s1">'Analysis'</span><span class="o">)</span> <span class="o">{</span>
+      <span class="n">steps</span> <span class="o">{</span>
+	    <span class="c1">// Warnings next generation plugin required</span>
+	    <span class="n">sh</span> <span class="s2">"mvn -f sesion07Maven/pom.xml site"</span>
+      <span class="o">}</span>
+      <span class="n">post</span> <span class="o">{</span>
+        <span class="n">success</span> <span class="o">{</span>
+          <span class="n">recordIssues</span> <span class="nl">enabledForFailure:</span> <span class="kc">true</span><span class="o">,</span> <span class="nl">tool:</span> <span class="n">checkStyle</span><span class="o">()</span>
+          <span class="n">recordIssues</span> <span class="nl">enabledForFailure:</span> <span class="kc">true</span><span class="o">,</span> <span class="nl">tool:</span> <span class="n">pmdParser</span><span class="o">()</span>
+          <span class="n">recordIssues</span> <span class="nl">enabledForFailure:</span> <span class="kc">true</span><span class="o">,</span> <span class="nl">tool:</span> <span class="n">cpd</span><span class="o">()</span>
+          <span class="n">recordIssues</span> <span class="nl">enabledForFailure:</span> <span class="kc">true</span><span class="o">,</span> <span class="nl">tool:</span> <span class="n">findBugs</span><span class="o">()</span>
+          <span class="n">recordIssues</span> <span class="nl">enabledForFailure:</span> <span class="kc">true</span><span class="o">,</span> <span class="nl">tool:</span> <span class="n">spotBugs</span><span class="o">()</span>
+        <span class="o">}</span>
+      <span class="o">}</span>
+    <span class="o">}</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Como resultado debes ver las gráficas de cada una de estas 5 herramientas en la página del proyecto. Y haciendo clic en cada gráfica, así como en los enlaces del menú de la izquierda, se accede al detalle de cada informe.</p>
+</div>
+<div class="imageblock text-center thumb">
+<div class="content">
+<img src="images/new-pipeline-analysis-links.png" alt="new pipeline analysis links">
+</div>
+<div class="title">Fig. 34. Enlaces a los informes de análisis estático de código</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_dependency_check">7.4. Dependency-check</h3>
+<div class="paragraph">
+<p><a href="https://owasp.org/www-project-dependency-check/">Dependency Check</a> de <a href="https://owasp.org/">OWASP</a> (Open Web Application Security Project) es una herramienta que permite identificar las dependencias de nuestro proyecto y comprobar si hay alguna de ellas que tiene vulnerabilidades conocidas. En la práctica anterior configuramos el plugin <code>dependency-check-maven</code> en el bloque <code>&lt;reporting&gt;</code> del <code>pom.xml</code>, por lo que este <a href="https://jeremylong.github.io/DependencyCheck/dependency-check-maven/index.html">plugin se ejecuta</a> cuando llamamos al <em>goal</em> <code>site</code>. Puesto que ya hemos ejecutado <code>site</code> en la fase anterior, no es necesario crear una nueva fase (<em>stage</em>) para generar el informe de Dependency-check, únicamente será necesario publicarlo en el pipeline.</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Instala el plugin <a href="https://plugins.jenkins.io/dependency-check-jenkins-plugin/">OWASP Dependency-Check</a> en Jenkins.</p>
+</li>
+</ol>
+</div>
+<div class="imageblock text-center thumb">
+<div class="content">
+<img src="images/plugins-owasp-dependency-check-install.png" alt="plugins owasp dependency check install">
+</div>
+<div class="title">Fig. 35. Instalación del plugin Dependency-Check</div>
+</div>
+<div class="olist arabic">
+<ol class="arabic" start="2">
+<li>
+<p>Modifica el archivo <code>pom.xml</code> en tu proyecto y añade la siguiente línea para que genere el informe también en formato XML, que es el formato que lee el plugin:</p>
+</li>
+</ol>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="xml"><table class="linenotable"><tbody><tr><td class="linenos gl"><pre class="lineno"> 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+</pre></td><td class="code"><pre>			<span class="nt">&lt;plugin&gt;</span>
+				<span class="nt">&lt;groupId&gt;</span>org.owasp<span class="nt">&lt;/groupId&gt;</span>
+				<span class="nt">&lt;artifactId&gt;</span>dependency-check-maven<span class="nt">&lt;/artifactId&gt;</span>
+				<span class="nt">&lt;version&gt;</span>5.3.2<span class="nt">&lt;/version&gt;</span>
+				<span class="nt">&lt;configuration&gt;</span>
+					<span class="nt">&lt;skipTestScope&gt;</span>false<span class="nt">&lt;/skipTestScope&gt;</span>
+<span class="hll">					<span class="nt">&lt;formats&gt;</span>HTML,XML<span class="nt">&lt;/formats&gt;</span> <i class="conum" data-value="1"></i><b>(1)</b>
+</span>				<span class="nt">&lt;/configuration&gt;</span>
+				...
+			<span class="nt">&lt;/plugin&gt;</span>
+</pre></td></tr></tbody></table></code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>Genera el informe en HTML y XML</td>
+</tr>
+</table>
+</div>
+<div class="olist arabic">
+<ol class="arabic" start="3">
+<li>
+<p>Añade en el pipeline la siguiente linea para publicar el informe, en el mismo bloque pero antes que <em>checkstyle</em>, <em>pmd</em>, etc.</p>
+</li>
+</ol>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="groovy"><span class="n">dependencyCheckPublisher</span> <span class="nl">pattern:</span> <span class="s1">'**/target/site/dependency-check-report.xml'</span></code></pre>
+</div>
+</div>
+<div class="olist arabic">
+<ol class="arabic" start="4">
+<li>
+<p>Tras volver a construir el proyecto, aparecerá una nueva gráfica de <em>Dependency Check</em> en el proyecto. Si no tienes problemas de seguridad en las dependencias, esta gráfica estará en blanco. El enlace al informe de dependencias no aparece en la página principal del proyecto, en el menú de enlaces como el resto, sino que tienes que hacer clic en el número del último build, y en la nueva página ya aparece el enlace el enlace:</p>
+</li>
+</ol>
+</div>
+<div class="imageblock text-center thumb">
+<div class="content">
+<img src="images/new-pipeline-dependency-check-link.png" alt="new pipeline dependency check link">
+</div>
+<div class="title">Fig. 36. Enlace al informe <em>Dependency-Check</em></div>
 </div>
 <div class="sidebarblock">
 <div class="content">
 <div class="title">Saber más&#8230;&#8203;</div>
 <div class="paragraph">
-<p>Si estás interesado en profundizar en este tema, en la asignatura Procesos de Ingeniería del Software II, de 4º curso, lo estudiareis en profundidad. En cualquier caso, adelanto que es recomendable integrar <a href="https://www.sonarqube.org/">SonarQube</a> con Jenkins, ya que SonarQube realiza un análisis mucho más detallado de la calidad y seguridad del código, realizando tanto análisis estático de código (CheckStyle y otros), como de análisis de seguridad (vulnerabilidades), y definiendo lo que denomina <a href="https://docs.sonarqube.org/latest/user-guide/quality-gates/"><em>Quality Gates</em></a> que permiten definir condiciones que se deben cumplir basadas en los valores de las métricas del proyecto (por ejemplo, que la cobertura de código sea mayor del 80%). Puedes encontrar mucha documentación online sobre cómo hacerlo:</p>
+<p>Si estás interesado en profundizar en este tema, en la asignatura <a href="http://cms.ual.es/UAL/estudios/grados/plandeestudios/asignaturas/asignatura/GRADO4015?idAss=40154308&amp;idTit=4015">Procesos de Ingeniería del Software II</a>, de 4º curso, lo estudiareis en profundidad. En cualquier caso, adelanto que es recomendable integrar <a href="https://www.sonarqube.org/">SonarQube</a> con Jenkins, ya que SonarQube realiza un análisis mucho más detallado de la calidad y seguridad del código, realizando tanto análisis estático de código (CheckStyle y otros), como de análisis de seguridad (vulnerabilidades), y definiendo lo que denomina <a href="https://docs.sonarqube.org/latest/user-guide/quality-gates/"><em>Quality Gates</em></a> que permiten definir condiciones que se deben cumplir basadas en los valores de las métricas del proyecto (por ejemplo, que la cobertura de código sea mayor del 80%). Puedes encontrar mucha documentación online sobre cómo hacerlo:</p>
 </div>
 <div class="ulist">
 <ul>
@@ -1360,12 +1538,73 @@ Por consola se visualiza el resultado de la ejecución de maven.</p>
 </div>
 </div>
 </div>
+<div class="sect2">
+<h3 id="_documentación_javadoc_y_site">7.5. Documentación Javadoc y Site</h3>
+<div class="paragraph">
+<p>La siguiente fase recomendada en el pipeline, de las <a href="https://stackoverflow.com/a/56149262">lista de fases genéricas</a>, es la de generar la documentación</p>
+</div>
+<div class="paragraph">
+<p>Es necesario instalar previamente el plugin <strong>HTML Publisher</strong> de Jenkins.</p>
+</div>
+<div class="paragraph">
+<p>Añade esta fase al pipeline:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="groovy">    <span class="n">stage</span> <span class="o">(</span><span class="s1">'Documentation'</span><span class="o">)</span> <span class="o">{</span>
+      <span class="n">steps</span> <span class="o">{</span>
+	    <span class="n">sh</span> <span class="s2">"mvn -f sesion07Maven/pom.xml javadoc:javadoc javadoc:aggregate"</span> <i class="conum" data-value="1"></i><b>(1)</b>
+      <span class="o">}</span>
+      <span class="n">post</span><span class="o">{</span>
+        <span class="n">success</span> <span class="o">{</span>
+          <span class="n">step</span> <span class="n">$class</span><span class="o">:</span> <span class="s1">'JavadocArchiver'</span><span class="o">,</span> <span class="nl">javadocDir:</span> <span class="s1">'sesion07Maven/target/site/apidocs'</span><span class="o">,</span> <span class="nl">keepAll:</span> <span class="kc">false</span> <i class="conum" data-value="2"></i><b>(2)</b>
+          <span class="n">publishHTML</span><span class="o">(</span><span class="nl">target:</span> <span class="o">[</span><span class="nl">reportName:</span> <span class="s1">'Maven Site'</span><span class="o">,</span> <span class="nl">reportDir:</span> <span class="s1">'sesion07Maven/target/site'</span><span class="o">,</span> <span class="nl">reportFiles:</span> <span class="s1">'index.html'</span><span class="o">,</span> <span class="nl">keepAll:</span> <span class="kc">false</span><span class="o">])</span> <i class="conum" data-value="3"></i><b>(3)</b>
+        <span class="o">}</span>
+      <span class="o">}</span>
+    <span class="o">}</span></code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>Llamada a javadoc desde Maven.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>Publica los archivos html de Javadoc y añade el enlace en el menú.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="3"></i><b>3</b></td>
+<td>Publica el <em>site</em> y añade el enlace en el menú.</td>
+</tr>
+</table>
+</div>
+<div class="imageblock text-center thumb">
+<div class="content">
+<img src="images/new-pipeline-docs-links.png" alt="new pipeline docs links">
+</div>
+<div class="title">Fig. 37. Enlaces a documentación Javadoc y Site</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_jenkinsfile">7.6. Jenkinsfile</h3>
+<div class="paragraph">
+<p>La descripción del pipeline puede guardarse en un archivo llamado <code>Jenkinsfile</code> y guardarse en el repositorio como otro archivo de código más. Si haces esto, al configurar el proyecto en Jenkins debes elegir la opción <strong>Pipeline script from SCM</strong> en la sección de definición del pipeline. A continuación, debes proporcionar la URL del repositorio donde se encuentra el archivo Jenkinsfile.</p>
+</div>
+<div class="imageblock text-center thumb">
+<div class="content">
+<img src="images/new-pipeline-jenkinsfile.png" alt="new pipeline jenkinsfile">
+</div>
+<div class="title">Fig. 38. Configuración del pipeline con archivo <em>Jenkinsfile</em></div>
+</div>
+</div>
 </div>
 </div>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2020-04-30 11:45:26 +0200
+Last updated 2020-05-01 02:04:57 +0200
 </div>
 </div>
 <style>
