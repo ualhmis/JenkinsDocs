@@ -659,3 +659,7 @@ La descripción del pipeline puede guardarse en un archivo llamado `Jenkinsfile`
 
 .Configuración del pipeline con archivo _Jenkinsfile_
 image::new-pipeline-jenkinsfile.png[role="thumb", align="center"]
+
+== FAQ y resolución de problemas (_thoubleshouting_)
+
+En esta sección se añadirán soluciones a los problemas más habituales. 
