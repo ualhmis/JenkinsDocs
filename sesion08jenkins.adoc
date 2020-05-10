@@ -121,7 +121,7 @@ Para comenzar a trabajar en esta sesión, será necesario haber realizado las ac
 
 == Instalación de plugins adicionales
 
-Vamos a instalar varios plugins adicionales en Jenkins, si aun no están instalados:  Github integration, Maven Integration, Cobertura,Jacoco (comprobar antes si no están instalados ya), Greenballs, Code Coverage Api, JavaDoc, Warnings Next Generation, Embeddable Build Status Plugin, xUnit, etc.
+Vamos a instalar varios plugins adicionales en Jenkins, si aun no están instalados:  Github integration, Maven Integration, Cobertura, Jacoco (comprobar antes si no están instalados ya), Greenballs, Code Coverage Api, JavaDoc, Warnings Next Generation, Embeddable Build Status Plugin, xUnit, etc.
 
 Haz clic en __Manage Jenkins__ > __Manage Plugins__. En la pestaña __Available__ busca __Github integration__, seleccionaló y pulsa en __Download now and install after restart__.
 
@@ -587,7 +587,10 @@ image::plugins-owasp-dependency-check-install.png[role="thumb", align="center"]
 				<version>5.3.2</version>
 				<configuration>
 					<skipTestScope>false</skipTestScope>
-					<formats>HTML,XML</formats> <1>
+					<formats> <1>
+            <format>HTML</format>
+            <format>XML</format>
+          </formats> 
 				</configuration>
 				...
 			</plugin>
@@ -617,9 +620,17 @@ Si estás interesado en profundizar en este tema, en la asignatura http://cms.ua
 - https://docs.sonarqube.org/latest/setup/get-started-2-minutes/[Instalar SonarQube] como aplicación o como contenedor Docker (recomendado)
 - Instalar el plugin https://plugins.jenkins.io/sonar/[SonarQube Scanner for Jenkins]
 - https://docs.sonarqube.org/latest/analysis/scan/sonarscanner-for-jenkins/#header-1[Configurar] SonarQube Scanner for Jenkins
-- https://docs.sonarqube.org/latest/analysis/scan/sonarscanner-for-jenkins/#header-5[Añadir al pipeline] la fase de análisis de Sonar
+- https://docs.sonarqube.org/latest/analysis/scan/sonarscanner-for-jenkins/#header-6[Añadir al pipeline] la fase de análisis de Sonar (_Declarative pipeline example:_). Más info de Sonar en pipeline: https://www.jenkins.io/doc/pipeline/steps/sonar/#sonarqube-scanner-for-jenkins[SonarQube Scanner for Jenkins]
 
-Además, Si tu proyecto está en un repositorio público en GitHub, puedes ahorrarte tener que instalar tu propio SonarQube utilizando https://sonarcloud.io/[SonarCloud], el servicio de SonarQube en la nube (SaaS) gratuito para proyectos públicos, con el que evitas tener que instalar y mantener tu propio SonarQube. Incluso puedes configurar SonarCloud y Jenkins para que  https://blog.jdriven.com/2019/08/sonarcloud-github-pull-request-analysis-from-jenkins/[analizar los __pull request__] de tu repositorio y conocer el resultado del análisis de Sonar antes de hacer el __merge__ del pull request.
+Además, si tu proyecto está en un repositorio público en GitHub, puedes ahorrarte tener que instalar tu propio SonarQube utilizando https://sonarcloud.io/[SonarCloud], el servicio de SonarQube en la nube (SaaS) gratuito para proyectos públicos, con el que evitas tener que instalar y mantener tu propio SonarQube. 
+
+Para lanzar el análisis de Sonar con maven:
+
+. Genera el login https://docs.sonarqube.org/latest/user-guide/user-token/[TOKEN]
+
+. Ejecuta los goals de maven: `clean verify sonar:sonar -Dsonar.login=$SONAR_LOGIN_TOKEN`
+
+Incluso puedes configurar SonarCloud y Jenkins para que  https://blog.jdriven.com/2019/08/sonarcloud-github-pull-request-analysis-from-jenkins/[analizar los __pull request__] de tu repositorio y conocer el resultado del análisis de Sonar antes de hacer el __merge__ del pull request.
 ****
 
 
@@ -663,3 +674,6 @@ image::new-pipeline-jenkinsfile.png[role="thumb", align="center"]
 == FAQ y resolución de problemas (_thoubleshouting_)
 
 En esta sección se añadirán soluciones a los problemas más habituales. 
+
+. *La construcción de maven funciona correctamente en Eclipse pero da error en Jenkins*: 
+.. Revisa la versión de maven instalada en Jenkins, y actualiza a la última versión: En _Jenkins_ / _Manage Jenkins_ / _Global Tool Configuration_ / _Maven Installations_. Selecciona la última versión disponible, marca install automatically, y dale un nombre por ejemplo `Default Maven`. *IMPORTANTE*: si tienes más de una instalación de maven, en los proyectos de tipo maven tendrás que elegir cual deseas usar a partir del nombre que le hayas dado a cada una de ellas, seleccionandola en una lista desplegable en la sección de build. 

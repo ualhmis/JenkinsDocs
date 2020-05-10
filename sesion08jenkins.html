@@ -639,7 +639,7 @@ La entrega será mediante el envío de un informe y el acceso al profesor a los 
 <h2 id="_instalación_de_plugins_adicionales">3. Instalación de plugins adicionales</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>Vamos a instalar varios plugins adicionales en Jenkins, si aun no están instalados:  Github integration, Maven Integration, Cobertura,Jacoco (comprobar antes si no están instalados ya), Greenballs, Code Coverage Api, JavaDoc, Warnings Next Generation, Embeddable Build Status Plugin, xUnit, etc.</p>
+<p>Vamos a instalar varios plugins adicionales en Jenkins, si aun no están instalados:  Github integration, Maven Integration, Cobertura, Jacoco (comprobar antes si no están instalados ya), Greenballs, Code Coverage Api, JavaDoc, Warnings Next Generation, Embeddable Build Status Plugin, xUnit, etc.</p>
 </div>
 <div class="paragraph">
 <p>Haz clic en <em>Manage Jenkins</em> &gt; <em>Manage Plugins</em>. En la pestaña <em>Available</em> busca <em>Github integration</em>, seleccionaló y pulsa en <em>Download now and install after restart</em>.</p>
@@ -1465,14 +1465,20 @@ Por consola se visualiza el resultado de la ejecución de maven.</p>
  8
  9
 10
+11
+12
+13
 </pre></td><td class="code"><pre>			<span class="nt">&lt;plugin&gt;</span>
 				<span class="nt">&lt;groupId&gt;</span>org.owasp<span class="nt">&lt;/groupId&gt;</span>
 				<span class="nt">&lt;artifactId&gt;</span>dependency-check-maven<span class="nt">&lt;/artifactId&gt;</span>
 				<span class="nt">&lt;version&gt;</span>5.3.2<span class="nt">&lt;/version&gt;</span>
 				<span class="nt">&lt;configuration&gt;</span>
 					<span class="nt">&lt;skipTestScope&gt;</span>false<span class="nt">&lt;/skipTestScope&gt;</span>
-<span class="hll">					<span class="nt">&lt;formats&gt;</span>HTML,XML<span class="nt">&lt;/formats&gt;</span> <i class="conum" data-value="1"></i><b>(1)</b>
-</span>				<span class="nt">&lt;/configuration&gt;</span>
+<span class="hll">					<span class="nt">&lt;formats&gt;</span> <i class="conum" data-value="1"></i><b>(1)</b>
+</span>            <span class="nt">&lt;format&gt;</span>HTML<span class="nt">&lt;/format&gt;</span>
+            <span class="nt">&lt;format&gt;</span>XML<span class="nt">&lt;/format&gt;</span>
+          <span class="nt">&lt;/formats&gt;</span>
+				<span class="nt">&lt;/configuration&gt;</span>
 				...
 			<span class="nt">&lt;/plugin&gt;</span>
 </pre></td></tr></tbody></table></code></pre>
@@ -1529,12 +1535,28 @@ Por consola se visualiza el resultado de la ejecución de maven.</p>
 <p><a href="https://docs.sonarqube.org/latest/analysis/scan/sonarscanner-for-jenkins/#header-1">Configurar</a> SonarQube Scanner for Jenkins</p>
 </li>
 <li>
-<p><a href="https://docs.sonarqube.org/latest/analysis/scan/sonarscanner-for-jenkins/#header-5">Añadir al pipeline</a> la fase de análisis de Sonar</p>
+<p><a href="https://docs.sonarqube.org/latest/analysis/scan/sonarscanner-for-jenkins/#header-6">Añadir al pipeline</a> la fase de análisis de Sonar (<em>Declarative pipeline example:</em>). Más info de Sonar en pipeline: <a href="https://www.jenkins.io/doc/pipeline/steps/sonar/#sonarqube-scanner-for-jenkins">SonarQube Scanner for Jenkins</a></p>
 </li>
 </ul>
 </div>
 <div class="paragraph">
-<p>Además, Si tu proyecto está en un repositorio público en GitHub, puedes ahorrarte tener que instalar tu propio SonarQube utilizando <a href="https://sonarcloud.io/">SonarCloud</a>, el servicio de SonarQube en la nube (SaaS) gratuito para proyectos públicos, con el que evitas tener que instalar y mantener tu propio SonarQube. Incluso puedes configurar SonarCloud y Jenkins para que  <a href="https://blog.jdriven.com/2019/08/sonarcloud-github-pull-request-analysis-from-jenkins/">analizar los <em>pull request</em></a> de tu repositorio y conocer el resultado del análisis de Sonar antes de hacer el <em>merge</em> del pull request.</p>
+<p>Además, si tu proyecto está en un repositorio público en GitHub, puedes ahorrarte tener que instalar tu propio SonarQube utilizando <a href="https://sonarcloud.io/">SonarCloud</a>, el servicio de SonarQube en la nube (SaaS) gratuito para proyectos públicos, con el que evitas tener que instalar y mantener tu propio SonarQube.</p>
+</div>
+<div class="paragraph">
+<p>Para lanzar el análisis de Sonar con maven:</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Genera el login <a href="https://docs.sonarqube.org/latest/user-guide/user-token/">TOKEN</a></p>
+</li>
+<li>
+<p>Ejecuta los goals de maven: <code>clean verify sonar:sonar -Dsonar.login=$SONAR_LOGIN_TOKEN</code></p>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p>Incluso puedes configurar SonarCloud y Jenkins para que  <a href="https://blog.jdriven.com/2019/08/sonarcloud-github-pull-request-analysis-from-jenkins/">analizar los <em>pull request</em></a> de tu repositorio y conocer el resultado del análisis de Sonar antes de hacer el <em>merge</em> del pull request.</p>
 </div>
 </div>
 </div>
@@ -1608,12 +1630,26 @@ Por consola se visualiza el resultado de la ejecución de maven.</p>
 <div class="paragraph">
 <p>En esta sección se añadirán soluciones a los problemas más habituales.</p>
 </div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p><strong>La construcción de maven funciona correctamente en Eclipse pero da error en Jenkins</strong>:</p>
+<div class="olist loweralpha">
+<ol class="loweralpha" type="a">
+<li>
+<p>Revisa la versión de maven instalada en Jenkins, y actualiza a la última versión: En <em>Jenkins</em> / <em>Manage Jenkins</em> / <em>Global Tool Configuration</em> / <em>Maven Installations</em>. Selecciona la última versión disponible, marca install automatically, y dale un nombre por ejemplo <code>Default Maven</code>. <strong>IMPORTANTE</strong>: si tienes más de una instalación de maven, en los proyectos de tipo maven tendrás que elegir cual deseas usar a partir del nombre que le hayas dado a cada una de ellas, seleccionandola en una lista desplegable en la sección de build.</p>
+</li>
+</ol>
+</div>
+</li>
+</ol>
+</div>
 </div>
 </div>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2020-05-01 02:29:13 +0200
+Last updated 2020-05-10 11:07:26 +0200
 </div>
 </div>
 <style>
