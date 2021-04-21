@@ -25,6 +25,6 @@ Codificación, idioma, tabla de contenidos, tipo de documento
 ////
 Nombre y título del trabajo
 ////
-= Actividad 8. Integración Continua con Jenkins 
+= Actividad. Integración Continua con Jenkins 
 
 link:docs/sesion08jenkins.html[Guión de la actividad]

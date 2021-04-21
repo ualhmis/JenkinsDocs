@@ -993,30 +993,55 @@ Para ver una gráfica de resultados de los Test debemos ejecutar al menos 2 cons
 </li>
 </ol>
 </div>
+<div class="sidebarblock">
+<div class="content">
+<div class="title"><strong>Webhook</strong>: ejecución automática del build en Jenkins tras un <em>push</em> en GitHub</div>
+<div class="paragraph">
+<p>Configura en GitHub un nuevo <em>Webhook</em> para que tras cada cambio de código en el repositorio, Jenkins sea notificado y lance la construcción del pipeline:</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>En GitHub, seleccionamos el repositorio sobre el que queremos activar la construcción en Jenkins y hacemos clic en: <em>Settings &gt; WebHooks &gt; Add webhook</em></p>
+</li>
+<li>
+<p>En Payload URL:</p>
+<div class="literalblock">
+<div class="content">
+<pre>http://{YOUR_JENKINS_URL}/github-webhook/</pre>
+</div>
+</div>
+</li>
+</ol>
+</div>
 <div class="imageblock text-center thumb">
 <div class="content">
-<img src="images/new-maven-github-hook.png" alt="new maven github hook">
+<img src="images/jenkins-webhook-github.png" alt="jenkins webhook github">
 </div>
-<div class="title">Fig. 20. Build con Github hook</div>
+<div class="title">Fig. 20. Nuevo Webhook</div>
 </div>
-<div class="admonitionblock warning">
-<table>
-<tr>
-<td class="icon">
-<i class="fa icon-warning" title="Warning"></i>
-</td>
-<td class="content">
+<div class="olist arabic">
+<ol class="arabic" start="3">
+<li>
+<p>Finalmente, en la configuración del proyecto en Jenkins, en la sección Build Trigers, marca la opción <em>GitHub hook tirigger from GITScm polling</em></p>
+</li>
+</ol>
+</div>
+<div class="imageblock text-center thumb">
+<div class="content">
+<img src="images/jenkins-webhook-build-triger.png" alt="jenkins webhook build triger">
+</div>
+<div class="title">Fig. 21. Activar el Webhook en build trigers</div>
+</div>
 <div class="paragraph">
-<p>Recuerda configurar también el <em>webhook</em> en el repo en GitHub (se hizo ya en la sesión 05).</p>
+<p>A partir de ahora, cuando el repositorio en GitHub reciba un push notificará a Jenkins para que lance la construcción automáticamente.</p>
 </div>
-</td>
-</tr>
-</table>
+</div>
 </div>
 <div class="olist arabic">
 <ol class="arabic" start="5">
 <li>
-<p>En la sección de <em>build</em>, añade la ruta correcta al archivo <code>pom.xml</code> y por último añade los goals: <code>clean pagkage</code></p>
+<p>En la sección de <em>build</em>, añade la ruta correcta al archivo <code>pom.xml</code> y por último añade los goals: <code>clean package</code></p>
 </li>
 </ol>
 </div>
@@ -1024,7 +1049,7 @@ Para ver una gráfica de resultados de los Test debemos ejecutar al menos 2 cons
 <div class="content">
 <img src="images/new-maven-build-goals.png" alt="new maven build goals">
 </div>
-<div class="title">Fig. 21. Build con Maven</div>
+<div class="title">Fig. 22. Build con Maven</div>
 </div>
 <div class="olist arabic">
 <ol class="arabic" start="6">
@@ -1044,7 +1069,7 @@ Por consola se visualiza el resultado de la ejecución de maven.</p>
 <div class="content">
 <img src="images/new-maven-build-results.png" alt="new maven build results">
 </div>
-<div class="title">Fig. 22. Resultados de la construcción</div>
+<div class="title">Fig. 23. Resultados de la construcción</div>
 </div>
 </div>
 <div class="sect2">
@@ -1060,7 +1085,7 @@ Por consola se visualiza el resultado de la ejecución de maven.</p>
 <div class="content">
 <img src="images/maven-postbuild-jacoco.png" alt="maven postbuild jacoco">
 </div>
-<div class="title">Fig. 23. Añadir el informe de cobertura con JaCoCO</div>
+<div class="title">Fig. 24. Añadir el informe de cobertura con JaCoCO</div>
 </div>
 <div class="olist arabic">
 <ol class="arabic" start="9">
@@ -1073,7 +1098,7 @@ Por consola se visualiza el resultado de la ejecución de maven.</p>
 <div class="content">
 <img src="images/maven-postbuild-jacoco-config.png" alt="maven postbuild jacoco config">
 </div>
-<div class="title">Fig. 24. Configuración de JaCoCo</div>
+<div class="title">Fig. 25. Configuración de JaCoCo</div>
 </div>
 <div class="olist arabic">
 <ol class="arabic" start="10">
@@ -1086,7 +1111,7 @@ Por consola se visualiza el resultado de la ejecución de maven.</p>
 <div class="content">
 <img src="images/maven-postbuild-jacoco-grafica.png" alt="maven postbuild jacoco grafica">
 </div>
-<div class="title">Fig. 25. Añadir el informe de cobertura con JaCoCo</div>
+<div class="title">Fig. 26. Añadir el informe de cobertura con JaCoCo</div>
 </div>
 <div class="paragraph">
 <p>Y si haces clic en la gráfica, verás el informe detallado.</p>
@@ -1095,7 +1120,7 @@ Por consola se visualiza el resultado de la ejecución de maven.</p>
 <div class="content">
 <img src="images/maven-postbuild-jacoco-details.png" alt="maven postbuild jacoco details">
 </div>
-<div class="title">Fig. 26. Detalle de cobertura con JaCoCo</div>
+<div class="title">Fig. 27. Detalle de cobertura con JaCoCo</div>
 </div>
 </div>
 <div class="sect2">
@@ -1114,7 +1139,7 @@ Por consola se visualiza el resultado de la ejecución de maven.</p>
 <div class="content">
 <img src="images/maven-postbuild-javadoc-site.png" alt="maven postbuild javadoc site">
 </div>
-<div class="title">Fig. 27. Javadoc y Site</div>
+<div class="title">Fig. 28. Javadoc y Site</div>
 </div>
 <div class="olist arabic">
 <ol class="arabic" start="12">
@@ -1133,7 +1158,7 @@ Por consola se visualiza el resultado de la ejecución de maven.</p>
 <div class="content">
 <img src="images/maven-script-console-site.png" alt="maven script console site">
 </div>
-<div class="title">Fig. 28. Script Console: permisos para visualizar <em>Site</em></div>
+<div class="title">Fig. 29. Script Console: permisos para visualizar <em>Site</em></div>
 </div>
 <div class="olist arabic">
 <ol class="arabic" start="13">
@@ -1260,7 +1285,7 @@ Por consola se visualiza el resultado de la ejecución de maven.</p>
 <div class="content">
 <img src="images/new-pipeline-definition.png" alt="new pipeline definition">
 </div>
-<div class="title">Fig. 29. Definición del <em>pipeline</em></div>
+<div class="title">Fig. 30. Definición del <em>pipeline</em></div>
 </div>
 <div class="olist arabic">
 <ol class="arabic" start="4">
@@ -1276,7 +1301,7 @@ Por consola se visualiza el resultado de la ejecución de maven.</p>
 <div class="content">
 <img src="images/new-pipeline-results.png" alt="new pipeline results">
 </div>
-<div class="title">Fig. 30. Resultados del <em>pipeline</em></div>
+<div class="title">Fig. 31. Resultados del <em>pipeline</em></div>
 </div>
 </div>
 <div class="sect2">
@@ -1320,7 +1345,7 @@ Por consola se visualiza el resultado de la ejecución de maven.</p>
 <div class="content">
 <img src="images/new-pipeline-coverage-results.png" alt="new pipeline coverage results">
 </div>
-<div class="title">Fig. 31. Resultados de la cobertura</div>
+<div class="title">Fig. 32. Resultados de la cobertura</div>
 </div>
 </div>
 <div class="sect2">
@@ -1353,13 +1378,13 @@ Por consola se visualiza el resultado de la ejecución de maven.</p>
 <div class="content">
 <img src="images/new-pipeline-checkstyle-report-dashboard.png" alt="new pipeline checkstyle report dashboard">
 </div>
-<div class="title">Fig. 32. Pipeline con la nueva fase de Análisis</div>
+<div class="title">Fig. 33. Pipeline con la nueva fase de Análisis</div>
 </div>
 <div class="imageblock text-center thumb">
 <div class="content">
 <img src="images/new-pipeline-checkstyle-report-details.png" alt="new pipeline checkstyle report details">
 </div>
-<div class="title">Fig. 33. Detalles del informe de CheckStyle</div>
+<div class="title">Fig. 34. Detalles del informe de CheckStyle</div>
 </div>
 <div class="paragraph">
 <p>Como parte del ejercicio, completa por ti mismo la publicación del resto de informes de análisis estático de código generados en la sesión 7. Se publican a través del plugin <a href="https://www.jenkins.io/doc/pipeline/steps/warnings-ng/">Warnings Next Generation</a>.</p>
@@ -1427,7 +1452,7 @@ Por consola se visualiza el resultado de la ejecución de maven.</p>
 <div class="content">
 <img src="images/new-pipeline-analysis-links.png" alt="new pipeline analysis links">
 </div>
-<div class="title">Fig. 34. Enlaces a los informes de análisis estático de código</div>
+<div class="title">Fig. 35. Enlaces a los informes de análisis estático de código</div>
 </div>
 </div>
 <div class="sect2">
@@ -1446,7 +1471,7 @@ Por consola se visualiza el resultado de la ejecución de maven.</p>
 <div class="content">
 <img src="images/plugins-owasp-dependency-check-install.png" alt="plugins owasp dependency check install">
 </div>
-<div class="title">Fig. 35. Instalación del plugin Dependency-Check</div>
+<div class="title">Fig. 36. Instalación del plugin Dependency-Check</div>
 </div>
 <div class="olist arabic">
 <ol class="arabic" start="2">
@@ -1517,7 +1542,7 @@ Por consola se visualiza el resultado de la ejecución de maven.</p>
 <div class="content">
 <img src="images/new-pipeline-dependency-check-link.png" alt="new pipeline dependency check link">
 </div>
-<div class="title">Fig. 36. Enlace al informe <em>Dependency-Check</em></div>
+<div class="title">Fig. 37. Enlace al informe <em>Dependency-Check</em></div>
 </div>
 <div class="sidebarblock">
 <div class="content">
@@ -1609,7 +1634,7 @@ Por consola se visualiza el resultado de la ejecución de maven.</p>
 <div class="content">
 <img src="images/new-pipeline-docs-links.png" alt="new pipeline docs links">
 </div>
-<div class="title">Fig. 37. Enlaces a documentación Javadoc y Site</div>
+<div class="title">Fig. 38. Enlaces a documentación Javadoc y Site</div>
 </div>
 </div>
 <div class="sect2">
@@ -1621,7 +1646,7 @@ Por consola se visualiza el resultado de la ejecución de maven.</p>
 <div class="content">
 <img src="images/new-pipeline-jenkinsfile.png" alt="new pipeline jenkinsfile">
 </div>
-<div class="title">Fig. 38. Configuración del pipeline con archivo <em>Jenkinsfile</em></div>
+<div class="title">Fig. 39. Configuración del pipeline con archivo <em>Jenkinsfile</em></div>
 </div>
 </div>
 </div>
@@ -1651,7 +1676,7 @@ Por consola se visualiza el resultado de la ejecución de maven.</p>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2021-04-21 12:13:01 +0200
+Last updated 2021-04-21 13:55:37 +0200
 </div>
 </div>
 <style>

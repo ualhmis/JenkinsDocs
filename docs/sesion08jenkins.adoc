@@ -296,16 +296,32 @@ En caso de que sea un repositorio privado tendrás que proporcionar unas *creden
 [start=4]
 . En la sección de disparadores de la construcción (build trigers) marca la opción de hook con Github: 
 
-.Build con Github hook
-image::new-maven-github-hook.png[role="thumb", align="center"]
+.*Webhook*: ejecución automática del build en Jenkins tras un _push_ en GitHub
+****
+Configura en GitHub un nuevo _Webhook_ para que tras cada cambio de código en el repositorio, Jenkins sea notificado y lance la construcción del pipeline:
 
-[WARNING]
-====
-Recuerda configurar también el _webhook_ en el repo en GitHub (se hizo ya en la sesión 05).
-====
+. En GitHub, seleccionamos el repositorio sobre el que queremos activar la construcción en Jenkins y hacemos clic en: _Settings > WebHooks > Add webhook_
+
+. En Payload URL:
+
+    http://{YOUR_JENKINS_URL}/github-webhook/
+
+.Nuevo Webhook
+image::jenkins-webhook-github.png[role="thumb", align="center"]
+
+[start=3]
+. Finalmente, en la configuración del proyecto en Jenkins, en la sección Build Trigers, marca la opción _GitHub hook tirigger from GITScm polling_
+
+.Activar el Webhook en build trigers
+image::jenkins-webhook-build-triger.png[role="thumb", align="center"]
+
+
+A partir de ahora, cuando el repositorio en GitHub reciba un push notificará a Jenkins para que lance la construcción automáticamente. 
+
+****
 
 [start=5]
-. En la sección de _build_, añade la ruta correcta al archivo `pom.xml` y por último añade los goals: `clean pagkage`
+. En la sección de _build_, añade la ruta correcta al archivo `pom.xml` y por último añade los goals: `clean package`
 
 
 .Build con Maven
