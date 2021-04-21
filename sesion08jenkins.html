@@ -480,8 +480,8 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div id="preamble">
 <div class="sectionbody">
 <div class="paragraph">
-<p>Computación en la nube servicios y aplicaciones.
-Version 1.0, Abril-2020.
+<p>Herramientas y Métodos en Ingeniería del Software.
+Version 1.1, Abril-2021.
 Joaquín Cañadas &lt;<a href="mailto:jjcanada@ual.es">jjcanada@ual.es</a>&gt;</p>
 </div>
 <div class="quoteblock abstract">
@@ -595,6 +595,9 @@ La entrega será mediante el envío de un informe y el acceso al profesor a los 
 <p>Debido a los múltiples sistemas de notificaciones por cual optar (ya sea por mail, chat, slack, twitter, etc), es sencillo estar siempre informado y poder tomar decisiones rápidamente.</p>
 </li>
 </ol>
+</div>
+<div class="paragraph">
+<p>Aquí pueden encontrar un resumen de <a href="https://www.browserstack.com/guide/continuous-integration-with-jenkins-tutorial">beneficios y preocupaciones</a> de Jenkins.</p>
 </div>
 </div>
 <div class="sect2">
@@ -737,7 +740,7 @@ La entrega será mediante el envío de un informe y el acceso al profesor a los 
 <p><strong>Estilo libre (Freestyle project)</strong>: es el más flexible en su configuración. Permite construir proyectos en cualquier tecnología, en función de las herramientas (tools) y plugins que tengas instalados. Se utiliza cuando deseemos ejecutar fundamentalmente comandos desde la <em>shell</em>. En la sesión de despliegue automatizado de la web del equipo (sesión 05) usamos proyectos de este tipo.</p>
 </li>
 <li>
-<p><strong>Proyecto Maven</strong>: se utiliza para construir proyectos Java basados en Maven. De forma predeterminada incluye un paso en el que añadir los <em>goals</em> de maven que se deseen ejecutar en la construccion del proyecto.</p>
+<p><strong>Proyecto Maven</strong>: se utiliza para construir proyectos Java basados en Maven. De forma predeterminada incluye un paso en el que añadir los <em>goals</em> de maven que se deseen ejecutar en la construcción del proyecto.</p>
 </li>
 <li>
 <p><strong>Pipeline</strong>: un <em>pipeline</em> o tubería identifica los pasos o fases (<em>stages</em>) que se van a ejecutar en el proceso de construcción del proyecto. Cada fase tiene definido cómo se ejecuta, y los resultados que produce. La ejecución de las fases es secuencial, aunque también se pueden configurar fases <a href="https://www.jenkins.io/blog/2017/09/25/declarative-1/">en paralelo</a>.</p>
@@ -751,7 +754,7 @@ La entrega será mediante el envío de un informe y el acceso al profesor a los 
 <div class="title">Fig. 7. Nuevo proyecto. Tipos principales de proyectos</div>
 </div>
 <div class="paragraph">
-<p>En esta actividad vamos a construir en Jenkins un proyecto estilo libre en Ant, y los proyectos Java mavenizados de las sesiones anteriores de dos formas:</p>
+<p>En esta actividad vamos a construir en Jenkins un proyecto estilo libre en Ant, y los proyectos Java <em>mavenizados</em> de las sesiones anteriores de dos formas:</p>
 </div>
 <div class="olist arabic">
 <ol class="arabic">
@@ -1323,7 +1326,7 @@ Por consola se visualiza el resultado de la ejecución de maven.</p>
 <div class="sect2">
 <h3 id="_análisis_estático_de_código">7.3. Análisis estático de código</h3>
 <div class="paragraph">
-<p>Para mantener y aumentar la calidad de nuestro código debemos ayudarnos, entre otras herramientas, de técnicas de análisis estático de código. Básicamente, se encargan de buscar defectos en el código sin necesidad de que este se ejecute. En Java una de las más habituales es Checkstyle, aunque hay otras como FindBugs, PMD, y SonarQube que integra a los anteriores.</p>
+<p>Para mantener y aumentar la calidad de nuestro código debemos ayudarnos, entre otras herramientas, de técnicas de <a href="https://es.wikipedia.org/wiki/An%C3%A1lisis_est%C3%A1tico_de_software"><strong>análisis estático de código</strong></a>. Básicamente, se encargan de buscar defectos en el código sin necesidad de que este se ejecute. En Java una de las más habituales es Checkstyle, aunque hay otras como FindBugs, PMD, y SonarQube que integra a los anteriores.</p>
 </div>
 <div class="paragraph">
 <p>Para ejecutar y visualizar el análisis de Checkstyle, añade un nuevo <em>stage</em> al pipeline:</p>
@@ -1336,7 +1339,6 @@ Por consola se visualiza el resultado de la ejecución de maven.</p>
 	  <span class="n">sh</span> <span class="s2">"mvn -f sesion07Maven/pom.xml checkstyle:checkstyle site -DgenerateReports=false"</span>
     <span class="o">}</span>
     <span class="n">post</span> <span class="o">{</span>
-      <span class="c1">// Record the test results and archive the jar file.</span>
       <span class="n">success</span> <span class="o">{</span>
         <span class="n">recordIssues</span> <span class="nl">enabledForFailure:</span> <span class="kc">true</span><span class="o">,</span> <span class="nl">tool:</span> <span class="n">checkStyle</span><span class="o">()</span>
       <span class="o">}</span>
@@ -1507,7 +1509,7 @@ Por consola se visualiza el resultado de la ejecución de maven.</p>
 <div class="olist arabic">
 <ol class="arabic" start="4">
 <li>
-<p>Tras volver a construir el proyecto, aparecerá una nueva gráfica de <em>Dependency Check</em> en el proyecto. Si no tienes problemas de seguridad en las dependencias, esta gráfica estará en blanco. El enlace al informe de dependencias no aparece en la página principal del proyecto, en el menú de enlaces como el resto, sino que tienes que hacer clic en el número del último build, y en la nueva página ya aparece el enlace el enlace:</p>
+<p>Tras volver a construir el proyecto, aparecerá una nueva gráfica de <em>Dependency Check</em> en el proyecto. Si no tienes problemas de seguridad en las dependencias, esta gráfica estará en blanco. El enlace al informe de dependencias no aparece en la página principal del proyecto, en el menú de enlaces como el resto, sino que tienes que hacer clic en el número del último build, y en la nueva página ya aparece el enlace:</p>
 </li>
 </ol>
 </div>
@@ -1649,7 +1651,7 @@ Por consola se visualiza el resultado de la ejecución de maven.</p>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2020-05-10 11:07:26 +0200
+Last updated 2021-04-21 12:13:01 +0200
 </div>
 </div>
 <style>

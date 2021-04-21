@@ -27,8 +27,8 @@ Nombre y título del trabajo
 ////
 = Actividad 8. Integración Continua con Jenkins
 
-Computación en la nube servicios y aplicaciones.
-Version 1.0, Abril-2020.
+Herramientas y Métodos en Ingeniería del Software.
+Version 1.1, Abril-2021.
 Joaquín Cañadas <jjcanada@ual.es>
 
 // Entrar en modo no numerado de apartados
@@ -91,12 +91,13 @@ Existen otras muchas herramientas de integración continua y despliegue continuo
 
 === ¿Por qué usarlo?
 
-1. Simplifica significativamente (a un par de clicks y dentro de un entorno web lo que lo hace fácilmente accesible desde cualquier parte) los procesos involucrados en el ciclo de vida de un proyecto, ya sean  simples o repetitivos, largos y complejos como puede ser de generación de binarios, integrando el trabajo de varios desarrolladores, ejecución de pruebas automatizadas, generación de informes, publicación en pagina web, notificación a clientes de versiones beta, etc.
+. Simplifica significativamente (a un par de clicks y dentro de un entorno web lo que lo hace fácilmente accesible desde cualquier parte) los procesos involucrados en el ciclo de vida de un proyecto, ya sean  simples o repetitivos, largos y complejos como puede ser de generación de binarios, integrando el trabajo de varios desarrolladores, ejecución de pruebas automatizadas, generación de informes, publicación en pagina web, notificación a clientes de versiones beta, etc.
 
-2. Da un marco de simplicidad sobre la integración continua gracias a las diferentes posibilidades de notificaciones de éxitos y errores entre procesos, por lo que con la formación adecuada sobre los mismos se puede asegurar una altísima calidad de software desde el primer día, evitando errores, demoras y a un mínimo coste.
+. Da un marco de simplicidad sobre la integración continua gracias a las diferentes posibilidades de notificaciones de éxitos y errores entre procesos, por lo que con la formación adecuada sobre los mismos se puede asegurar una altísima calidad de software desde el primer día, evitando errores, demoras y a un mínimo coste.
 
-3. Debido a los múltiples sistemas de notificaciones por cual optar (ya sea por mail, chat, slack, twitter, etc), es sencillo estar siempre informado y poder tomar decisiones rápidamente.
+. Debido a los múltiples sistemas de notificaciones por cual optar (ya sea por mail, chat, slack, twitter, etc), es sencillo estar siempre informado y poder tomar decisiones rápidamente.
 
+Aquí pueden encontrar un resumen de https://www.browserstack.com/guide/continuous-integration-with-jenkins-tutorial[beneficios y preocupaciones] de Jenkins. 
 
 === CI/CD y DevOps
 
@@ -171,14 +172,14 @@ En Jenkins existen varios tipos de proyectos. Al hacer clic en nuevo elemento, a
 
 - *Estilo libre (Freestyle project)*: es el más flexible en su configuración. Permite construir proyectos en cualquier tecnología, en función de las herramientas (tools) y plugins que tengas instalados. Se utiliza cuando deseemos ejecutar fundamentalmente comandos desde la _shell_. En la sesión de despliegue automatizado de la web del equipo (sesión 05) usamos proyectos de este tipo. 
 
-- *Proyecto Maven*: se utiliza para construir proyectos Java basados en Maven. De forma predeterminada incluye un paso en el que añadir los _goals_ de maven que se deseen ejecutar en la construccion del proyecto.
+- *Proyecto Maven*: se utiliza para construir proyectos Java basados en Maven. De forma predeterminada incluye un paso en el que añadir los _goals_ de maven que se deseen ejecutar en la construcción del proyecto.
 
 - *Pipeline*: un _pipeline_ o tubería identifica los pasos o fases (_stages_) que se van a ejecutar en el proceso de construcción del proyecto. Cada fase tiene definido cómo se ejecuta, y los resultados que produce. La ejecución de las fases es secuencial, aunque también se pueden configurar fases https://www.jenkins.io/blog/2017/09/25/declarative-1/[en paralelo].  
 
 .Nuevo proyecto. Tipos principales de proyectos
 image::001-project-types.png[role="thumb", align="center"]
 
-En esta actividad vamos a construir en Jenkins un proyecto estilo libre en Ant, y los proyectos Java mavenizados de las sesiones anteriores de dos formas: 
+En esta actividad vamos a construir en Jenkins un proyecto estilo libre en Ant, y los proyectos Java _mavenizados_ de las sesiones anteriores de dos formas: 
 
   . Utilizando la forma clásica, creando un proyecto tipo Maven.
 
@@ -488,7 +489,7 @@ image::new-pipeline-coverage-results.png[role="thumb", align="center"]
 
 === Análisis estático de código
 
-Para mantener y aumentar la calidad de nuestro código debemos ayudarnos, entre otras herramientas, de técnicas de análisis estático de código. Básicamente, se encargan de buscar defectos en el código sin necesidad de que este se ejecute. En Java una de las más habituales es Checkstyle, aunque hay otras como FindBugs, PMD, y SonarQube que integra a los anteriores. 
+Para mantener y aumentar la calidad de nuestro código debemos ayudarnos, entre otras herramientas, de técnicas de https://es.wikipedia.org/wiki/An%C3%A1lisis_est%C3%A1tico_de_software[*análisis estático de código*]. Básicamente, se encargan de buscar defectos en el código sin necesidad de que este se ejecute. En Java una de las más habituales es Checkstyle, aunque hay otras como FindBugs, PMD, y SonarQube que integra a los anteriores. 
 
 Para ejecutar y visualizar el análisis de Checkstyle, añade un nuevo _stage_ al pipeline: 
 
@@ -501,7 +502,6 @@ Para ejecutar y visualizar el análisis de Checkstyle, añade un nuevo _stage_ a
 	  sh "mvn -f sesion07Maven/pom.xml checkstyle:checkstyle site -DgenerateReports=false"
     }
     post {
-      // Record the test results and archive the jar file.
       success {
         recordIssues enabledForFailure: true, tool: checkStyle() 
       }
@@ -607,7 +607,7 @@ dependencyCheckPublisher pattern: '**/target/site/dependency-check-report.xml'
 
 [start=4]
 
-. Tras volver a construir el proyecto, aparecerá una nueva gráfica de _Dependency Check_ en el proyecto. Si no tienes problemas de seguridad en las dependencias, esta gráfica estará en blanco. El enlace al informe de dependencias no aparece en la página principal del proyecto, en el menú de enlaces como el resto, sino que tienes que hacer clic en el número del último build, y en la nueva página ya aparece el enlace el enlace:
+. Tras volver a construir el proyecto, aparecerá una nueva gráfica de _Dependency Check_ en el proyecto. Si no tienes problemas de seguridad en las dependencias, esta gráfica estará en blanco. El enlace al informe de dependencias no aparece en la página principal del proyecto, en el menú de enlaces como el resto, sino que tienes que hacer clic en el número del último build, y en la nueva página ya aparece el enlace:
 
 .Enlace al informe _Dependency-Check_
 image::new-pipeline-dependency-check-link.png[role="thumb", align="center"]
