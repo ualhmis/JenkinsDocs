@@ -458,8 +458,9 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#_creación_de_un_proyecto_maven">6. Creación de un Proyecto Maven</a>
 <ul class="sectlevel2">
 <li><a href="#_construcción_básica">6.1. Construcción básica</a></li>
-<li><a href="#_informe_de_cobertura">6.2. Informe de cobertura</a></li>
-<li><a href="#_añadiendo_javadoc_y_site">6.3. Añadiendo Javadoc y Site</a></li>
+<li><a href="#_webhook_construcción_tras_un_push_en_github">6.2. Webhook: construcción tras un <em>push</em> en GitHub</a></li>
+<li><a href="#_informe_de_cobertura">6.3. Informe de cobertura</a></li>
+<li><a href="#_añadiendo_javadoc_y_site">6.4. Añadiendo Javadoc y Site</a></li>
 </ul>
 </li>
 <li><a href="#_creación_de_un_proyecto_pipeline">7. Creación de un Proyecto Pipeline</a>
@@ -989,9 +990,41 @@ Para ver una gráfica de resultados de los Test debemos ejecutar al menos 2 cons
 <div class="olist arabic">
 <ol class="arabic" start="4">
 <li>
-<p>En la sección de disparadores de la construcción (build trigers) marca la opción de hook con Github:</p>
+<p>En la sección de <em>build</em>, añade la ruta correcta al archivo <code>pom.xml</code> y por último añade los goals: <code>clean package</code></p>
 </li>
 </ol>
+</div>
+<div class="imageblock text-center thumb">
+<div class="content">
+<img src="images/new-maven-build-goals.png" alt="new maven build goals">
+</div>
+<div class="title">Fig. 20. Build con Maven</div>
+</div>
+<div class="olist arabic">
+<ol class="arabic" start="6">
+<li>
+<p>Guarda los cambios</p>
+</li>
+<li>
+<p><strong>Construir ahora</strong>.
+Por consola se visualiza el resultado de la ejecución de maven.</p>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p>En los proyectos Maven, no hace falta configurar la publicación de los test de JUnit, se hace de forma predeterminada a partir de la segunda construcción.</p>
+</div>
+<div class="imageblock text-center thumb">
+<div class="content">
+<img src="images/new-maven-build-results.png" alt="new maven build results">
+</div>
+<div class="title">Fig. 21. Resultados de la construcción</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_webhook_construcción_tras_un_push_en_github">6.2. Webhook: construcción tras un <em>push</em> en GitHub</h3>
+<div class="paragraph">
+<p>Mediante un <em>Webhook</em> se puede configurar que cuando el repositorio en GitHub reciba un <em>push</em> notificará a Jenkins para que lance la construcción automáticamente. Para ello, en la sección de disparadores de la construcción (build trigers) marca la opción de hook con Github:</p>
 </div>
 <div class="sidebarblock">
 <div class="content">
@@ -1018,7 +1051,7 @@ Para ver una gráfica de resultados de los Test debemos ejecutar al menos 2 cons
 <div class="content">
 <img src="images/jenkins-webhook-github.png" alt="jenkins webhook github">
 </div>
-<div class="title">Fig. 20. Nuevo Webhook</div>
+<div class="title">Fig. 22. Nuevo Webhook</div>
 </div>
 <div class="olist arabic">
 <ol class="arabic" start="3">
@@ -1031,49 +1064,16 @@ Para ver una gráfica de resultados de los Test debemos ejecutar al menos 2 cons
 <div class="content">
 <img src="images/jenkins-webhook-build-triger.png" alt="jenkins webhook build triger">
 </div>
-<div class="title">Fig. 21. Activar el Webhook en build trigers</div>
+<div class="title">Fig. 23. Activar el Webhook en build trigers</div>
 </div>
 <div class="paragraph">
 <p>A partir de ahora, cuando el repositorio en GitHub reciba un push notificará a Jenkins para que lance la construcción automáticamente.</p>
 </div>
 </div>
 </div>
-<div class="olist arabic">
-<ol class="arabic" start="5">
-<li>
-<p>En la sección de <em>build</em>, añade la ruta correcta al archivo <code>pom.xml</code> y por último añade los goals: <code>clean package</code></p>
-</li>
-</ol>
-</div>
-<div class="imageblock text-center thumb">
-<div class="content">
-<img src="images/new-maven-build-goals.png" alt="new maven build goals">
-</div>
-<div class="title">Fig. 22. Build con Maven</div>
-</div>
-<div class="olist arabic">
-<ol class="arabic" start="6">
-<li>
-<p>Guarda los cambios</p>
-</li>
-<li>
-<p><strong>Construir ahora</strong>.
-Por consola se visualiza el resultado de la ejecución de maven.</p>
-</li>
-</ol>
-</div>
-<div class="paragraph">
-<p>En los proyectos Maven, no hace falta configurar la publicación de los test de JUnit, se hace de forma predeterminada a partir de la segunda construcción.</p>
-</div>
-<div class="imageblock text-center thumb">
-<div class="content">
-<img src="images/new-maven-build-results.png" alt="new maven build results">
-</div>
-<div class="title">Fig. 23. Resultados de la construcción</div>
-</div>
 </div>
 <div class="sect2">
-<h3 id="_informe_de_cobertura">6.2. Informe de cobertura</h3>
+<h3 id="_informe_de_cobertura">6.3. Informe de cobertura</h3>
 <div class="olist arabic">
 <ol class="arabic" start="8">
 <li>
@@ -1124,7 +1124,7 @@ Por consola se visualiza el resultado de la ejecución de maven.</p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_añadiendo_javadoc_y_site">6.3. Añadiendo Javadoc y Site</h3>
+<h3 id="_añadiendo_javadoc_y_site">6.4. Añadiendo Javadoc y Site</h3>
 <div class="olist arabic">
 <ol class="arabic" start="10">
 <li>
@@ -1676,7 +1676,7 @@ Por consola se visualiza el resultado de la ejecución de maven.</p>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2021-04-21 13:57:54 +0200
+Last updated 2021-04-21 14:03:01 +0200
 </div>
 </div>
 <style>

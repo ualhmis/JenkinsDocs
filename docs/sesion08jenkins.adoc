@@ -294,7 +294,26 @@ En caso de que sea un repositorio privado tendrás que proporcionar unas *creden
 ====
 
 [start=4]
-. En la sección de disparadores de la construcción (build trigers) marca la opción de hook con Github: 
+. En la sección de _build_, añade la ruta correcta al archivo `pom.xml` y por último añade los goals: `clean package`
+
+
+.Build con Maven
+image::new-maven-build-goals.png[role="thumb", align="center"]
+
+[start=6]
+. Guarda los cambios
+
+. *Construir ahora*. 
+Por consola se visualiza el resultado de la ejecución de maven.
+
+En los proyectos Maven, no hace falta configurar la publicación de los test de JUnit, se hace de forma predeterminada a partir de la segunda construcción. 
+
+.Resultados de la construcción
+image::new-maven-build-results.png[role="thumb", align="center"]
+
+=== Webhook: construcción tras un _push_ en GitHub
+
+Mediante un _Webhook_ se puede configurar que cuando el repositorio en GitHub reciba un _push_ notificará a Jenkins para que lance la construcción automáticamente. Para ello, en la sección de disparadores de la construcción (build trigers) marca la opción de hook con Github: 
 
 .*Webhook*: ejecución automática del build en Jenkins tras un _push_ en GitHub
 ****
@@ -319,24 +338,6 @@ image::jenkins-webhook-build-triger.png[role="thumb", align="center"]
 A partir de ahora, cuando el repositorio en GitHub reciba un push notificará a Jenkins para que lance la construcción automáticamente. 
 
 ****
-
-[start=5]
-. En la sección de _build_, añade la ruta correcta al archivo `pom.xml` y por último añade los goals: `clean package`
-
-
-.Build con Maven
-image::new-maven-build-goals.png[role="thumb", align="center"]
-
-[start=6]
-. Guarda los cambios
-
-. *Construir ahora*. 
-Por consola se visualiza el resultado de la ejecución de maven.
-
-En los proyectos Maven, no hace falta configurar la publicación de los test de JUnit, se hace de forma predeterminada a partir de la segunda construcción. 
-
-.Resultados de la construcción
-image::new-maven-build-results.png[role="thumb", align="center"]
 
 === Informe de cobertura
 
