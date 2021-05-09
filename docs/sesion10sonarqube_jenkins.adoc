@@ -1,0 +1,168 @@
+////
+Codificación, idioma, tabla de contenidos, tipo de documento
+////
+:encoding: utf-8
+:lang: es
+:toc: right
+:toc-title: Tabla de contenidos
+:keywords: CI/CD Jenkins SonarQube
+:doctype: book
+:icons: font
+
+////
+/// activar btn:
+////
+:experimental:
+
+:source-highlighter: rouge
+:rouge-linenums-mode: inline
+
+// :highlightjsdir: ./highlight
+
+:figure-caption: Fig.
+:imagesdir: images
+
+////
+Nombre y título del trabajo
+////
+= Actividad. SonarQube con Jenkins
+
+Herramientas y Métodos en Ingeniería del Software.
+Version 1.0, Mayo-2021.
+Joaquín Cañadas <jjcanada@ual.es>
+
+// Entrar en modo no numerado de apartados
+:numbered!: 
+
+[abstract]
+////
+COLOCA A CONTINUACION EL RESUMEN
+////
+Integración de SonarQube  con Jenkins.
+
+////
+COLOCA A CONTINUACION LOS OBJETIVOS
+////
+.Objetivos
+* Configurar la integración de las herramientas SonarQube y Jenkins
+* Ejecutar el análisis de SonarQube desde Jenkins
+* Visualizar los resultados del análisis de SonarQube
+
+.Realización y entrega
+****
+La realización de estas actividades se realizará de forma individual. Debe tener sus ejercicios individuales en el Jenkins del equipo. 
+La entrega será mediante el envío de un informe y el acceso al profesor a los servicios configurados, para la revisión y evaluación de los mismos. Recuerda dar acceso al profesor al Sonar del equipo.
+****
+
+// Entrar en modo numerado de apartados
+:numbered:
+
+
+
+== Introducción a SonarQube
+
+image::sonarqube-logo-black.svg[Static,300, align="center"]
+
+SonarQube (conocido anteriormente como Sonar) es una herramienta para evaluar la calidad del código fuente. Es software libre y usa diversas herramientas de análisis estático de código fuente como Checkstyle, PMD o FindBugs para obtener métricas que pueden ayudar a mejorar la calidad del código de un programa: 
+
+- Informa sobre código duplicado, estándares de codificación, pruebas unitarias, cobertura de código, complejidad ciclomática, errores potenciales, comentarios y diseño del software.
+
+- Aunque inicialmente fue pensado para Java, acepta otros lenguajes mediante extensiones.
+
+- Se integra con Maven, Ant y herramientas de integración continua como Atlassian Bamboo, Jenkins y Hudson.
+
+
+SonarQube como plataforma web ofrece https://www.sonarsource.com/plans-and-pricing/[dos versiones principales] de uso: 
+
+- SonarQube on premise: permite instalar SonarQube en cualquier ordenador o servidor en la nube. La versión https://www.sonarsource.com/plans-and-pricing/community/[Community] es gratuita y open source. 
+
+- SonarCloud: SonarQube ofrecido como software como servicio disponible en la URL https://sonarcloud.io/ y gratuita para proyectos de código abierto. 
+
+Además, https://www.sonarlint.org/[SonarLint] es una extensión para los principales IDEs que hayuda a detentar y corregir los problemas de calidad a la vez que escribes código fuente. 
+
+En esta actividad nos vamos a centrar en integrar SonarQube on premise que hemos instalado en una máquina virtual en Azure, con Jenkins.
+
+== Configuración de la integración entre Jenkins y SonarQube
+
+image::Sonarqube-Jenkins.jpg[width=50%, role="thumb", align="center"]
+
+. El primer paso es crear un *token* en SonarQube para el usuario. Para ello, en SonarQube, creamos un nuevo usuario: `userjenkins`. Para administrar usuarios y grupos, una vez logueado como `admin` elige *Administration* > *Security*. Añade el usuario `userjenkins`, que de forma predeterminada se añade al grupo `sonar-users`. 
+
+.Crear usuario
+image::sonar-administration-sercurity-create-user.png[role="thumb", align="center"]
+
+// .Nuevo usuario `userjenkins`
+// image::sonar-create-userjenkins.png[role="thumb", align="center"]
+
+Accede con usuario `userjenkins` en SonarQube y en su perfil, https://docs.sonarqube.org/latest/user-guide/user-token/[crea un token] y guardalo para usarlo después.
+
+.Creación del token
+image::sonarqube-generate-token.png[role="thumb", align="center"]
+
+[start=2]
+. En Jenkins, instalamos el plugin https://plugins.jenkins.io/sonar/[SonarQube Scanner]. 
+
+.Plugin SonarQube Scanner for Jenkins
+image::jenkins-install-sonar-plugin.png[role="thumb", align="center"]
+
+[start=3]
+. Una vez instalado el plugin de SonarQube, lo configuramos: *Administrar Jenkins* > *Configurar el Sistema*, y bajamos hasta la sección *SonarQube Servers*. Marca la opción `Environment variables Enable injection of SonarQube server configuration as build environment variables`. Añadimos un nuevo SonarQube, damos un nombre al servidor, la *URL* de SonarQube, y añadimos la credencial de acceso al servidor mediante una nueva credencial de tipo _Secret Text_ usando el *token* de autenticación. Dale el ID a la credencial: `sonar_server`
+
+.Configuración del Servidor SonarQube
+image::jenkins-sonar-servers.png[role="thumb", align="center",width=80%]
+
+.Añadir la credencial del token de SonarQube
+image::jenkins-add-sonar-credentials.png[role="thumb", align="center", width=70%]
+
+
+[start=4]
+. A continuación debemos añadir la instalación de *SonarQube Scanner* en  *Administrar Jenkins* > *Global Tool configuration*. Seleccionamos la última version que se instale automáticamente. 
+
+
+.Añadir SonarQube Scanner
+image::jenkins-add-sonarqube-scanner.png[role="thumb", align="center", width=80%]
+
+
+== Añadir el análisis con SonarQube a un proyecto tipo Maven
+
+=== Primeros ejemplos
+
+En el repositorio de GitHub https://github.com/SonarSource/sonar-scanning-examples[sonar-scanning-examples] hay disponibles varios ejemplos para probar el funcionamiento de SonarQube. Nos centraremos en los proyectos https://github.com/SonarSource/sonar-scanning-examples/tree/master/sonarqube-scanner-maven[Java con Maven] para probar el funcionamiento de Sonar.
+
+Para añadirlo a nuestro proyecto, en el archivo pom.xml tenemos que incorporar el plugin de SonarQube en el bloque `<build>`.
+
+[source, xml]
+----
+<build>
+...
+    <plugin>
+      <groupId>org.sonarsource.scanner.maven</groupId>
+      <artifactId>sonar-maven-plugin</artifactId>
+      <version>3.9.0.2155</version>
+    </plugin>
+...
+</build>
+----
+
+
+
+== Añadir el análisis con SonarQube a un pipeline
+
+
+  stage('SonarQube analysis') {
+    withSonarQubeEnv(credentialsId: 'f225455e-ea59-40fa-8af7-08176e86507a', installationName: 'My SonarQube Server') { // You can override the credential to be used
+      sh 'mvn org.sonarsource.scanner.maven:sonar-maven-plugin:3.7.0.1746:sonar'
+    }
+  }
+  
+== Resultados del análisis con SonarQube 
+
+En el pipeline, se mostrará una etiqueta con el valor del quality gate encontrado en el análisis.
+
+En SonarQube tenemos el resultado detallado del análisis.
+
+
+== FAQ y resolución de problemas (_thoubleshouting_)
+
+En esta sección se añadirán soluciones a los problemas más habituales. 
+

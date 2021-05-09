@@ -5,8 +5,8 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="generator" content="Asciidoctor 2.0.10">
-<meta name="keywords" content="Selenium end-to-end testing">
-<title>Actividad. Integración Continua con Jenkins</title>
+<meta name="keywords" content="CI/CD Jenkins SonarQube">
+<title>Actividad. SonarQube con Jenkins</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic%7CNoto+Serif:400,400italic,700,700italic%7CDroid+Sans+Mono:400,700">
 <style>
 /* Asciidoctor default stylesheet | MIT License | https://asciidoctor.org */
@@ -438,30 +438,461 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </style>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 </head>
-<body class="book">
+<body class="book toc2 toc-right">
 <div id="header">
-<h1>Actividad. Integración Continua con Jenkins</h1>
+<h1>Actividad. SonarQube con Jenkins</h1>
+<div id="toc" class="toc2">
+<div id="toctitle">Tabla de contenidos</div>
+<ul class="sectlevel1">
+<li><a href="#_introducción_a_sonarqube">1. Introducción a SonarQube</a></li>
+<li><a href="#_configuración_de_la_integración_entre_jenkins_y_sonarqube">2. Configuración de la integración entre Jenkins y SonarQube</a></li>
+<li><a href="#_añadir_el_análisis_con_sonarqube_a_un_proyecto_tipo_maven">3. Añadir el análisis con SonarQube a un proyecto tipo Maven</a>
+<ul class="sectlevel2">
+<li><a href="#_primeros_ejemplos">3.1. Primeros ejemplos</a></li>
+</ul>
+</li>
+<li><a href="#_añadir_el_análisis_con_sonarqube_a_un_pipeline">4. Añadir el análisis con SonarQube a un pipeline</a></li>
+<li><a href="#_resultados_del_análisis_con_sonarqube">5. Resultados del análisis con SonarQube</a></li>
+<li><a href="#_faq_y_resolución_de_problemas_thoubleshouting">6. FAQ y resolución de problemas (<em>thoubleshouting</em>)</a></li>
+</ul>
+</div>
 </div>
 <div id="content">
 <div id="preamble">
 <div class="sectionbody">
+<div class="paragraph">
+<p>Herramientas y Métodos en Ingeniería del Software.
+Version 1.0, Mayo-2021.
+Joaquín Cañadas &lt;<a href="mailto:jjcanada@ual.es">jjcanada@ual.es</a>&gt;</p>
+</div>
+<div class="quoteblock abstract">
+<blockquote>
+Integración de SonarQube  con Jenkins.
+</blockquote>
+</div>
+<div class="ulist">
+<div class="title">Objetivos</div>
+<ul>
+<li>
+<p>Configurar la integración de las herramientas SonarQube y Jenkins</p>
+</li>
+<li>
+<p>Ejecutar el análisis de SonarQube desde Jenkins</p>
+</li>
+<li>
+<p>Visualizar los resultados del análisis de SonarQube</p>
+</li>
+</ul>
+</div>
+<div class="sidebarblock">
+<div class="content">
+<div class="title">Realización y entrega</div>
+<div class="paragraph">
+<p>La realización de estas actividades se realizará de forma individual. Debe tener sus ejercicios individuales en el Jenkins del equipo.
+La entrega será mediante el envío de un informe y el acceso al profesor a los servicios configurados, para la revisión y evaluación de los mismos. Recuerda dar acceso al profesor al Sonar del equipo.</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_introducción_a_sonarqube">1. Introducción a SonarQube</h2>
+<div class="sectionbody">
+<div class="imageblock text-center">
+<div class="content">
+<img src="images/sonarqube-logo-black.svg" alt="Static" width="300">
+</div>
+</div>
+<div class="paragraph">
+<p>SonarQube (conocido anteriormente como Sonar) es una herramienta para evaluar la calidad del código fuente. Es software libre y usa diversas herramientas de análisis estático de código fuente como Checkstyle, PMD o FindBugs para obtener métricas que pueden ayudar a mejorar la calidad del código de un programa:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Informa sobre código duplicado, estándares de codificación, pruebas unitarias, cobertura de código, complejidad ciclomática, errores potenciales, comentarios y diseño del software.</p>
+</li>
+<li>
+<p>Aunque inicialmente fue pensado para Java, acepta otros lenguajes mediante extensiones.</p>
+</li>
+<li>
+<p>Se integra con Maven, Ant y herramientas de integración continua como Atlassian Bamboo, Jenkins y Hudson.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>SonarQube como plataforma web ofrece <a href="https://www.sonarsource.com/plans-and-pricing/">dos versiones principales</a> de uso:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>SonarQube on premise: permite instalar SonarQube en cualquier ordenador o servidor en la nube. La versión <a href="https://www.sonarsource.com/plans-and-pricing/community/">Community</a> es gratuita y open source.</p>
+</li>
+<li>
+<p>SonarCloud: SonarQube ofrecido como software como servicio disponible en la URL <a href="https://sonarcloud.io/" class="bare">https://sonarcloud.io/</a> y gratuita para proyectos de código abierto.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>Además, <a href="https://www.sonarlint.org/">SonarLint</a> es una extensión para los principales IDEs que hayuda a detentar y corregir los problemas de calidad a la vez que escribes código fuente.</p>
+</div>
+<div class="paragraph">
+<p>En esta actividad nos vamos a centrar en integrar SonarQube on premise que hemos instalado en una máquina virtual en Azure, con Jenkins.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_configuración_de_la_integración_entre_jenkins_y_sonarqube">2. Configuración de la integración entre Jenkins y SonarQube</h2>
+<div class="sectionbody">
+<div class="imageblock text-center thumb">
+<div class="content">
+<img src="images/Sonarqube-Jenkins.jpg" alt="Sonarqube Jenkins" width="50%">
+</div>
+</div>
 <div class="olist arabic">
 <ol class="arabic">
 <li>
-<p><a href="docs/sesion08jenkins.html">Guión de la actividad</a></p>
-</li>
-<li>
-<p><a href="docs/sesion10sonarqube_jenkins.html">Integración de SonarQube y Jenkins</a></p>
+<p>El primer paso es crear un <strong>token</strong> en SonarQube para el usuario. Para ello, en SonarQube, creamos un nuevo usuario: <code>userjenkins</code>. Para administrar usuarios y grupos, una vez logueado como <code>admin</code> elige <strong>Administration</strong> &gt; <strong>Security</strong>. Añade el usuario <code>userjenkins</code>, que de forma predeterminada se añade al grupo <code>sonar-users</code>.</p>
 </li>
 </ol>
+</div>
+<div class="imageblock text-center thumb">
+<div class="content">
+<img src="images/sonar-administration-sercurity-create-user.png" alt="sonar administration sercurity create user">
+</div>
+<div class="title">Fig. 1. Crear usuario</div>
+</div>
+<div class="paragraph">
+<p>Accede con usuario <code>userjenkins</code> en SonarQube y en su perfil, <a href="https://docs.sonarqube.org/latest/user-guide/user-token/">crea un token</a> y guardalo para usarlo después.</p>
+</div>
+<div class="imageblock text-center thumb">
+<div class="content">
+<img src="images/sonarqube-generate-token.png" alt="sonarqube generate token">
+</div>
+<div class="title">Fig. 2. Creación del token</div>
+</div>
+<div class="olist arabic">
+<ol class="arabic" start="2">
+<li>
+<p>En Jenkins, instalamos el plugin <a href="https://plugins.jenkins.io/sonar/">SonarQube Scanner</a>.</p>
+</li>
+</ol>
+</div>
+<div class="imageblock text-center thumb">
+<div class="content">
+<img src="images/jenkins-install-sonar-plugin.png" alt="jenkins install sonar plugin">
+</div>
+<div class="title">Fig. 3. Plugin SonarQube Scanner for Jenkins</div>
+</div>
+<div class="olist arabic">
+<ol class="arabic" start="3">
+<li>
+<p>Una vez instalado el plugin de SonarQube, lo configuramos: <strong>Administrar Jenkins</strong> &gt; <strong>Configurar el Sistema</strong>, y bajamos hasta la sección <strong>SonarQube Servers</strong>. Marca la opción <code>Environment variables Enable injection of SonarQube server configuration as build environment variables</code>. Añadimos un nuevo SonarQube, damos un nombre al servidor, la <strong>URL</strong> de SonarQube, y añadimos la credencial de acceso al servidor mediante una nueva credencial de tipo <em>Secret Text</em> usando el <strong>token</strong> de autenticación. Dale el ID a la credencial: <code>sonar_server</code></p>
+</li>
+</ol>
+</div>
+<div class="imageblock text-center thumb">
+<div class="content">
+<img src="images/jenkins-sonar-servers.png" alt="jenkins sonar servers" width="80%">
+</div>
+<div class="title">Fig. 4. Configuración del Servidor SonarQube</div>
+</div>
+<div class="imageblock text-center thumb">
+<div class="content">
+<img src="images/jenkins-add-sonar-credentials.png" alt="jenkins add sonar credentials" width="70%">
+</div>
+<div class="title">Fig. 5. Añadir la credencial del token de SonarQube</div>
+</div>
+<div class="olist arabic">
+<ol class="arabic" start="4">
+<li>
+<p>A continuación debemos añadir la instalación de <strong>SonarQube Scanner</strong> en  <strong>Administrar Jenkins</strong> &gt; <strong>Global Tool configuration</strong>. Seleccionamos la última version que se instale automáticamente.</p>
+</li>
+</ol>
+</div>
+<div class="imageblock text-center thumb">
+<div class="content">
+<img src="images/jenkins-add-sonarqube-scanner.png" alt="jenkins add sonarqube scanner" width="80%">
+</div>
+<div class="title">Fig. 6. Añadir SonarQube Scanner</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_añadir_el_análisis_con_sonarqube_a_un_proyecto_tipo_maven">3. Añadir el análisis con SonarQube a un proyecto tipo Maven</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_primeros_ejemplos">3.1. Primeros ejemplos</h3>
+<div class="paragraph">
+<p>En el repositorio de GitHub <a href="https://github.com/SonarSource/sonar-scanning-examples">sonar-scanning-examples</a> hay disponibles varios ejemplos para probar el funcionamiento de SonarQube. Nos centraremos en los proyectos <a href="https://github.com/SonarSource/sonar-scanning-examples/tree/master/sonarqube-scanner-maven">Java con Maven</a> para probar el funcionamiento de Sonar.</p>
+</div>
+<div class="paragraph">
+<p>Para añadirlo a nuestro proyecto, en el archivo pom.xml tenemos que incorporar el plugin de SonarQube en el bloque <code>&lt;build&gt;</code>.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="xml"><span class="nt">&lt;build&gt;</span>
+...
+    <span class="nt">&lt;plugin&gt;</span>
+      <span class="nt">&lt;groupId&gt;</span>org.sonarsource.scanner.maven<span class="nt">&lt;/groupId&gt;</span>
+      <span class="nt">&lt;artifactId&gt;</span>sonar-maven-plugin<span class="nt">&lt;/artifactId&gt;</span>
+      <span class="nt">&lt;version&gt;</span>3.9.0.2155<span class="nt">&lt;/version&gt;</span>
+    <span class="nt">&lt;/plugin&gt;</span>
+...
+<span class="nt">&lt;/build&gt;</span></code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_añadir_el_análisis_con_sonarqube_a_un_pipeline">4. Añadir el análisis con SonarQube a un pipeline</h2>
+<div class="sectionbody">
+<div class="literalblock">
+<div class="content">
+<pre>stage('SonarQube analysis') {
+  withSonarQubeEnv(credentialsId: 'f225455e-ea59-40fa-8af7-08176e86507a', installationName: 'My SonarQube Server') { // You can override the credential to be used
+    sh 'mvn org.sonarsource.scanner.maven:sonar-maven-plugin:3.7.0.1746:sonar'
+  }
+}</pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_resultados_del_análisis_con_sonarqube">5. Resultados del análisis con SonarQube</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>En el pipeline, se mostrará una etiqueta con el valor del quality gate encontrado en el análisis.</p>
+</div>
+<div class="paragraph">
+<p>En SonarQube tenemos el resultado detallado del análisis.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_faq_y_resolución_de_problemas_thoubleshouting">6. FAQ y resolución de problemas (<em>thoubleshouting</em>)</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>En esta sección se añadirán soluciones a los problemas más habituales.</p>
 </div>
 </div>
 </div>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2021-05-09 17:50:55 +0200
+Last updated 2021-05-09 20:52:54 +0200
 </div>
 </div>
+<style>
+pre.rouge table td { padding: 5px; }
+pre.rouge table pre { margin: 0; }
+pre.rouge .cm {
+  color: #999988;
+  font-style: italic;
+}
+pre.rouge .cp {
+  color: #999999;
+  font-weight: bold;
+}
+pre.rouge .c1 {
+  color: #999988;
+  font-style: italic;
+}
+pre.rouge .cs {
+  color: #999999;
+  font-weight: bold;
+  font-style: italic;
+}
+pre.rouge .c, pre.rouge .ch, pre.rouge .cd, pre.rouge .cpf {
+  color: #999988;
+  font-style: italic;
+}
+pre.rouge .err {
+  color: #a61717;
+  background-color: #e3d2d2;
+}
+pre.rouge .gd {
+  color: #000000;
+  background-color: #ffdddd;
+}
+pre.rouge .ge {
+  color: #000000;
+  font-style: italic;
+}
+pre.rouge .gr {
+  color: #aa0000;
+}
+pre.rouge .gh {
+  color: #999999;
+}
+pre.rouge .gi {
+  color: #000000;
+  background-color: #ddffdd;
+}
+pre.rouge .go {
+  color: #888888;
+}
+pre.rouge .gp {
+  color: #555555;
+}
+pre.rouge .gs {
+  font-weight: bold;
+}
+pre.rouge .gu {
+  color: #aaaaaa;
+}
+pre.rouge .gt {
+  color: #aa0000;
+}
+pre.rouge .kc {
+  color: #000000;
+  font-weight: bold;
+}
+pre.rouge .kd {
+  color: #000000;
+  font-weight: bold;
+}
+pre.rouge .kn {
+  color: #000000;
+  font-weight: bold;
+}
+pre.rouge .kp {
+  color: #000000;
+  font-weight: bold;
+}
+pre.rouge .kr {
+  color: #000000;
+  font-weight: bold;
+}
+pre.rouge .kt {
+  color: #445588;
+  font-weight: bold;
+}
+pre.rouge .k, pre.rouge .kv {
+  color: #000000;
+  font-weight: bold;
+}
+pre.rouge .mf {
+  color: #009999;
+}
+pre.rouge .mh {
+  color: #009999;
+}
+pre.rouge .il {
+  color: #009999;
+}
+pre.rouge .mi {
+  color: #009999;
+}
+pre.rouge .mo {
+  color: #009999;
+}
+pre.rouge .m, pre.rouge .mb, pre.rouge .mx {
+  color: #009999;
+}
+pre.rouge .sb {
+  color: #d14;
+}
+pre.rouge .sc {
+  color: #d14;
+}
+pre.rouge .sd {
+  color: #d14;
+}
+pre.rouge .s2 {
+  color: #d14;
+}
+pre.rouge .se {
+  color: #d14;
+}
+pre.rouge .sh {
+  color: #d14;
+}
+pre.rouge .si {
+  color: #d14;
+}
+pre.rouge .sx {
+  color: #d14;
+}
+pre.rouge .sr {
+  color: #009926;
+}
+pre.rouge .s1 {
+  color: #d14;
+}
+pre.rouge .ss {
+  color: #990073;
+}
+pre.rouge .s, pre.rouge .sa, pre.rouge .dl {
+  color: #d14;
+}
+pre.rouge .na {
+  color: #008080;
+}
+pre.rouge .bp {
+  color: #999999;
+}
+pre.rouge .nb {
+  color: #0086B3;
+}
+pre.rouge .nc {
+  color: #445588;
+  font-weight: bold;
+}
+pre.rouge .no {
+  color: #008080;
+}
+pre.rouge .nd {
+  color: #3c5d5d;
+  font-weight: bold;
+}
+pre.rouge .ni {
+  color: #800080;
+}
+pre.rouge .ne {
+  color: #990000;
+  font-weight: bold;
+}
+pre.rouge .nf, pre.rouge .fm {
+  color: #990000;
+  font-weight: bold;
+}
+pre.rouge .nl {
+  color: #990000;
+  font-weight: bold;
+}
+pre.rouge .nn {
+  color: #555555;
+}
+pre.rouge .nt {
+  color: #000080;
+}
+pre.rouge .vc {
+  color: #008080;
+}
+pre.rouge .vg {
+  color: #008080;
+}
+pre.rouge .vi {
+  color: #008080;
+}
+pre.rouge .nv, pre.rouge .vm {
+  color: #008080;
+}
+pre.rouge .ow {
+  color: #000000;
+  font-weight: bold;
+}
+pre.rouge .o {
+  color: #000000;
+  font-weight: bold;
+}
+pre.rouge .w {
+  color: #bbbbbb;
+}
+pre.rouge {
+  background-color: #f8f8f8;
+}
+</style>
 </body>
 </html>
