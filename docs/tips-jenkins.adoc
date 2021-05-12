@@ -49,26 +49,41 @@ COLOCA A CONTINUACION LOS OBJETIVOS
 
 
 
-== Configuración de JKD11 en Jenkins en Docker
+== Configuración de más de una versión de JDK en Jenkins (en Docker)
 
-https://stackoverflow.com/questions/55243120/jenkins-add-jdk-11-to-jdk-list
+=== Configuración de JDK
 
-Utiliza esta ruta: `https://download.java.net/openjdk/jdk11/ri/openjdk-11+28_linux-x64_bin.tar.gz`
+Normalmente, no es necesario configurar ningún JDK, ya que Jenkins toma de forma predeterminada la versión de JDK que haya instalada en el *Sistema*, en https://github.com/ualhmis/Jenkins2Instalacion/[nuestro caso], JDK 1.8. Sin embargo, se pueden configurar más versiones de JDK en la configuración de Jenkins, en concreto: Administrar Jenkins > Global Tool Configuration > JDK Installations.
 
-image::jenkins-tip-instalar-jdk11.png[role="thumb", align="center"]
+Dependiendo de las instalaciones que tengas configuradas en tu Jenkins, podrá ocurrir una de la siguientes situaciones: 
+  - en caso de que no tengas _ninguna instalación configurada_, Jenkins usará la del *Sistema* en todos los proyectos.
+  - en caso de que tengas _configurado un JDK_, Jenkins lo usará en todos los proyectos. 
+  - en caso de que tengas _configuradas más de una versión de JDK_, Jenkins permitirá elegir en cada proyecto la versión de JDK que quieres usar, pudiendo seleccionar una entre _System_ y las dos o más JDKs configuradas.
 
-En el proyecto, dejar el label en blanco. Si necesita Java 11, porque así está configuradon en el pom, lo usará: 
+=== Configurar Java 11
+
+Necesitarás Java 11 en los proyectos donde así esté configurado en el *pom.xml*: 
 
 [source, xml]
 ----
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-    <maven.compiler.release>11</maven.compiler.release>
+    <maven.compiler.release>11</maven.compiler.release> <1>
   </properties>
 ----
+<1> Versión de Java que usará para construir el proyecto. Similar para Java 13, 15, 16....
 
-Salida por consola
+Los pasos para configurar *Java 11* en Jenkins: 
+https://stackoverflow.com/questions/55243120/jenkins-add-jdk-11-to-jdk-list
+
+Utiliza esta ruta para descargar openjdk 11: `https://download.java.net/openjdk/jdk11/ri/openjdk-11+28_linux-x64_bin.tar.gz`
+
+image::jenkins-tip-instalar-jdk11.png[role="thumb", align="center"]
+
+En el proyecto, dejar el label en blanco. 
+
+El uso de Java 11 se puede comprobar en la salida por consola:
 
 [source]
 ----

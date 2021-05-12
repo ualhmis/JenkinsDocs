@@ -444,7 +444,12 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div id="toc" class="toc2">
 <div id="toctitle">Tabla de contenidos</div>
 <ul class="sectlevel1">
-<li><a href="#_configuración_de_jkd11_en_jenkins_en_docker">1. Configuración de JKD11 en Jenkins en Docker</a></li>
+<li><a href="#_configuración_de_más_de_una_versión_de_jdk_en_jenkins_en_docker">1. Configuración de más de una versión de JDK en Jenkins (en Docker)</a>
+<ul class="sectlevel2">
+<li><a href="#_configuración_de_jdk">1.1. Configuración de JDK</a></li>
+<li><a href="#_configurar_java_11">1.2. Configurar Java 11</a></li>
+</ul>
+</li>
 </ul>
 </div>
 </div>
@@ -463,13 +468,48 @@ Recopilación de trucos, pasos útiles de configuración, y ejemplos de Jenkins.
 </div>
 </div>
 <div class="sect1">
-<h2 id="_configuración_de_jkd11_en_jenkins_en_docker">1. Configuración de JKD11 en Jenkins en Docker</h2>
+<h2 id="_configuración_de_más_de_una_versión_de_jdk_en_jenkins_en_docker">1. Configuración de más de una versión de JDK en Jenkins (en Docker)</h2>
 <div class="sectionbody">
+<div class="sect2">
+<h3 id="_configuración_de_jdk">1.1. Configuración de JDK</h3>
 <div class="paragraph">
-<p><a href="https://stackoverflow.com/questions/55243120/jenkins-add-jdk-11-to-jdk-list" class="bare">https://stackoverflow.com/questions/55243120/jenkins-add-jdk-11-to-jdk-list</a></p>
+<p>Normalmente, no es necesario configurar ningún JDK, ya que Jenkins toma de forma predeterminada la versión de JDK que haya instalada en el <strong>Sistema</strong>, en <a href="https://github.com/ualhmis/Jenkins2Instalacion/">nuestro caso</a>, JDK 1.8. Sin embargo, se pueden configurar más versiones de JDK en la configuración de Jenkins, en concreto: Administrar Jenkins &gt; Global Tool Configuration &gt; JDK Installations.</p>
 </div>
 <div class="paragraph">
-<p>Utiliza esta ruta: <code><a href="https://download.java.net/openjdk/jdk11/ri/openjdk-11+28_linux-x64_bin.tar.gz" class="bare">https://download.java.net/openjdk/jdk11/ri/openjdk-11+28_linux-x64_bin.tar.gz</a></code></p>
+<p>Dependiendo de las instalaciones que tengas configuradas en tu Jenkins, podrá ocurrir una de la siguientes situaciones:
+  - en caso de que no tengas <em>ninguna instalación configurada</em>, Jenkins usará la del <strong>Sistema</strong> en todos los proyectos.
+  - en caso de que tengas <em>configurado un JDK</em>, Jenkins lo usará en todos los proyectos.
+  - en caso de que tengas <em>configuradas más de una versión de JDK</em>, Jenkins permitirá elegir en cada proyecto la versión de JDK que quieres usar, pudiendo seleccionar una entre <em>System</em> y las dos o más JDKs configuradas.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_configurar_java_11">1.2. Configurar Java 11</h3>
+<div class="paragraph">
+<p>Necesitarás Java 11 en los proyectos donde así esté configurado en el <strong>pom.xml</strong>:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="xml">  <span class="nt">&lt;properties&gt;</span>
+    <span class="nt">&lt;project.build.sourceEncoding&gt;</span>UTF-8<span class="nt">&lt;/project.build.sourceEncoding&gt;</span>
+    <span class="nt">&lt;project.reporting.outputEncoding&gt;</span>UTF-8<span class="nt">&lt;/project.reporting.outputEncoding&gt;</span>
+    <span class="nt">&lt;maven.compiler.release&gt;</span>11<span class="nt">&lt;/maven.compiler.release&gt;</span> <i class="conum" data-value="1"></i><b>(1)</b>
+  <span class="nt">&lt;/properties&gt;</span></code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>Versión de Java que usará para construir el proyecto. Similar para Java 13, 15, 16&#8230;&#8203;.</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>Los pasos para configurar <strong>Java 11</strong> en Jenkins:
+<a href="https://stackoverflow.com/questions/55243120/jenkins-add-jdk-11-to-jdk-list" class="bare">https://stackoverflow.com/questions/55243120/jenkins-add-jdk-11-to-jdk-list</a></p>
+</div>
+<div class="paragraph">
+<p>Utiliza esta ruta para descargar openjdk 11: <code><a href="https://download.java.net/openjdk/jdk11/ri/openjdk-11+28_linux-x64_bin.tar.gz" class="bare">https://download.java.net/openjdk/jdk11/ri/openjdk-11+28_linux-x64_bin.tar.gz</a></code></p>
 </div>
 <div class="imageblock text-center thumb">
 <div class="content">
@@ -477,19 +517,10 @@ Recopilación de trucos, pasos útiles de configuración, y ejemplos de Jenkins.
 </div>
 </div>
 <div class="paragraph">
-<p>En el proyecto, dejar el label en blanco. Si necesita Java 11, porque así está configuradon en el pom, lo usará:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="rouge highlight"><code data-lang="xml">  <span class="nt">&lt;properties&gt;</span>
-    <span class="nt">&lt;project.build.sourceEncoding&gt;</span>UTF-8<span class="nt">&lt;/project.build.sourceEncoding&gt;</span>
-    <span class="nt">&lt;project.reporting.outputEncoding&gt;</span>UTF-8<span class="nt">&lt;/project.reporting.outputEncoding&gt;</span>
-    <span class="nt">&lt;maven.compiler.release&gt;</span>11<span class="nt">&lt;/maven.compiler.release&gt;</span>
-  <span class="nt">&lt;/properties&gt;</span></code></pre>
-</div>
+<p>En el proyecto, dejar el label en blanco.</p>
 </div>
 <div class="paragraph">
-<p>Salida por consola</p>
+<p>El uso de Java 11 se puede comprobar en la salida por consola:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -502,9 +533,10 @@ Executing Maven:  -B -f /var/jenkins_home/workspace/sonar-scanning-examples-mave
 </div>
 </div>
 </div>
+</div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2021-05-09 21:06:28 +0200
+Last updated 2021-05-10 13:58:54 +0200
 </div>
 </div>
 <style>
