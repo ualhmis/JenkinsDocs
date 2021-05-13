@@ -180,6 +180,9 @@ Añade una https://docs.sonarqube.org/latest/analysis/scan/sonarscanner-for-jenk
 <1> Usando el ID de la credencial creada en Jenkins con el token de acceso a SonarQube, en la figura 5 se le dió el id `sonar_server`, y el nombre del servidor de SonarQube configurado en Jenkins. 
 <2> Utiliza `mvn -f carpeta/pom.xml sonar:sonar` si es necesario.
 
+.Resultados de SonarQube en el pipeline.
+image::jenkins-sonar-results-pipeline.png[role="thumb", align="center", width=80%]
+
 Alternativamente, se puede añadir a continuación una nueva fase que establezca el pipeline a  `UNSTABLE` si falla el Quality Gate.
 
 [source, groovy]
