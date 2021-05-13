@@ -487,7 +487,7 @@ Integración de SonarQube  con Jenkins.
 <div class="content">
 <div class="title">Realización y entrega</div>
 <div class="paragraph">
-<p>La realización de estas actividades se realizará de forma individual. Debe tener sus ejercicios individuales en el Jenkins del equipo.
+<p>La realización de esta actividad se realizará de forma individual. Consiste en <strong>añadir el análisis con SonarQube a los proyectos ya existentes en Jenkins</strong> de actividades anteriores. Su resolución debe estar en el Jenkins del equipo.
 La entrega será mediante el envío de un informe y el acceso al profesor a los servicios configurados, para la revisión y evaluación de los mismos. Recuerda dar acceso al profesor al Sonar del equipo.</p>
 </div>
 </div>
@@ -696,8 +696,7 @@ La entrega será mediante el envío de un informe y el acceso al profesor a los 
 <pre class="rouge highlight"><code data-lang="groovy">  <span class="n">stage</span><span class="o">(</span><span class="s1">'SonarQube analysis'</span><span class="o">)</span> <span class="o">{</span>
     <span class="n">steps</span> <span class="o">{</span>
       <span class="n">withSonarQubeEnv</span><span class="o">(</span><span class="nl">credentialsId:</span> <span class="s1">'sonar_server'</span><span class="o">,</span> <span class="nl">installationName:</span> <span class="s1">'servidor_sonarqube'</span><span class="o">)</span> <span class="o">{</span> <i class="conum" data-value="1"></i><b>(1)</b>
-        <span class="n">sh</span> <span class="s1">'mvn sonar:sonar'</span>
-
+        <span class="n">sh</span> <span class="s1">'mvn sonar:sonar'</span> <i class="conum" data-value="2"></i><b>(2)</b>
       <span class="o">}</span>
     <span class="o">}</span>
   <span class="o">}</span></code></pre>
@@ -708,6 +707,10 @@ La entrega será mediante el envío de un informe y el acceso al profesor a los 
 <tr>
 <td><i class="conum" data-value="1"></i><b>1</b></td>
 <td>Usando el ID de la credencial creada en Jenkins con el token de acceso a SonarQube, en la figura 5 se le dió el id <code>sonar_server</code>, y el nombre del servidor de SonarQube configurado en Jenkins.</td>
+</tr>
+<tr>
+<td><i class="conum" data-value="2"></i><b>2</b></td>
+<td>Utiliza <code>mvn -f carpeta/pom.xml sonar:sonar</code> si es necesario.</td>
 </tr>
 </table>
 </div>
@@ -741,7 +744,7 @@ La entrega será mediante el envío de un informe y el acceso al profesor a los 
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2021-05-13 08:27:09 +0200
+Last updated 2021-05-13 08:38:39 +0200
 </div>
 </div>
 <style>

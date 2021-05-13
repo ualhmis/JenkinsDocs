@@ -50,7 +50,7 @@ COLOCA A CONTINUACION LOS OBJETIVOS
 
 .Realización y entrega
 ****
-La realización de estas actividades se realizará de forma individual. Debe tener sus ejercicios individuales en el Jenkins del equipo. 
+La realización de esta actividad se realizará de forma individual. Consiste en *añadir el análisis con SonarQube a los proyectos ya existentes en Jenkins* de actividades anteriores. Su resolución debe estar en el Jenkins del equipo.
 La entrega será mediante el envío de un informe y el acceso al profesor a los servicios configurados, para la revisión y evaluación de los mismos. Recuerda dar acceso al profesor al Sonar del equipo.
 ****
 
