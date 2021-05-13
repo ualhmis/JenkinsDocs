@@ -84,7 +84,7 @@ En esta actividad nos vamos a centrar en integrar SonarQube on premise que hemos
 
 == Configuración de la integración entre Jenkins y SonarQube
 
-image::Sonarqube-Jenkins.jpg[width=50%, role="thumb", align="center"]
+image::Sonarqube-Jenkins.jpg[width=40%, align="center"]
 
 . El primer paso es crear un *token* en SonarQube para el usuario. Para ello, en SonarQube, creamos un nuevo usuario: `userjenkins`. Para administrar usuarios y grupos, una vez logueado como `admin` elige *Administration* > *Security*. Añade el usuario `userjenkins`, que de forma predeterminada se añade al grupo `sonar-users`. 
 
@@ -123,13 +123,11 @@ image::jenkins-add-sonar-credentials.png[role="thumb", align="center", width=70%
 image::jenkins-add-sonarqube-scanner.png[role="thumb", align="center", width=80%]
 
 
-== Añadir el análisis con SonarQube a un proyecto tipo Maven
+== Añadir SonarQube a un proyecto Jenkins
 
-=== Primeros ejemplos
+=== Projecto tipo Maven
 
-En el repositorio de GitHub https://github.com/SonarSource/sonar-scanning-examples[sonar-scanning-examples] hay disponibles varios ejemplos para probar el funcionamiento de SonarQube. Nos centraremos en los proyectos https://github.com/SonarSource/sonar-scanning-examples/tree/master/sonarqube-scanner-maven[Java con Maven] para probar el funcionamiento de Sonar.
-
-Para añadirlo a nuestro proyecto, en el archivo pom.xml tenemos que incorporar el plugin de SonarQube en el bloque `<build>`.
+. En el archivo pom.xml tenemos que incorporar el plugin de SonarQube en el bloque `<build>`.
 
 [source, xml]
 ----
@@ -144,23 +142,58 @@ Para añadirlo a nuestro proyecto, en el archivo pom.xml tenemos que incorporar 
 </build>
 ----
 
+[start=2]
+. En la configuración del proyecto Jenkins, en la sección `Entorno de Ejecución`, marcamos la opción: `Prepare SonarQube Scanner environment`, y seleccionamos el token en el desplegable. 
+
+.Añadir SonarQube al entornio de ejecución
+image::jenkins-add-sonarqube-environment.png[role="thumb", align="center", width=80%]
+
+[start=3]
+. En los Goals de Maven, añadimos `sonar:sonar`  al final de lista de goals.
+
+. Tras la ejecución, aparecerán los resultados de SonarQube. En el proyecto se mostrará una etiqueta con el valor del Quality Gate encontrado en el análisis. Haciendo clic en el enlace  nos lleva al resultado detallado del análisis.
 
 
-== Añadir el análisis con SonarQube a un pipeline
+.Resultados de SonarQube en el proyecto Jenkins.
+image::jenkins-sonar-results.png[role="thumb", align="center", width=80%]
 
+.Ejemplos de Maven y SonarQube
+[NOTE]
+====
+En el repositorio de GitHub https://github.com/SonarSource/sonar-scanning-examples[sonar-scanning-examples] hay disponibles varios ejemplos para probar el funcionamiento de SonarQube. Podemos usar los proyectos https://github.com/SonarSource/sonar-scanning-examples/tree/master/sonarqube-scanner-maven[Java con Maven] para probar el funcionamiento de SonarQube. Sin embargo, en estos proyectos está configurado Java 11 en el pom.xml, por lo que la construcción en nuestro Jenkins fallará ya que solamente tenemos instalado JDK 1.8.
+====
 
+=== Proyecto tipo Pipeline
+
+Añade una https://docs.sonarqube.org/latest/analysis/scan/sonarscanner-for-jenkins/[nueva fase] al pipeline:
+
+[source, groovy]
+----
   stage('SonarQube analysis') {
-    withSonarQubeEnv(credentialsId: 'f225455e-ea59-40fa-8af7-08176e86507a', installationName: 'My SonarQube Server') { // You can override the credential to be used
-      sh 'mvn org.sonarsource.scanner.maven:sonar-maven-plugin:3.7.0.1746:sonar'
+    steps {
+      withSonarQubeEnv(credentialsId: 'sonar_server', installationName: 'servidor_sonarqube') { <1>
+        sh 'mvn sonar:sonar' <2>
+      }
     }
   }
-  
-== Resultados del análisis con SonarQube 
+----
+<1> Usando el ID de la credencial creada en Jenkins con el token de acceso a SonarQube, en la figura 5 se le dió el id `sonar_server`, y el nombre del servidor de SonarQube configurado en Jenkins. 
+<2> Utiliza `mvn -f carpeta/pom.xml sonar:sonar` si es necesario.
 
-En el pipeline, se mostrará una etiqueta con el valor del quality gate encontrado en el análisis.
+Alternativamente, se puede añadir a continuación una nueva fase que establezca el pipeline a  `UNSTABLE` si falla el Quality Gate.
 
-En SonarQube tenemos el resultado detallado del análisis.
-
+[source, groovy]
+----
+  stage("Quality Gate") {
+    steps {
+      timeout(time: 1, unit: 'HOURS') {
+      // Parameter indicates whether to set pipeline to UNSTABLE if Quality Gate fails
+      // true = set pipeline to UNSTABLE, false = don't
+        waitForQualityGate abortPipeline: true
+      }
+    }
+  }
+----
 
 == FAQ y resolución de problemas (_thoubleshouting_)
 

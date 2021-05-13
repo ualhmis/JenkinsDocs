@@ -446,14 +446,13 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <ul class="sectlevel1">
 <li><a href="#_introducción_a_sonarqube">1. Introducción a SonarQube</a></li>
 <li><a href="#_configuración_de_la_integración_entre_jenkins_y_sonarqube">2. Configuración de la integración entre Jenkins y SonarQube</a></li>
-<li><a href="#_añadir_el_análisis_con_sonarqube_a_un_proyecto_tipo_maven">3. Añadir el análisis con SonarQube a un proyecto tipo Maven</a>
+<li><a href="#_añadir_sonarqube_a_un_proyecto_jenkins">3. Añadir SonarQube a un proyecto Jenkins</a>
 <ul class="sectlevel2">
-<li><a href="#_primeros_ejemplos">3.1. Primeros ejemplos</a></li>
+<li><a href="#_projecto_tipo_maven">3.1. Projecto tipo Maven</a></li>
+<li><a href="#_proyecto_tipo_pipeline">3.2. Proyecto tipo Pipeline</a></li>
 </ul>
 </li>
-<li><a href="#_añadir_el_análisis_con_sonarqube_a_un_pipeline">4. Añadir el análisis con SonarQube a un pipeline</a></li>
-<li><a href="#_resultados_del_análisis_con_sonarqube">5. Resultados del análisis con SonarQube</a></li>
-<li><a href="#_faq_y_resolución_de_problemas_thoubleshouting">6. FAQ y resolución de problemas (<em>thoubleshouting</em>)</a></li>
+<li><a href="#_faq_y_resolución_de_problemas_thoubleshouting">4. FAQ y resolución de problemas (<em>thoubleshouting</em>)</a></li>
 </ul>
 </div>
 </div>
@@ -543,9 +542,9 @@ La entrega será mediante el envío de un informe y el acceso al profesor a los 
 <div class="sect1">
 <h2 id="_configuración_de_la_integración_entre_jenkins_y_sonarqube">2. Configuración de la integración entre Jenkins y SonarQube</h2>
 <div class="sectionbody">
-<div class="imageblock text-center thumb">
+<div class="imageblock text-center">
 <div class="content">
-<img src="images/Sonarqube-Jenkins.jpg" alt="Sonarqube Jenkins" width="50%">
+<img src="images/Sonarqube-Jenkins.jpg" alt="Sonarqube Jenkins" width="40%">
 </div>
 </div>
 <div class="olist arabic">
@@ -618,15 +617,16 @@ La entrega será mediante el envío de un informe y el acceso al profesor a los 
 </div>
 </div>
 <div class="sect1">
-<h2 id="_añadir_el_análisis_con_sonarqube_a_un_proyecto_tipo_maven">3. Añadir el análisis con SonarQube a un proyecto tipo Maven</h2>
+<h2 id="_añadir_sonarqube_a_un_proyecto_jenkins">3. Añadir SonarQube a un proyecto Jenkins</h2>
 <div class="sectionbody">
 <div class="sect2">
-<h3 id="_primeros_ejemplos">3.1. Primeros ejemplos</h3>
-<div class="paragraph">
-<p>En el repositorio de GitHub <a href="https://github.com/SonarSource/sonar-scanning-examples">sonar-scanning-examples</a> hay disponibles varios ejemplos para probar el funcionamiento de SonarQube. Nos centraremos en los proyectos <a href="https://github.com/SonarSource/sonar-scanning-examples/tree/master/sonarqube-scanner-maven">Java con Maven</a> para probar el funcionamiento de Sonar.</p>
-</div>
-<div class="paragraph">
-<p>Para añadirlo a nuestro proyecto, en el archivo pom.xml tenemos que incorporar el plugin de SonarQube en el bloque <code>&lt;build&gt;</code>.</p>
+<h3 id="_projecto_tipo_maven">3.1. Projecto tipo Maven</h3>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>En el archivo pom.xml tenemos que incorporar el plugin de SonarQube en el bloque <code>&lt;build&gt;</code>.</p>
+</li>
+</ol>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -641,36 +641,97 @@ La entrega será mediante el envío de un informe y el acceso al profesor a los 
 <span class="nt">&lt;/build&gt;</span></code></pre>
 </div>
 </div>
+<div class="olist arabic">
+<ol class="arabic" start="2">
+<li>
+<p>En la configuración del proyecto Jenkins, en la sección <code>Entorno de Ejecución</code>, marcamos la opción: <code>Prepare SonarQube Scanner environment</code>, y seleccionamos el token en el desplegable.</p>
+</li>
+</ol>
 </div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="_añadir_el_análisis_con_sonarqube_a_un_pipeline">4. Añadir el análisis con SonarQube a un pipeline</h2>
-<div class="sectionbody">
-<div class="literalblock">
+<div class="imageblock text-center thumb">
 <div class="content">
-<pre>stage('SonarQube analysis') {
-  withSonarQubeEnv(credentialsId: 'f225455e-ea59-40fa-8af7-08176e86507a', installationName: 'My SonarQube Server') { // You can override the credential to be used
-    sh 'mvn org.sonarsource.scanner.maven:sonar-maven-plugin:3.7.0.1746:sonar'
-  }
-}</pre>
+<img src="images/jenkins-add-sonarqube-environment.png" alt="jenkins add sonarqube environment" width="80%">
+</div>
+<div class="title">Fig. 7. Añadir SonarQube al entornio de ejecución</div>
+</div>
+<div class="olist arabic">
+<ol class="arabic" start="3">
+<li>
+<p>En los Goals de Maven, añadimos <code>sonar:sonar</code>  al final de lista de goals.</p>
+</li>
+<li>
+<p>Tras la ejecución, aparecerán los resultados de SonarQube. En el proyecto se mostrará una etiqueta con el valor del Quality Gate encontrado en el análisis. Haciendo clic en el enlace  nos lleva al resultado detallado del análisis.</p>
+</li>
+</ol>
+</div>
+<div class="imageblock text-center thumb">
+<div class="content">
+<img src="images/jenkins-sonar-results.png" alt="jenkins sonar results" width="80%">
+</div>
+<div class="title">Fig. 8. Resultados de SonarQube en el proyecto Jenkins.</div>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+<div class="title">Ejemplos de Maven y SonarQube</div>
+<div class="paragraph">
+<p>En el repositorio de GitHub <a href="https://github.com/SonarSource/sonar-scanning-examples">sonar-scanning-examples</a> hay disponibles varios ejemplos para probar el funcionamiento de SonarQube. Podemos usar los proyectos <a href="https://github.com/SonarSource/sonar-scanning-examples/tree/master/sonarqube-scanner-maven">Java con Maven</a> para probar el funcionamiento de SonarQube. Sin embargo, en estos proyectos está configurado Java 11 en el pom.xml, por lo que la construcción en nuestro Jenkins fallará ya que solamente tenemos instalado JDK 1.8.</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_proyecto_tipo_pipeline">3.2. Proyecto tipo Pipeline</h3>
+<div class="paragraph">
+<p>Añade una <a href="https://docs.sonarqube.org/latest/analysis/scan/sonarscanner-for-jenkins/">nueva fase</a> al pipeline:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="groovy">  <span class="n">stage</span><span class="o">(</span><span class="s1">'SonarQube analysis'</span><span class="o">)</span> <span class="o">{</span>
+    <span class="n">steps</span> <span class="o">{</span>
+      <span class="n">withSonarQubeEnv</span><span class="o">(</span><span class="nl">credentialsId:</span> <span class="s1">'sonar_server'</span><span class="o">,</span> <span class="nl">installationName:</span> <span class="s1">'servidor_sonarqube'</span><span class="o">)</span> <span class="o">{</span> <i class="conum" data-value="1"></i><b>(1)</b>
+        <span class="n">sh</span> <span class="s1">'mvn sonar:sonar'</span>
+
+      <span class="o">}</span>
+    <span class="o">}</span>
+  <span class="o">}</span></code></pre>
+</div>
+</div>
+<div class="colist arabic">
+<table>
+<tr>
+<td><i class="conum" data-value="1"></i><b>1</b></td>
+<td>Usando el ID de la credencial creada en Jenkins con el token de acceso a SonarQube, en la figura 5 se le dió el id <code>sonar_server</code>, y el nombre del servidor de SonarQube configurado en Jenkins.</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>Alternativamente, se puede añadir a continuación una nueva fase que establezca el pipeline a  <code>UNSTABLE</code> si falla el Quality Gate.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="groovy">  <span class="n">stage</span><span class="o">(</span><span class="s2">"Quality Gate"</span><span class="o">)</span> <span class="o">{</span>
+    <span class="n">steps</span> <span class="o">{</span>
+      <span class="n">timeout</span><span class="o">(</span><span class="nl">time:</span> <span class="mi">1</span><span class="o">,</span> <span class="nl">unit:</span> <span class="s1">'HOURS'</span><span class="o">)</span> <span class="o">{</span>
+      <span class="c1">// Parameter indicates whether to set pipeline to UNSTABLE if Quality Gate fails</span>
+      <span class="c1">// true = set pipeline to UNSTABLE, false = don't</span>
+        <span class="n">waitForQualityGate</span> <span class="nl">abortPipeline:</span> <span class="kc">true</span>
+      <span class="o">}</span>
+    <span class="o">}</span>
+  <span class="o">}</span></code></pre>
+</div>
 </div>
 </div>
 </div>
 </div>
 <div class="sect1">
-<h2 id="_resultados_del_análisis_con_sonarqube">5. Resultados del análisis con SonarQube</h2>
-<div class="sectionbody">
-<div class="paragraph">
-<p>En el pipeline, se mostrará una etiqueta con el valor del quality gate encontrado en el análisis.</p>
-</div>
-<div class="paragraph">
-<p>En SonarQube tenemos el resultado detallado del análisis.</p>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="_faq_y_resolución_de_problemas_thoubleshouting">6. FAQ y resolución de problemas (<em>thoubleshouting</em>)</h2>
+<h2 id="_faq_y_resolución_de_problemas_thoubleshouting">4. FAQ y resolución de problemas (<em>thoubleshouting</em>)</h2>
 <div class="sectionbody">
 <div class="paragraph">
 <p>En esta sección se añadirán soluciones a los problemas más habituales.</p>
@@ -680,7 +741,7 @@ La entrega será mediante el envío de un informe y el acceso al profesor a los 
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2021-05-09 20:52:54 +0200
+Last updated 2021-05-13 08:27:09 +0200
 </div>
 </div>
 <style>
