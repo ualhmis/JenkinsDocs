@@ -37,7 +37,7 @@ Joaquín Cañadas <jjcanada@ual.es>
 ////
 COLOCA A CONTINUACION EL RESUMEN
 ////
-Recopilación de trucos, pasos útiles de configuración, y ejemplos de Jenkins. 
+Recopilación de trucos, pasos útiles de instalación, configuración, y ejemplos de Jenkins. 
 
 ////
 COLOCA A CONTINUACION LOS OBJETIVOS
@@ -56,8 +56,11 @@ COLOCA A CONTINUACION LOS OBJETIVOS
 Normalmente, no es necesario configurar ningún JDK, ya que Jenkins toma de forma predeterminada la versión de JDK que haya instalada en el *Sistema*, en https://github.com/ualhmis/Jenkins2Instalacion/[nuestro caso], JDK 1.8. Sin embargo, se pueden configurar más versiones de JDK en la configuración de Jenkins, en concreto: Administrar Jenkins > Global Tool Configuration > JDK Installations.
 
 Dependiendo de las instalaciones que tengas configuradas en tu Jenkins, podrá ocurrir una de la siguientes situaciones: 
-  - en caso de que no tengas _ninguna instalación configurada_, Jenkins usará la del *Sistema* en todos los proyectos.
+
+  - en caso de que no tengas _ninguna instalación configurada_ en _JDK Installations_, Jenkins usará la versión de JDK que haya instalada en el *Sistema* en todos los proyectos.
+
   - en caso de que tengas _configurado un JDK_, Jenkins lo usará en todos los proyectos. 
+
   - en caso de que tengas _configuradas más de una versión de JDK_, Jenkins permitirá elegir en cada proyecto la versión de JDK que quieres usar, pudiendo seleccionar una entre _System_ y las dos o más JDKs configuradas.
 
 === Configurar Java 11
@@ -92,4 +95,25 @@ El uso de Java 11 se puede comprobar en la salida por consola:
 Executing Maven:  -B -f /var/jenkins_home/workspace/sonar-scanning-examples-maven-basic/sonarqube-scanner-maven/maven-basic/pom.xml clean verify sonar:sonar
 [INFO] Scanning for projects...
 ----
+
+
+== Jenkins como contenedor Docker
+
+_Proximamente_...
+
+== Jenkins en Kubernetes
+
+_Proximamente_...
+
+== Construcción de contenedores Docker en Jenkins
+
+=== Docker in Docker
+
+_Proximamente_...
+
+=== Kaniko
+
+_Proximamente_...
+
+https://faun.pub/jenkins-on-kubernetes-moving-from-docker-in-docker-to-kaniko-b48d1a240349[Jenkins on Kubernetes: Moving from Docker-in-Docker to Kaniko]
 

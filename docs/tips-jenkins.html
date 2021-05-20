@@ -450,6 +450,14 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#_configurar_java_11">1.2. Configurar Java 11</a></li>
 </ul>
 </li>
+<li><a href="#_jenkins_como_contenedor_docker">2. Jenkins como contenedor Docker</a></li>
+<li><a href="#_jenkins_en_kubernetes">3. Jenkins en Kubernetes</a></li>
+<li><a href="#_construcción_de_contenedores_docker_en_jenkins">4. Construcción de contenedores Docker en Jenkins</a>
+<ul class="sectlevel2">
+<li><a href="#_docker_in_docker">4.1. Docker in Docker</a></li>
+<li><a href="#_kaniko">4.2. Kaniko</a></li>
+</ul>
+</li>
 </ul>
 </div>
 </div>
@@ -462,7 +470,7 @@ Joaquín Cañadas &lt;<a href="mailto:jjcanada@ual.es">jjcanada@ual.es</a>&gt;</
 </div>
 <div class="quoteblock abstract">
 <blockquote>
-Recopilación de trucos, pasos útiles de configuración, y ejemplos de Jenkins.
+Recopilación de trucos, pasos útiles de instalación, configuración, y ejemplos de Jenkins.
 </blockquote>
 </div>
 </div>
@@ -476,10 +484,20 @@ Recopilación de trucos, pasos útiles de configuración, y ejemplos de Jenkins.
 <p>Normalmente, no es necesario configurar ningún JDK, ya que Jenkins toma de forma predeterminada la versión de JDK que haya instalada en el <strong>Sistema</strong>, en <a href="https://github.com/ualhmis/Jenkins2Instalacion/">nuestro caso</a>, JDK 1.8. Sin embargo, se pueden configurar más versiones de JDK en la configuración de Jenkins, en concreto: Administrar Jenkins &gt; Global Tool Configuration &gt; JDK Installations.</p>
 </div>
 <div class="paragraph">
-<p>Dependiendo de las instalaciones que tengas configuradas en tu Jenkins, podrá ocurrir una de la siguientes situaciones:
-  - en caso de que no tengas <em>ninguna instalación configurada</em>, Jenkins usará la del <strong>Sistema</strong> en todos los proyectos.
-  - en caso de que tengas <em>configurado un JDK</em>, Jenkins lo usará en todos los proyectos.
-  - en caso de que tengas <em>configuradas más de una versión de JDK</em>, Jenkins permitirá elegir en cada proyecto la versión de JDK que quieres usar, pudiendo seleccionar una entre <em>System</em> y las dos o más JDKs configuradas.</p>
+<p>Dependiendo de las instalaciones que tengas configuradas en tu Jenkins, podrá ocurrir una de la siguientes situaciones:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>en caso de que no tengas <em>ninguna instalación configurada</em> en <em>JDK Installations</em>, Jenkins usará la versión de JDK que haya instalada en el <strong>Sistema</strong> en todos los proyectos.</p>
+</li>
+<li>
+<p>en caso de que tengas <em>configurado un JDK</em>, Jenkins lo usará en todos los proyectos.</p>
+</li>
+<li>
+<p>en caso de que tengas <em>configuradas más de una versión de JDK</em>, Jenkins permitirá elegir en cada proyecto la versión de JDK que quieres usar, pudiendo seleccionar una entre <em>System</em> y las dos o más JDKs configuradas.</p>
+</li>
+</ul>
 </div>
 </div>
 <div class="sect2">
@@ -533,10 +551,46 @@ Executing Maven:  -B -f /var/jenkins_home/workspace/sonar-scanning-examples-mave
 </div>
 </div>
 </div>
+<div class="sect1">
+<h2 id="_jenkins_como_contenedor_docker">2. Jenkins como contenedor Docker</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p><em>Proximamente</em>&#8230;&#8203;</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_jenkins_en_kubernetes">3. Jenkins en Kubernetes</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p><em>Proximamente</em>&#8230;&#8203;</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_construcción_de_contenedores_docker_en_jenkins">4. Construcción de contenedores Docker en Jenkins</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_docker_in_docker">4.1. Docker in Docker</h3>
+<div class="paragraph">
+<p><em>Proximamente</em>&#8230;&#8203;</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_kaniko">4.2. Kaniko</h3>
+<div class="paragraph">
+<p><em>Proximamente</em>&#8230;&#8203;</p>
+</div>
+<div class="paragraph">
+<p><a href="https://faun.pub/jenkins-on-kubernetes-moving-from-docker-in-docker-to-kaniko-b48d1a240349">Jenkins on Kubernetes: Moving from Docker-in-Docker to Kaniko</a></p>
+</div>
+</div>
+</div>
+</div>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2021-05-10 13:58:54 +0200
+Last updated 2021-05-20 11:01:48 +0200
 </div>
 </div>
 <style>
