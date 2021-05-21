@@ -36,12 +36,12 @@ Joaquín Cañadas <jjcanada@ual.es>
 
 [abstract]
 ////
-COLOCA A CONTINUACION EL RESUMEN
+COLOCA A CONTINUACIÓN EL RESUMEN
 ////
 Integración de SonarQube  con Jenkins.
 
 ////
-COLOCA A CONTINUACION LOS OBJETIVOS
+COLOCA A CONTINUACIÓN LOS OBJETIVOS
 ////
 .Objetivos
 * Configurar la integración de las herramientas SonarQube y Jenkins
@@ -125,7 +125,7 @@ image::jenkins-add-sonarqube-scanner.png[role="thumb", align="center", width=80%
 
 == Añadir SonarQube a un proyecto Jenkins
 
-=== Projecto tipo Maven
+=== Proyecto tipo Maven
 
 . En el archivo pom.xml tenemos que incorporar el plugin de SonarQube en el bloque `<build>`.
 
@@ -145,7 +145,7 @@ image::jenkins-add-sonarqube-scanner.png[role="thumb", align="center", width=80%
 [start=2]
 . En la configuración del proyecto Jenkins, en la sección `Entorno de Ejecución`, marcamos la opción: `Prepare SonarQube Scanner environment`, y seleccionamos el token en el desplegable. 
 
-.Añadir SonarQube al entornio de ejecución
+.Añadir SonarQube al entorno de ejecución
 image::jenkins-add-sonarqube-environment.png[role="thumb", align="center", width=80%]
 
 [start=3]
