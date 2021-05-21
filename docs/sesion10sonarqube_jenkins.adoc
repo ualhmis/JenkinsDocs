@@ -160,7 +160,7 @@ image::jenkins-sonar-results.png[role="thumb", align="center", width=80%]
 .Ejemplos de Maven y SonarQube
 [NOTE]
 ====
-En el repositorio de GitHub https://github.com/SonarSource/sonar-scanning-examples[sonar-scanning-examples] hay disponibles varios ejemplos para probar el funcionamiento de SonarQube. Podemos usar los proyectos https://github.com/SonarSource/sonar-scanning-examples/tree/master/sonarqube-scanner-maven[Java con Maven] para probar el funcionamiento de SonarQube. Sin embargo, en estos proyectos está configurado Java 11 en el pom.xml, por lo que la construcción en nuestro Jenkins fallará ya que solamente tenemos instalado JDK 1.8. Si quieres probar estos ejemplos, aquí tienes las instrucciones para https://ualhmis.github.io/JenkinsDocs/docs/tips-jenkins.html[instalar Java 11 en Jenkins].
+En el repositorio de GitHub https://github.com/SonarSource/sonar-scanning-examples[sonar-scanning-examples] hay disponibles varios ejemplos para probar el funcionamiento de SonarQube. Podemos usar los proyectos https://github.com/SonarSource/sonar-scanning-examples/tree/master/sonarqube-scanner-maven[Java con Maven] para probar el funcionamiento de SonarQube. Sin embargo, en estos proyectos está configurado Java 11 en el pom.xml, por lo que la construcción en nuestro Jenkins fallará ya que solamente tenemos instalado JDK 1.8. Si quieres probar estos ejemplos, aquí tienes las instrucciones para https://ualhmis.github.io/JenkinsDocs/docs/tips-jenkins.html#_configuraci%C3%B3n_de_jdk[instalar Java 11 en Jenkins].
 
 ====
 
