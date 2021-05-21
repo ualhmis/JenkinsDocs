@@ -452,7 +452,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#_proyecto_tipo_pipeline">3.2. Proyecto tipo Pipeline</a></li>
 </ul>
 </li>
-<li><a href="#_lanzar_el_análisis_sonarqube_desde_eclipse">4. Lanzar el análisis SonarQube desde Eclipse</a></li>
+<li><a href="#_análisis_sonarqube_desde_eclipse">4. Análisis SonarQube desde Eclipse</a></li>
 <li><a href="#_faq_y_resolución_de_problemas_thoubleshouting">5. FAQ y resolución de problemas (<em>thoubleshouting</em>)</a></li>
 </ul>
 </div>
@@ -741,15 +741,15 @@ La entrega será mediante el envío de un informe y el acceso al profesor a los 
 </div>
 </div>
 <div class="sect1">
-<h2 id="_lanzar_el_análisis_sonarqube_desde_eclipse">4. Lanzar el análisis SonarQube desde Eclipse</h2>
+<h2 id="_análisis_sonarqube_desde_eclipse">4. Análisis SonarQube desde Eclipse</h2>
 <div class="sectionbody">
 <div class="paragraph">
 <p>Si deseas ejecutar el análisis de SonarQube desde Eclipse, debes llamar a la construcción maven el goal <code>sonar:sonar</code> y los parámetros siguientes:</p>
 </div>
-<hr>
-<div class="paragraph">
-<p>sonar:sonar -Dsonar.host.url=http://sonarqube_server_url:9000  -Dsonar.login=user-token
-''''</p>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code>sonar:sonar -Dsonar.host.url=http://sonarqube_server_url:9000  -Dsonar.login=user-token</code></pre>
+</div>
 </div>
 <div class="paragraph">
 <p>Más info de como usar SonarQube en Eclipse, y Travis en <a href="https://www.baeldung.com/sonar-qube">baeldung.com</a>.</p>
@@ -767,7 +767,7 @@ La entrega será mediante el envío de un informe y el acceso al profesor a los 
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2021-05-21 20:49:56 +0200
+Last updated 2021-05-21 21:27:11 +0200
 </div>
 </div>
 <style>

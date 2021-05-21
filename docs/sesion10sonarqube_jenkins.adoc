@@ -199,13 +199,14 @@ Alternativamente, se puede añadir a continuación una nueva fase que establezca
   }
 ----
 
-== Lanzar el análisis SonarQube desde Eclipse
+== Análisis SonarQube desde Eclipse
 
 Si deseas ejecutar el análisis de SonarQube desde Eclipse, debes llamar a la construcción maven el goal `sonar:sonar` y los parámetros siguientes: 
 
-''''
+[source]
+----
 sonar:sonar -Dsonar.host.url=http://sonarqube_server_url:9000  -Dsonar.login=user-token
-''''
+----
 
 Más info de como usar SonarQube en Eclipse, y Travis en https://www.baeldung.com/sonar-qube[baeldung.com].
 
