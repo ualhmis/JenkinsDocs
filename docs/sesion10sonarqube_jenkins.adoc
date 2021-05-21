@@ -78,7 +78,7 @@ SonarQube como plataforma web ofrece https://www.sonarsource.com/plans-and-prici
 
 - SonarCloud: SonarQube ofrecido como software como servicio disponible en la URL https://sonarcloud.io/ y gratuita para proyectos de código abierto. 
 
-Además, https://www.sonarlint.org/[SonarLint] es una extensión para los principales IDEs que hayuda a detentar y corregir los problemas de calidad a la vez que escribes código fuente. 
+Además, https://www.sonarlint.org/[SonarLint] es una extensión para los principales IDEs que ayuda a detectar y corregir los problemas de calidad a la vez que escribes código fuente. 
 
 En esta actividad nos vamos a centrar en integrar SonarQube on premise que hemos instalado en una máquina virtual en Azure, con Jenkins.
 
@@ -160,7 +160,8 @@ image::jenkins-sonar-results.png[role="thumb", align="center", width=80%]
 .Ejemplos de Maven y SonarQube
 [NOTE]
 ====
-En el repositorio de GitHub https://github.com/SonarSource/sonar-scanning-examples[sonar-scanning-examples] hay disponibles varios ejemplos para probar el funcionamiento de SonarQube. Podemos usar los proyectos https://github.com/SonarSource/sonar-scanning-examples/tree/master/sonarqube-scanner-maven[Java con Maven] para probar el funcionamiento de SonarQube. Sin embargo, en estos proyectos está configurado Java 11 en el pom.xml, por lo que la construcción en nuestro Jenkins fallará ya que solamente tenemos instalado JDK 1.8.
+En el repositorio de GitHub https://github.com/SonarSource/sonar-scanning-examples[sonar-scanning-examples] hay disponibles varios ejemplos para probar el funcionamiento de SonarQube. Podemos usar los proyectos https://github.com/SonarSource/sonar-scanning-examples/tree/master/sonarqube-scanner-maven[Java con Maven] para probar el funcionamiento de SonarQube. Sin embargo, en estos proyectos está configurado Java 11 en el pom.xml, por lo que la construcción en nuestro Jenkins fallará ya que solamente tenemos instalado JDK 1.8. Si quieres probar estos ejemplos, aquí tienes las instrucciones para https://ualhmis.github.io/JenkinsDocs/docs/tips-jenkins.html[instalar Java 11 en Jenkins].
+
 ====
 
 === Proyecto tipo Pipeline
