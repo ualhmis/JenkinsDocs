@@ -27,8 +27,8 @@ Nombre y título del trabajo
 ////
 = Actividad. Integración Continua con Jenkins 
 
-. link:docs/sesion08jenkins.html[Guión de la actividad]
+. Guión de la actividad: link:docs/sesion08jenkins.html[Integración Continua con Jenkins]
 
-. link:docs/sesion10sonarqube_jenkins.html[Integración de SonarQube y Jenkins]
+. Para grupos de 3 personas, resto optativo: link:docs/sesion10sonarqube_jenkins.html[Integración de SonarQube y Jenkins]
 
 . link:docs/tips-jenkins.html[Tips de Jenkins, configuración y ejemplos]

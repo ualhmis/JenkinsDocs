@@ -22,13 +22,14 @@ Codificación, idioma, tabla de contenidos, tipo de documento
 :figure-caption: Fig.
 :imagesdir: images
 
+:page-component-display-version: curso.2022
 ////
 Nombre y título del trabajo
 ////
 = Actividad 8. Integración Continua con Jenkins
 
 Herramientas y Métodos en Ingeniería del Software.
-Version 1.1, Abril-2021.
+_Version_ *{page-component-display-version}*. 
 Joaquín Cañadas <jjcanada@ual.es>
 
 // Entrar en modo no numerado de apartados
@@ -108,7 +109,9 @@ CI/CD es una práctica fundamental dentro de la metodología https://es.wikipedi
 
 == Prerrequisitos
 
-Para comenzar a trabajar en esta sesión, será necesario haber realizado las actividades anteriores de JUnit y Maven. Además, se debe disponer de crédito en Azure, y es necesario disponer de una máquina virtual con Jenkins instalado y un usuario con permisos (todo ello realizado en sesiones anteriores). Igualmente, se dispone de usuario en GitHub y los repositorios git en GitHub de los proyectos Java de las sesiones anteriores. También, debes tener una pareja de claves SSH personal en la carpeta `HOME` del usuario de tu equipo (`~`).
+Para comenzar a trabajar en esta sesión, será necesario haber realizado las actividades anteriores de JUnit y Maven. Al menos, haberlas empezado, porque si aun no las has terminado, ¡¡¡no te preocupes!!! De hecho, es mejor que hagas esta actividad de Jenkins antes de terminar las anteriores de JUnit y Maven, ya que así verás como Jenkins visualiza los gráficos de evolución (tests, métricas, etc.) cuando vayas completando las actividades anteriores. 
+
+Además, se debe disponer de crédito en Azure, y es necesario disponer de una máquina virtual con Jenkins instalado y un usuario con permisos (todo ello realizado en sesiones anteriores). Igualmente, se dispone de usuario en GitHub y los repositorios git en GitHub de los proyectos Java de las sesiones anteriores. También, debes tener una pareja de claves SSH personal en la carpeta `HOME` del usuario de tu equipo (`~`).
 
 [source,subs="verbatim,quotes"]
 ----
@@ -122,14 +125,21 @@ Para comenzar a trabajar en esta sesión, será necesario haber realizado las ac
 
 == Instalación de plugins adicionales
 
-Vamos a instalar varios plugins adicionales en Jenkins, si aun no están instalados:  Github integration, Maven Integration, Cobertura, Jacoco (comprobar antes si no están instalados ya), Greenballs, Code Coverage Api, JavaDoc, Warnings Next Generation, Embeddable Build Status Plugin, xUnit, etc.
+En primer lugar, es recomendable actualizar Jenkins a la última versión, para evitar bugs y vulnerabilidades de seguridad que hayan sido arregladas en la última versión. Para ello, accede a tu máquina Jenkins por ssh y ejecuta la actualización de paquetes:
+ 
+ ssh ubuntu@dns.maquina.jenkins
+
+ sudo apt-get update -y
+ sudo apt-get upgrade -y
+
+Tras la actualización y reinicio de Jenkins, vamos a instalar varios plugins adicionales en Jenkins, si aun no están instalados: Github integration, Maven Integration, Cobertura, Jacoco (comprobar antes si no están instalados ya), Code Coverage Api, JavaDoc, Warnings Next Generation, Embeddable Build Status Plugin, xUnit, Monitoring, etc.
 
 Haz clic en __Manage Jenkins__ > __Manage Plugins__. En la pestaña __Available__ busca __Github integration__, seleccionaló y pulsa en __Download now and install after restart__.
 
 .Instalación del plugin Github integration
 image::jenkins-plugins-github-integration.png[role="thumb", align="center"]
 
-Repite los pasos para los plugins _Maven Integration_, _Cobertura_ __Green Balls__, _JavaDoc_ y _xUnit_.
+Repite los pasos para los plugins _Maven Integration_, _Cobertura_, _JavaDoc_ y _xUnit_.
 
 Necesitaremos visualizar el resultado de la cobertura en Jenkins. Para ello instala el plugin de JaCoCo (Java Code Coverage) y el plugin Code Coverage API.
 
@@ -163,6 +173,8 @@ image::build-status-access.png[role="thumb", align="center"]
 [IMPORTANT]
 ====
 Además de los plugins, para que la máquina virtual de Jenkins funcione correctamente al aumentar la carga de trabajo, es necesario *añadir memoria Swap* (en disco), al menos *2 Gb*. Aquí tienes los pasos: https://www.digitalocean.com/community/tutorials/how-to-add-swap-space-on-ubuntu-18-04[How To Add Swap Space on Ubuntu 18.04].
+
+Si tienes crédito de sobra en tu cuenta Azure, puedes incluso https://docs.microsoft.com/es-es/azure/virtual-machines/resize-vm?tabs=portal[cambiar el tamaño de la máquina virtual] para que tenga más cores y RAM.
 ====
 
 
@@ -375,7 +387,7 @@ image::maven-postbuild-jacoco-details.png[role="thumb", align="center"]
 image::maven-postbuild-javadoc-site.png[role="thumb", align="center"]
 
 [start=12]
-. Para poder visualizar correctamente el _Site_, hay que cambiar la https://wiki.jenkins.io/display/JENKINS/Configuring+Content+Security+Policy#ConfiguringContentSecurityPolicy-TheDefaultRuleSet[configuración de seguridad] de Jenkins predeterminada que es muy restrictiva para prevenir de archivos HTML/JS maliciosos. Para modificar la configuración, abre la consola de scritps (_Manage Jenkins / Script Console_), y ejecuta estas líneas: 
+. Para poder visualizar correctamente el _Site_, hay que cambiar la https://www.jenkins.io/doc/book/security/configuring-content-security-policy/[configuración de seguridad, window="_blank"] de Jenkins predeterminada que es muy restrictiva para prevenir de archivos HTML/JS maliciosos. Para modificar la configuración, abre la consola de scritps (_Manage Jenkins / Script Console_), y ejecuta estas líneas: 
 
 [source,groovy]
 ----
@@ -392,7 +404,7 @@ image::maven-script-console-site.png[role="thumb", align="center"]
 
 == Creación de un Proyecto Pipeline
 
-Para ese ejercicio, cada estudiante debe usar, de nuevo, el repositorio de la práctica 7 donde se ha trabajado con Maven. Vamos a configurar el proyecto Jenkins que construya el mismo repositorio de la sección anterior, pero esta vez vamos a utilizar _pipelines_.
+Para ese ejercicio, cada estudiante debe usar, de nuevo, el repositorio de la práctica 7 donde se ha trabajado con Maven. Vamos a configurar el proyecto Jenkins que construya el mismo repositorio de la sección anterior, pero esta vez vamos a utilizar https://www.jenkins.io/doc/book/pipeline/getting-started/[_pipelines_].
 
 === Diseño del _pipeline_
 
@@ -458,9 +470,9 @@ pipeline {
   }
 }
 ----
-<1> Fase de descarga del *repositorio git*
-<2> Fase de build: *compilación, test y empaquetado* de la aplicación. Se ejecutarán los __goals__ `clean package`: primero se elimina todo lo generado en la construcción anterior, y a continuación se lanza la construcción con `package` tal y como está definida en el archivo `pom.xml`.
-<3> Cuando sea necesario, indique el path al archivo `pom.xml` con el parámetro `-f path-to/pom.xml`
+<1> El step `git` clona el *repositorio https://www.jenkins.io/doc/pipeline/steps/git/[git]*. En este ejemplo se trata de un repositorio público. También, puedes clonar un _repo privado_ o una rama concreta usando los parámetros adecuados, por ejemplo: ```git credentialsId: 'my-private-key-credential-id', branch: 'main', url: 'https://github.com/usuario/repoPrivado.git'```. Previamente has debido https://www.jenkins.io/doc/book/using/using-credentials/#adding-new-global-credentials[crear una credencial, window="_blank"] con el ID `my-private-key-credential-id`. Se recomienda usar credenciales de tipo *Username and password*, donde el _password_ debe ser un _token_ generado en GitHub. El token se genera en GitHub, sobre tu usuario: _Settings, Developer Settings, Personal Access tokens, Generate New Token_, y marcar las opciones de _repo_. Si necesitas hacer alguna otra parametrización, se recomienda usar el https://www.jenkins.io/doc/book/pipeline/getting-started/#snippet-generator[Snippet Generator, window="_blank"].
+<2> Fase de build: *compilación, test y empaquetado* de la aplicación. 
+<3> Se llama a maven con los  __goals__ `clean package`: elimina todo lo generado en la construcción anterior, y a continuación se lanza la construcción con `package` tal y como está definida en el archivo `pom.xml`. Cuando sea necesario, indique el path al archivo `pom.xml` con el parámetro `-f path-to/pom.xml`
 <4> Paso *posterior al build*, que guarda los resultados de los test de JUnit para generar la gráfica de evolución de los test. Además, https://www.jenkins.io/doc/pipeline/steps/core/#archiveartifacts-archive-the-artifacts[archiva el empaquetado] `.jar` para que pueda ser descargado posteriormente
 
 .Definición del _pipeline_
@@ -596,21 +608,21 @@ image::plugins-owasp-dependency-check-install.png[role="thumb", align="center"]
 [start=2]
 . Modifica el archivo `pom.xml` en tu proyecto y añade la siguiente línea para que genere el informe también en formato XML, que es el formato que lee el plugin:
 
-[source,xml,linenums,highlight=7]
+[source,xml,highlight=7]
 ----
-			<plugin>
-				<groupId>org.owasp</groupId>
-				<artifactId>dependency-check-maven</artifactId>
-				<version>5.3.2</version>
-				<configuration>
-					<skipTestScope>false</skipTestScope>
-					<formats> <1>
+      <plugin>
+        <groupId>org.owasp</groupId>
+        <artifactId>dependency-check-maven</artifactId>
+        <version>5.3.2</version>
+        <configuration>
+          <skipTestScope>false</skipTestScope>
+          <formats> <1>
             <format>HTML</format>
             <format>XML</format>
           </formats> 
-				</configuration>
-				...
-			</plugin>
+        </configuration>
+        ...
+      </plugin>
 ----
 <1> Genera el informe en HTML y XML
 
@@ -630,9 +642,11 @@ dependencyCheckPublisher pattern: '**/target/site/dependency-check-report.xml'
 image::new-pipeline-dependency-check-link.png[role="thumb", align="center"]
 
 
-.Saber más...
+.Saber más... Oligatorio para los equipos de 3 personas
 ****
-Si estás interesado en profundizar en este tema, en la asignatura http://cms.ual.es/UAL/estudios/grados/plandeestudios/asignaturas/asignatura/GRADO4015?idAss=40154308&idTit=4015[Procesos de Ingeniería del Software II], de 4º curso, lo estudiareis en profundidad. En cualquier caso, adelanto que es recomendable integrar https://www.sonarqube.org/[SonarQube] con Jenkins, ya que SonarQube realiza un análisis mucho más detallado de la calidad y seguridad del código, realizando tanto análisis estático de código (CheckStyle y otros), como de análisis de seguridad (vulnerabilidades), y definiendo lo que denomina https://docs.sonarqube.org/latest/user-guide/quality-gates/[__Quality Gates__] que permiten definir condiciones que se deben cumplir basadas en los valores de las métricas del proyecto (por ejemplo, que la cobertura de código sea mayor del 80%). Puedes encontrar mucha documentación online sobre cómo hacerlo:
+Si estás interesado en profundizar en este tema, en la asignatura http://cms.ual.es/UAL/estudios/grados/plandeestudios/asignaturas/asignatura/GRADO4015?idAss=40154308&idTit=4015[Procesos de Ingeniería del Software II], de 4º curso, lo estudiaréis con mas detalle. En cualquier caso, es *obligatorio para los equipos de 3 personas*  integrar https://www.sonarqube.org/[SonarQube] con Jenkins, ya que SonarQube realiza un análisis mucho más detallado de la calidad y seguridad del código, realizando tanto análisis estático de código (CheckStyle y otros), como de análisis de seguridad (vulnerabilidades), y definiendo lo que denomina https://docs.sonarqube.org/latest/user-guide/quality-gates/[__Quality Gates__] que permiten definir condiciones que se deben cumplir basadas en los valores de las métricas del proyecto (por ejemplo, que la cobertura de código sea mayor del 80%). 
+
+En la https://ualhmis.github.io/JenkinsDocs/[página principal de esta actividad] tienes un tutorial sobre https://ualhmis.github.io/JenkinsDocs/docs/sesion10sonarqube_jenkins.html[Integración de SonarQube y Jenkins]. También puedes encontrar mucha documentación online sobre cómo hacerlo:
 
 - https://docs.sonarqube.org/latest/setup/get-started-2-minutes/[Instalar SonarQube] como aplicación o como contenedor Docker (recomendado)
 - Instalar el plugin https://plugins.jenkins.io/sonar/[SonarQube Scanner for Jenkins]
