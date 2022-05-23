@@ -1216,7 +1216,7 @@ Para ver una gráfica de resultados de los Test debemos ejecutar al menos 2 cons
 </td>
 <td class="content">
 <div class="paragraph">
-<p>En caso de que sea un repositorio privado tendrás que proporcionar unas <strong>credenciales</strong>. Aunque <strong>no es recomendable</strong>, puedes introducir tus credenciales usuario/contraseña de Github. Sin embargo, es mejor <strong>usar pareja de claves SSH</strong>, aunque es igual de <em>mala práctica</em> meter tu clave privada personal en Jenkins. Por ello, la <em>buena práctica</em> consiste en <strong>crear una nueva pareja de claves</strong> SSH exclusiva para que Jenkins pueda leer el repositorio privado, añadir la <strong>clave pública</strong> al repositorio en GitHub (exclusivamente al repositorio concreto, no a nuestro usuario de GitHub), y por último añadir la <strong>clave privada</strong> como credencial en Jenkins para que pueda leer ese repositorio privado de GitHub.</p>
+<p>En caso de que sea un repositorio privado tendrás que proporcionar unas <strong>credenciales</strong>. En Jenkins debes crear unas nuevas credenciales. Se recomienda crear en Jenkins unas credenciales de tipo <strong>Username and password</strong>, donde el <em>password</em> debe ser un <em>token</em> generado en GitHub. El token se genera en GitHub, sobre tu usuario: <em>Settings, Developer Settings, Personal Access tokens, Generate New Token</em>, y marcar las opciones de <em>repo</em>. Otra alternativa es crear en Jenkins unas credenciales tipo <strong>pareja de claves SSH</strong>, aunque es igual de <em>mala práctica</em> meter tu clave privada personal en Jenkins. Por ello, para esta alternativa, la <em>buena práctica</em> consiste en <strong>crear una nueva pareja de claves</strong> SSH exclusiva para que Jenkins pueda leer el repositorio privado, añadir la <strong>clave pública</strong> al repositorio en GitHub (exclusivamente al repositorio concreto, no a nuestro usuario de GitHub), y por último añadir la <strong>clave privada</strong> como credencial en Jenkins para que pueda leer ese repositorio privado de GitHub.</p>
 </div>
 </td>
 </tr>
@@ -1900,7 +1900,7 @@ Por consola se visualiza el resultado de la ejecución de maven.</p>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2022-05-10 14:33:30 +0200
+Last updated 2022-05-23 12:09:06 +0200
 </div>
 </div>
 </body>
