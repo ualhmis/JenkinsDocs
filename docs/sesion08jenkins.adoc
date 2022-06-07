@@ -156,6 +156,8 @@ Instala además el https://plugins.jenkins.io/embeddable-build-status/[Embeddabl
 ._Badge_ con el estado del build
 image::badge-build-status.png[role="thumb", align="center"]
 
+Instala además los plugins: https://plugins.jenkins.io/monitoring/[Monitoning], https://plugins.jenkins.io/jobConfigHistory/[Job Configuration History] y https://plugins.jenkins.io/pipeline-config-history/[Pipeline Configuration History], que nos permitiran, el primero, monitorizar el estado de Jenkins (uso de recursos, etc) para poder decidir si la máquina necesita ser dimensionada a una más grande (con más nucleos, RAM, etc), y los dos siguientes, guardar un historial de los cambios en la configuración de los proyectos y pipelines, por si falla la nueva configuración poder recuperar alguna versión anterior.
+
 Por último, marca __Restart Jenkins__ para completar la instalación. Tras unos segundos, vuelve a iniciar sesión y tendrás los plugins instalados. 
 
 .Reiniciar para completar la instalación
