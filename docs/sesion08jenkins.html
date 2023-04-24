@@ -773,6 +773,30 @@ La entrega será mediante el envío de un informe y el acceso al profesor a los 
 sudo apt-get upgrade -y</pre>
 </div>
 </div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>A partir de marzo 2023 hay que <a href="https://www.jenkins.io/blog/2023/03/27/repository-signing-keys-changing/">actualizar las claves de firma de Jenkins</a></p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="bash">curl <span class="nt">-fsSL</span> https://pkg.jenkins.io/debian-stable/jenkins.io-2023.key | <span class="nb">sudo tee</span> <span class="se">\</span>
+  /usr/share/keyrings/jenkins-keyring.asc <span class="o">&gt;</span> /dev/null
+
+<span class="nb">echo </span>deb <span class="o">[</span>signed-by<span class="o">=</span>/usr/share/keyrings/jenkins-keyring.asc] <span class="se">\</span>
+  https://pkg.jenkins.io/debian-stable binary/ | <span class="nb">sudo tee</span> <span class="se">\</span>
+  /etc/apt/sources.list.d/jenkins.list <span class="o">&gt;</span> /dev/null</code></pre>
+</div>
+</div>
+</td>
+</tr>
+</table>
+</div>
 <div class="paragraph">
 <p>Tras la actualización y reinicio de Jenkins, vamos a instalar varios plugins adicionales en Jenkins, si aun no están instalados: Github integration, Maven Integration, Cobertura, Jacoco (comprobar antes si no están instalados ya), Code Coverage Api, JavaDoc, Warnings Next Generation, Embeddable Build Status Plugin, xUnit, Monitoring, etc.</p>
 </div>
@@ -1802,7 +1826,7 @@ Por consola se visualiza el resultado de la ejecución de maven.</p>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2023-04-24 10:31:05 +0200
+Last updated 2023-04-24 10:53:54 +0200
 </div>
 </div>
 <style>
