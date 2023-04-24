@@ -23,6 +23,13 @@ Codificación, idioma, tabla de contenidos, tipo de documento
 :imagesdir: images
 
 ////
+///  Copy button on code blocks
+////
+[.doc]
+
+:docinfo: shared-footer
+
+////
 Nombre y título del trabajo
 ////
 = Actividad. SonarQube con Jenkins
@@ -208,7 +215,7 @@ Si deseas ejecutar el análisis de SonarQube desde Eclipse, debes llamar a la co
 sonar:sonar -Dsonar.host.url=http://sonarqube_server_url:9000  -Dsonar.login=user-token
 ----
 
-Más info de como usar SonarQube en Eclipse, y Travis en https://www.baeldung.com/sonar-qube[baeldung.com].
+Más info de como usar SonarQube en Eclipse, y SonarQube en https://www.baeldung.com/sonar-qube[baeldung.com].
 
 == FAQ y resolución de problemas (_thoubleshouting_)
 

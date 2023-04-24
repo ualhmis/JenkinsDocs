@@ -22,6 +22,14 @@ Codificación, idioma, tabla de contenidos, tipo de documento
 :figure-caption: Fig.
 :imagesdir: images
 
+
+////
+///  Copy button on code blocks
+////
+[.doc]
+
+:docinfo: shared-footer
+
 :page-component-display-version: curso.2022
 ////
 Nombre y título del trabajo
