@@ -801,7 +801,7 @@ sudo apt-get upgrade -y</pre>
 <p>Tras la actualización y reinicio de Jenkins, vamos a instalar varios plugins adicionales en Jenkins, si aun no están instalados: Github integration, Maven Integration, Cobertura, Jacoco (comprobar antes si no están instalados ya), Code Coverage Api, JavaDoc, Warnings Next Generation, Embeddable Build Status Plugin, xUnit, Monitoring, etc.</p>
 </div>
 <div class="paragraph">
-<p>Haz clic en <em>Manage Jenkins</em> &gt; <em>Manage Plugins</em>. En la pestaña <em>Available</em> busca <em>Github integration</em>, seleccionaló y pulsa en <em>Download now and install after restart</em>.</p>
+<p>Haz clic en <em>Manage Jenkins</em> &gt; <em>Manage Plugins</em>. En la pestaña <em>Available</em> busca <em>Github integration</em>, seleccionalo y pulsa en <em>Download now and install after restart</em>.</p>
 </div>
 <div class="imageblock text-center thumb">
 <div class="content">
@@ -1287,7 +1287,7 @@ Por consola se visualiza el resultado de la ejecución de maven.</p>
 <div class="sect2">
 <h3 id="_añadiendo_javadoc_y_site">6.4. Añadiendo Javadoc y Site</h3>
 <div class="olist arabic">
-<ol class="arabic" start="10">
+<ol class="arabic" start="11">
 <li>
 <p>Para generar la documentación en <em>Javadoc</em> y publicarla en la página del proyecto, simplemente añade los <em>goals</em> <code>javadoc:javadoc javadoc:aggregate</code>.</p>
 </li>
@@ -1303,15 +1303,15 @@ Por consola se visualiza el resultado de la ejecución de maven.</p>
 <div class="title">Fig. 28. Javadoc y Site</div>
 </div>
 <div class="olist arabic">
-<ol class="arabic" start="12">
+<ol class="arabic" start="13">
 <li>
-<p>Para poder visualizar correctamente el <em>Site</em>, hay que cambiar la <a href="https://www.jenkins.io/doc/book/security/configuring-content-security-policy/" target="<em>blank">configuración de seguridad</a> de Jenkins predeterminada que es muy restrictiva para prevenir de archivos HTML/JS maliciosos. Para modificar la configuración, abre la consola de scritps (_Manage Jenkins / Script Console</em>), y ejecuta estas líneas:</p>
+<p>Para poder visualizar correctamente el <em>Site</em>, hay que cambiar la <a href="https://www.jenkins.io/doc/book/security/configuring-content-security-policy/" target="blank">configuración de seguridad</a> de Jenkins predeterminada que es muy restrictiva para prevenir de archivos HTML/JS maliciosos. Para modificar la configuración, abre la consola de scritps (<em>Manage Jenkins</em> / <em>Script Console</em>), y ejecuta estas líneas para desestablecer la cabecera:</p>
 </li>
 </ol>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="rouge highlight"><code data-lang="groovy"><span class="n">System</span><span class="o">.</span><span class="na">setProperty</span><span class="o">(</span><span class="s2">"hudson.model.DirectoryBrowserSupport.CSP"</span><span class="o">,</span> <span class="s2">"sandbox; default-src 'none'; img-src 'self'; style-src 'self' 'unsafe-inline'; "</span><span class="o">)</span>
+<pre class="rouge highlight"><code data-lang="groovy"><span class="n">System</span><span class="o">.</span><span class="na">setProperty</span><span class="o">(</span><span class="s2">"hudson.model.DirectoryBrowserSupport.CSP"</span><span class="o">,</span> <span class="s2">""</span><span class="o">)</span>
 <span class="n">System</span><span class="o">.</span><span class="na">getProperty</span><span class="o">(</span><span class="s2">"hudson.model.DirectoryBrowserSupport.CSP"</span><span class="o">)</span></code></pre>
 </div>
 </div>
@@ -1322,7 +1322,7 @@ Por consola se visualiza el resultado de la ejecución de maven.</p>
 <div class="title">Fig. 29. Script Console: permisos para visualizar <em>Site</em></div>
 </div>
 <div class="olist arabic">
-<ol class="arabic" start="13">
+<ol class="arabic" start="14">
 <li>
 <p>Tras ello ya podrás visualizar correctamente. Pero ten en cuenta que cada vez que reinicies Jenkins esta configuración  se pierde y vuelve a la configuración predeterminada.</p>
 </li>
@@ -1401,7 +1401,7 @@ Por consola se visualiza el resultado de la ejecución de maven.</p>
     <span class="n">stage</span><span class="o">(</span><span class="s1">'Git fetch'</span><span class="o">)</span> <span class="o">{</span> <i class="conum" data-value="1"></i><b>(1)</b>
       <span class="n">steps</span> <span class="o">{</span>
         <span class="c1">// Get some code from a GitHub repository</span>
-        <span class="n">git</span> <span class="s1">'https://github.com/ualhmis/MavenEjercicios.git'</span>
+        <span class="n">git</span> <span class="nl">branch:</span> <span class="s1">'main'</span><span class="o">,</span> <span class="nl">url:</span> <span class="s1">'https://github.com/ualhmis/MavenEjercicios'</span>
       <span class="o">}</span>
     <span class="o">}</span>
     <span class="n">stage</span><span class="o">(</span><span class="s1">'Compile, Test, Package'</span><span class="o">)</span> <span class="o">{</span> <i class="conum" data-value="2"></i><b>(2)</b>
@@ -1426,7 +1426,7 @@ Por consola se visualiza el resultado de la ejecución de maven.</p>
 <table>
 <tr>
 <td><i class="conum" data-value="1"></i><b>1</b></td>
-<td>El step <code>git</code> clona el <strong>repositorio <a href="https://www.jenkins.io/doc/pipeline/steps/git/">git</a></strong>. En este ejemplo se trata de un repositorio público. También, puedes clonar un <em>repo privado</em> o una rama concreta usando los parámetros adecuados, por ejemplo: <code><code>git credentialsId: 'my-private-key-credential-id', branch: 'main', url: 'https://github.com/usuario/repoPrivado.git'</code></code>. Previamente has debido <a href="https://www.jenkins.io/doc/book/using/using-credentials/#adding-new-global-credentials" target="<em>blank">crear una credencial</a> con el ID <code>my-private-key-credential-id</code>. Se recomienda usar credenciales de tipo <strong>Username and password</strong>, donde el _password</em> debe ser un <em>token</em> generado en GitHub. El token se genera en GitHub, sobre tu usuario: <em>Settings, Developer Settings, Personal Access tokens, Generate New Token</em>, y marcar las opciones de <em>repo</em>. Si necesitas hacer alguna otra parametrización, se recomienda usar el <a href="https://www.jenkins.io/doc/book/pipeline/getting-started/#snippet-generator" target="_blank" rel="noopener">Snippet Generator</a>.</td>
+<td>El step <code>git</code> clona el <strong>repositorio <a href="https://www.jenkins.io/doc/pipeline/steps/git/">git</a></strong>. En este ejemplo se trata de un repositorio público. También, puedes clonar un <em>repo privado</em> o una rama concreta usando los parámetros adecuados, por ejemplo: <code><code>git credentialsId: 'my-private-key-credential-id', branch: 'main', url: 'https://github.com/usuario/repoPrivado.git'</code></code>. Previamente has debido <a href="https://www.jenkins.io/doc/book/using/using-credentials/#adding-new-global-credentials" target="blank">crear una credencial</a> con el ID <code>my-private-key-credential-id</code>. Se recomienda usar credenciales de tipo <strong>Username and password</strong>, donde el <em>password</em> debe ser un <em>token</em> generado en GitHub. El token se genera en GitHub, sobre tu usuario: <em>Settings, Developer Settings, Personal Access tokens, Generate New Token</em>, y marcar las opciones de <em>repo</em>. Si necesitas hacer alguna otra parametrización, se recomienda usar el <a href="https://www.jenkins.io/doc/book/pipeline/getting-started/#snippet-generator" target="blank">Snippet Generator</a>.</td>
 </tr>
 <tr>
 <td><i class="conum" data-value="2"></i><b>2</b></td>
@@ -1826,7 +1826,7 @@ Por consola se visualiza el resultado de la ejecución de maven.</p>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2023-04-24 10:53:54 +0200
+Last updated 2023-05-18 13:43:55 +0200
 </div>
 </div>
 <style>
