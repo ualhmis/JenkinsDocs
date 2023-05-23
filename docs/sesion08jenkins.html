@@ -1819,6 +1819,17 @@ Por consola se visualiza el resultado de la ejecución de maven.</p>
 </ol>
 </div>
 </li>
+<li>
+<p><strong>La fase de documentación del pipeline da error JAVA_HOME</strong>:</p>
+<div class="olist loweralpha">
+<ol class="loweralpha" type="a">
+<li>
+<p>Si se muestra el error: <code>An error has occurred in Javadoc report generation: Unable to find javadoc command: The environment variable JAVA_HOME is not correctly set.</code>
+Debes añadir la variable de entorno <code>JAVA_HOME</code> en la configuración de Jenkins: Jenkins &gt; Manage Jenkins &gt; Configure System &gt; Global properties &gt; Add environment variable. Añade la variable <code>JAVA_HOME</code> con el valor de la ruta de instalación de Java, por ejemplo: <code>/usr/lib/jvm/java-11-openjdk-amd64/</code></p>
+</li>
+</ol>
+</div>
+</li>
 </ol>
 </div>
 </div>
@@ -1826,7 +1837,7 @@ Por consola se visualiza el resultado de la ejecución de maven.</p>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2023-05-18 13:43:55 +0200
+Last updated 2023-05-23 12:02:26 +0200
 </div>
 </div>
 <style>

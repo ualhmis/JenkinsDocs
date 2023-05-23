@@ -732,3 +732,7 @@ En esta sección se añadirán soluciones a los problemas más habituales.
 
 . *La construcción de maven funciona correctamente en Eclipse pero da error en Jenkins*: 
 .. Revisa la versión de maven instalada en Jenkins, y actualiza a la última versión: En _Jenkins_ / _Manage Jenkins_ / _Global Tool Configuration_ / _Maven Installations_. Selecciona la última versión disponible, marca install automatically, y dale un nombre por ejemplo `Default Maven`. *IMPORTANTE*: si tienes más de una instalación de maven, en los proyectos de tipo maven tendrás que elegir cual deseas usar a partir del nombre que le hayas dado a cada una de ellas, seleccionandola en una lista desplegable en la sección de build. 
+
+. *La fase de documentación del pipeline da error JAVA_HOME*:
+.. Si se muestra el error: `An error has occurred in Javadoc report generation: Unable to find javadoc command: The environment variable JAVA_HOME is not correctly set.` 
+Debes añadir la variable de entorno `JAVA_HOME` en la configuración de Jenkins: Jenkins > Manage Jenkins > Configure System > Global properties > Add environment variable. Añade la variable `JAVA_HOME` con el valor de la ruta de instalación de Java, por ejemplo: `/usr/lib/jvm/java-11-openjdk-amd64/`
