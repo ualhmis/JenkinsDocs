@@ -22,6 +22,14 @@ Codificación, idioma, tabla de contenidos, tipo de documento
 :figure-caption: Fig.
 :imagesdir: images
 
+
+////
+///  Copy button on code blocks
+////
+[.doc]
+
+:docinfo: shared-footer
+
 :page-component-display-version: curso.2022
 ////
 Nombre y título del trabajo
@@ -132,9 +140,23 @@ En primer lugar, es recomendable actualizar Jenkins a la última versión, para 
  sudo apt-get update -y
  sudo apt-get upgrade -y
 
+[NOTE]
+====
+A partir de marzo 2023 hay que https://www.jenkins.io/blog/2023/03/27/repository-signing-keys-changing/[actualizar las claves de firma de Jenkins] 
+[source, bash]
+----
+curl -fsSL https://pkg.jenkins.io/debian-stable/jenkins.io-2023.key | sudo tee \
+  /usr/share/keyrings/jenkins-keyring.asc > /dev/null
+
+echo deb [signed-by=/usr/share/keyrings/jenkins-keyring.asc] \
+  https://pkg.jenkins.io/debian-stable binary/ | sudo tee \
+  /etc/apt/sources.list.d/jenkins.list > /dev/null
+----
+====
+
 Tras la actualización y reinicio de Jenkins, vamos a instalar varios plugins adicionales en Jenkins, si aun no están instalados: Github integration, Maven Integration, Cobertura, Jacoco (comprobar antes si no están instalados ya), Code Coverage Api, JavaDoc, Warnings Next Generation, Embeddable Build Status Plugin, xUnit, Monitoring, etc.
 
-Haz clic en __Manage Jenkins__ > __Manage Plugins__. En la pestaña __Available__ busca __Github integration__, seleccionaló y pulsa en __Download now and install after restart__.
+Haz clic en __Manage Jenkins__ > __Manage Plugins__. En la pestaña __Available__ busca __Github integration__, seleccionalo y pulsa en __Download now and install after restart__.
 
 .Instalación del plugin Github integration
 image::jenkins-plugins-github-integration.png[role="thumb", align="center"]
@@ -380,7 +402,7 @@ image::maven-postbuild-jacoco-details.png[role="thumb", align="center"]
 
 === Añadiendo Javadoc y Site
 
-[start=10]
+[start=11]
 . Para generar la documentación en _Javadoc_ y publicarla en la página del proyecto, simplemente añade los _goals_ `javadoc:javadoc javadoc:aggregate`.
 
 . Para generar la documentación _Site_ de Maven y publicarla, simplemente añade el _goal_ `site`.
@@ -388,19 +410,19 @@ image::maven-postbuild-jacoco-details.png[role="thumb", align="center"]
 .Javadoc y Site
 image::maven-postbuild-javadoc-site.png[role="thumb", align="center"]
 
-[start=12]
-. Para poder visualizar correctamente el _Site_, hay que cambiar la https://www.jenkins.io/doc/book/security/configuring-content-security-policy/[configuración de seguridad, window="_blank"] de Jenkins predeterminada que es muy restrictiva para prevenir de archivos HTML/JS maliciosos. Para modificar la configuración, abre la consola de scritps (_Manage Jenkins / Script Console_), y ejecuta estas líneas: 
+[start=13]
+. Para poder visualizar correctamente el _Site_, hay que cambiar la https://www.jenkins.io/doc/book/security/configuring-content-security-policy/[configuración de seguridad, window="blank"] de Jenkins predeterminada que es muy restrictiva para prevenir de archivos HTML/JS maliciosos. Para modificar la configuración, abre la consola de scritps (_Manage Jenkins_ / _Script Console_), y ejecuta estas líneas para desestablecer la cabecera: 
 
 [source,groovy]
 ----
-System.setProperty("hudson.model.DirectoryBrowserSupport.CSP", "sandbox; default-src 'none'; img-src 'self'; style-src 'self' 'unsafe-inline'; ")
+System.setProperty("hudson.model.DirectoryBrowserSupport.CSP", "")
 System.getProperty("hudson.model.DirectoryBrowserSupport.CSP")
 ----
 
 .Script Console: permisos para visualizar _Site_
 image::maven-script-console-site.png[role="thumb", align="center"]
 
-[start=13]
+[start=14]
 . Tras ello ya podrás visualizar correctamente. Pero ten en cuenta que cada vez que reinicies Jenkins esta configuración  se pierde y vuelve a la configuración predeterminada. 
 
 
@@ -452,7 +474,7 @@ pipeline {
     stage('Git fetch') { <1>
       steps {
         // Get some code from a GitHub repository
-        git 'https://github.com/ualhmis/MavenEjercicios.git'
+        git branch: 'main', url: 'https://github.com/ualhmis/MavenEjercicios'
       }
     }
     stage('Compile, Test, Package') { <2>
@@ -472,7 +494,7 @@ pipeline {
   }
 }
 ----
-<1> El step `git` clona el *repositorio https://www.jenkins.io/doc/pipeline/steps/git/[git]*. En este ejemplo se trata de un repositorio público. También, puedes clonar un _repo privado_ o una rama concreta usando los parámetros adecuados, por ejemplo: ```git credentialsId: 'my-private-key-credential-id', branch: 'main', url: 'https://github.com/usuario/repoPrivado.git'```. Previamente has debido https://www.jenkins.io/doc/book/using/using-credentials/#adding-new-global-credentials[crear una credencial, window="_blank"] con el ID `my-private-key-credential-id`. Se recomienda usar credenciales de tipo *Username and password*, donde el _password_ debe ser un _token_ generado en GitHub. El token se genera en GitHub, sobre tu usuario: _Settings, Developer Settings, Personal Access tokens, Generate New Token_, y marcar las opciones de _repo_. Si necesitas hacer alguna otra parametrización, se recomienda usar el https://www.jenkins.io/doc/book/pipeline/getting-started/#snippet-generator[Snippet Generator, window="_blank"].
+<1> El step `git` clona el *repositorio https://www.jenkins.io/doc/pipeline/steps/git/[git]*. En este ejemplo se trata de un repositorio público. También, puedes clonar un _repo privado_ o una rama concreta usando los parámetros adecuados, por ejemplo: ```git credentialsId: 'my-private-key-credential-id', branch: 'main', url: 'https://github.com/usuario/repoPrivado.git'```. Previamente has debido https://www.jenkins.io/doc/book/using/using-credentials/#adding-new-global-credentials[crear una credencial, window="blank"] con el ID `my-private-key-credential-id`. Se recomienda usar credenciales de tipo *Username and password*, donde el _password_ debe ser un _token_ generado en GitHub. El token se genera en GitHub, sobre tu usuario: _Settings, Developer Settings, Personal Access tokens, Generate New Token_, y marcar las opciones de _repo_. Si necesitas hacer alguna otra parametrización, se recomienda usar el https://www.jenkins.io/doc/book/pipeline/getting-started/#snippet-generator[Snippet Generator, window="blank"].
 <2> Fase de build: *compilación, test y empaquetado* de la aplicación. 
 <3> Se llama a maven con los  __goals__ `clean package`: elimina todo lo generado en la construcción anterior, y a continuación se lanza la construcción con `package` tal y como está definida en el archivo `pom.xml`. Cuando sea necesario, indique el path al archivo `pom.xml` con el parámetro `-f path-to/pom.xml`
 <4> Paso *posterior al build*, que guarda los resultados de los test de JUnit para generar la gráfica de evolución de los test. Además, https://www.jenkins.io/doc/pipeline/steps/core/#archiveartifacts-archive-the-artifacts[archiva el empaquetado] `.jar` para que pueda ser descargado posteriormente
@@ -710,3 +732,7 @@ En esta sección se añadirán soluciones a los problemas más habituales.
 
 . *La construcción de maven funciona correctamente en Eclipse pero da error en Jenkins*: 
 .. Revisa la versión de maven instalada en Jenkins, y actualiza a la última versión: En _Jenkins_ / _Manage Jenkins_ / _Global Tool Configuration_ / _Maven Installations_. Selecciona la última versión disponible, marca install automatically, y dale un nombre por ejemplo `Default Maven`. *IMPORTANTE*: si tienes más de una instalación de maven, en los proyectos de tipo maven tendrás que elegir cual deseas usar a partir del nombre que le hayas dado a cada una de ellas, seleccionandola en una lista desplegable en la sección de build. 
+
+. *La fase de documentación del pipeline da error JAVA_HOME*:
+.. Si se muestra el error: `An error has occurred in Javadoc report generation: Unable to find javadoc command: The environment variable JAVA_HOME is not correctly set.` 
+Debes añadir la variable de entorno `JAVA_HOME` en la configuración de Jenkins: Jenkins > Manage Jenkins > Configure System > Global properties > Add environment variable. Añade la variable `JAVA_HOME` con el valor de la ruta de instalación de Java, por ejemplo: `/usr/lib/jvm/java-11-openjdk-amd64/`

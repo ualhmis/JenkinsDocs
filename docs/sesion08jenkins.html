@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="generator" content="Asciidoctor 2.0.17">
+<meta name="generator" content="Asciidoctor 2.0.18">
 <meta name="keywords" content="CI/CD Jenkins Pipelines NodeJs Docker KeystoneJs">
 <title>Actividad 8. Integración Continua con Jenkins</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic%7CNoto+Serif:400,400italic,700,700italic%7CDroid+Sans+Mono:400,700">
@@ -85,10 +85,10 @@ code{font-family:"Droid Sans Mono","DejaVu Sans Mono",monospace;font-weight:400;
 ul,ol,dl{line-height:1.6;margin-bottom:1.25em;list-style-position:outside;font-family:inherit}
 ul,ol{margin-left:1.5em}
 ul li ul,ul li ol{margin-left:1.25em;margin-bottom:0}
-ul.square li ul,ul.circle li ul,ul.disc li ul{list-style:inherit}
-ul.square{list-style-type:square}
 ul.circle{list-style-type:circle}
 ul.disc{list-style-type:disc}
+ul.square{list-style-type:square}
+ul.circle ul:not([class]),ul.disc ul:not([class]),ul.square ul:not([class]){list-style:inherit}
 ol li ul,ol li ol{margin-left:1.25em;margin-bottom:0}
 dl dt{margin-bottom:.3125em;font-weight:bold}
 dl dd{margin-bottom:1.25em}
@@ -440,220 +440,119 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <style>
 pre.rouge table td { padding: 5px; }
 pre.rouge table pre { margin: 0; }
-pre.rouge .cm {
-  color: #999988;
-  font-style: italic;
+pre.rouge, pre.rouge .w {
+  color: #24292f;
+  background-color: #f6f8fa;
 }
-pre.rouge .cp {
-  color: #999999;
-  font-weight: bold;
-}
-pre.rouge .c1 {
-  color: #999988;
-  font-style: italic;
-}
-pre.rouge .cs {
-  color: #999999;
-  font-weight: bold;
-  font-style: italic;
-}
-pre.rouge .c, pre.rouge .ch, pre.rouge .cd, pre.rouge .cpf {
-  color: #999988;
-  font-style: italic;
-}
-pre.rouge .err {
-  color: #a61717;
-  background-color: #e3d2d2;
-}
-pre.rouge .gd {
-  color: #000000;
-  background-color: #ffdddd;
-}
-pre.rouge .ge {
-  color: #000000;
-  font-style: italic;
+pre.rouge .k, pre.rouge .kd, pre.rouge .kn, pre.rouge .kp, pre.rouge .kr, pre.rouge .kt, pre.rouge .kv {
+  color: #cf222e;
 }
 pre.rouge .gr {
-  color: #aa0000;
+  color: #f6f8fa;
 }
-pre.rouge .gh {
-  color: #999999;
+pre.rouge .gd {
+  color: #82071e;
+  background-color: #ffebe9;
+}
+pre.rouge .nb {
+  color: #953800;
+}
+pre.rouge .nc {
+  color: #953800;
+}
+pre.rouge .no {
+  color: #953800;
+}
+pre.rouge .nn {
+  color: #953800;
+}
+pre.rouge .sr {
+  color: #116329;
+}
+pre.rouge .na {
+  color: #116329;
+}
+pre.rouge .nt {
+  color: #116329;
 }
 pre.rouge .gi {
-  color: #000000;
-  background-color: #ddffdd;
+  color: #116329;
+  background-color: #dafbe1;
 }
-pre.rouge .go {
-  color: #888888;
+pre.rouge .kc {
+  color: #0550ae;
 }
-pre.rouge .gp {
-  color: #555555;
+pre.rouge .l, pre.rouge .ld, pre.rouge .m, pre.rouge .mb, pre.rouge .mf, pre.rouge .mh, pre.rouge .mi, pre.rouge .il, pre.rouge .mo, pre.rouge .mx {
+  color: #0550ae;
 }
-pre.rouge .gs {
+pre.rouge .sb {
+  color: #0550ae;
+}
+pre.rouge .bp {
+  color: #0550ae;
+}
+pre.rouge .ne {
+  color: #0550ae;
+}
+pre.rouge .nl {
+  color: #0550ae;
+}
+pre.rouge .py {
+  color: #0550ae;
+}
+pre.rouge .nv, pre.rouge .vc, pre.rouge .vg, pre.rouge .vi, pre.rouge .vm {
+  color: #0550ae;
+}
+pre.rouge .o, pre.rouge .ow {
+  color: #0550ae;
+}
+pre.rouge .gh {
+  color: #0550ae;
   font-weight: bold;
 }
 pre.rouge .gu {
-  color: #aaaaaa;
-}
-pre.rouge .gt {
-  color: #aa0000;
-}
-pre.rouge .kc {
-  color: #000000;
+  color: #0550ae;
   font-weight: bold;
 }
-pre.rouge .kd {
-  color: #000000;
-  font-weight: bold;
-}
-pre.rouge .kn {
-  color: #000000;
-  font-weight: bold;
-}
-pre.rouge .kp {
-  color: #000000;
-  font-weight: bold;
-}
-pre.rouge .kr {
-  color: #000000;
-  font-weight: bold;
-}
-pre.rouge .kt {
-  color: #445588;
-  font-weight: bold;
-}
-pre.rouge .k, pre.rouge .kv {
-  color: #000000;
-  font-weight: bold;
-}
-pre.rouge .mf {
-  color: #009999;
-}
-pre.rouge .mh {
-  color: #009999;
-}
-pre.rouge .il {
-  color: #009999;
-}
-pre.rouge .mi {
-  color: #009999;
-}
-pre.rouge .mo {
-  color: #009999;
-}
-pre.rouge .m, pre.rouge .mb, pre.rouge .mx {
-  color: #009999;
-}
-pre.rouge .sa {
-  color: #000000;
-  font-weight: bold;
-}
-pre.rouge .sb {
-  color: #d14;
-}
-pre.rouge .sc {
-  color: #d14;
-}
-pre.rouge .sd {
-  color: #d14;
-}
-pre.rouge .s2 {
-  color: #d14;
-}
-pre.rouge .se {
-  color: #d14;
-}
-pre.rouge .sh {
-  color: #d14;
-}
-pre.rouge .si {
-  color: #d14;
-}
-pre.rouge .sx {
-  color: #d14;
-}
-pre.rouge .sr {
-  color: #009926;
-}
-pre.rouge .s1 {
-  color: #d14;
-}
-pre.rouge .ss {
-  color: #990073;
-}
-pre.rouge .s, pre.rouge .dl {
-  color: #d14;
-}
-pre.rouge .na {
-  color: #008080;
-}
-pre.rouge .bp {
-  color: #999999;
-}
-pre.rouge .nb {
-  color: #0086B3;
-}
-pre.rouge .nc {
-  color: #445588;
-  font-weight: bold;
-}
-pre.rouge .no {
-  color: #008080;
+pre.rouge .s, pre.rouge .sa, pre.rouge .sc, pre.rouge .dl, pre.rouge .sd, pre.rouge .s2, pre.rouge .se, pre.rouge .sh, pre.rouge .sx, pre.rouge .s1, pre.rouge .ss {
+  color: #0a3069;
 }
 pre.rouge .nd {
-  color: #3c5d5d;
-  font-weight: bold;
-}
-pre.rouge .ni {
-  color: #800080;
-}
-pre.rouge .ne {
-  color: #990000;
-  font-weight: bold;
+  color: #8250df;
 }
 pre.rouge .nf, pre.rouge .fm {
-  color: #990000;
+  color: #8250df;
+}
+pre.rouge .err {
+  color: #f6f8fa;
+  background-color: #82071e;
+}
+pre.rouge .c, pre.rouge .ch, pre.rouge .cd, pre.rouge .cm, pre.rouge .cp, pre.rouge .cpf, pre.rouge .c1, pre.rouge .cs {
+  color: #6e7781;
+}
+pre.rouge .gl {
+  color: #6e7781;
+}
+pre.rouge .gt {
+  color: #6e7781;
+}
+pre.rouge .ni {
+  color: #24292f;
+}
+pre.rouge .si {
+  color: #24292f;
+}
+pre.rouge .ge {
+  color: #24292f;
+  font-style: italic;
+}
+pre.rouge .gs {
+  color: #24292f;
   font-weight: bold;
-}
-pre.rouge .nl {
-  color: #990000;
-  font-weight: bold;
-}
-pre.rouge .nn {
-  color: #555555;
-}
-pre.rouge .nt {
-  color: #000080;
-}
-pre.rouge .vc {
-  color: #008080;
-}
-pre.rouge .vg {
-  color: #008080;
-}
-pre.rouge .vi {
-  color: #008080;
-}
-pre.rouge .nv, pre.rouge .vm {
-  color: #008080;
-}
-pre.rouge .ow {
-  color: #000000;
-  font-weight: bold;
-}
-pre.rouge .o {
-  color: #000000;
-  font-weight: bold;
-}
-pre.rouge .w {
-  color: #bbbbbb;
-}
-pre.rouge {
-  background-color: #f8f8f8;
 }
 </style>
 </head>
-<body class="book toc2 toc-right">
+<body class="book toc2 toc-right doc">
 <div id="header">
 <h1>Actividad 8. Integración Continua con Jenkins</h1>
 <div id="toc" class="toc2">
@@ -874,11 +773,35 @@ La entrega será mediante el envío de un informe y el acceso al profesor a los 
 sudo apt-get upgrade -y</pre>
 </div>
 </div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>A partir de marzo 2023 hay que <a href="https://www.jenkins.io/blog/2023/03/27/repository-signing-keys-changing/">actualizar las claves de firma de Jenkins</a></p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="rouge highlight"><code data-lang="bash">curl <span class="nt">-fsSL</span> https://pkg.jenkins.io/debian-stable/jenkins.io-2023.key | <span class="nb">sudo tee</span> <span class="se">\</span>
+  /usr/share/keyrings/jenkins-keyring.asc <span class="o">&gt;</span> /dev/null
+
+<span class="nb">echo </span>deb <span class="o">[</span>signed-by<span class="o">=</span>/usr/share/keyrings/jenkins-keyring.asc] <span class="se">\</span>
+  https://pkg.jenkins.io/debian-stable binary/ | <span class="nb">sudo tee</span> <span class="se">\</span>
+  /etc/apt/sources.list.d/jenkins.list <span class="o">&gt;</span> /dev/null</code></pre>
+</div>
+</div>
+</td>
+</tr>
+</table>
+</div>
 <div class="paragraph">
 <p>Tras la actualización y reinicio de Jenkins, vamos a instalar varios plugins adicionales en Jenkins, si aun no están instalados: Github integration, Maven Integration, Cobertura, Jacoco (comprobar antes si no están instalados ya), Code Coverage Api, JavaDoc, Warnings Next Generation, Embeddable Build Status Plugin, xUnit, Monitoring, etc.</p>
 </div>
 <div class="paragraph">
-<p>Haz clic en <em>Manage Jenkins</em> &gt; <em>Manage Plugins</em>. En la pestaña <em>Available</em> busca <em>Github integration</em>, seleccionaló y pulsa en <em>Download now and install after restart</em>.</p>
+<p>Haz clic en <em>Manage Jenkins</em> &gt; <em>Manage Plugins</em>. En la pestaña <em>Available</em> busca <em>Github integration</em>, seleccionalo y pulsa en <em>Download now and install after restart</em>.</p>
 </div>
 <div class="imageblock text-center thumb">
 <div class="content">
@@ -1364,7 +1287,7 @@ Por consola se visualiza el resultado de la ejecución de maven.</p>
 <div class="sect2">
 <h3 id="_añadiendo_javadoc_y_site">6.4. Añadiendo Javadoc y Site</h3>
 <div class="olist arabic">
-<ol class="arabic" start="10">
+<ol class="arabic" start="11">
 <li>
 <p>Para generar la documentación en <em>Javadoc</em> y publicarla en la página del proyecto, simplemente añade los <em>goals</em> <code>javadoc:javadoc javadoc:aggregate</code>.</p>
 </li>
@@ -1380,15 +1303,15 @@ Por consola se visualiza el resultado de la ejecución de maven.</p>
 <div class="title">Fig. 28. Javadoc y Site</div>
 </div>
 <div class="olist arabic">
-<ol class="arabic" start="12">
+<ol class="arabic" start="13">
 <li>
-<p>Para poder visualizar correctamente el <em>Site</em>, hay que cambiar la <a href="https://www.jenkins.io/doc/book/security/configuring-content-security-policy/" target="<em>blank">configuración de seguridad</a> de Jenkins predeterminada que es muy restrictiva para prevenir de archivos HTML/JS maliciosos. Para modificar la configuración, abre la consola de scritps (_Manage Jenkins / Script Console</em>), y ejecuta estas líneas:</p>
+<p>Para poder visualizar correctamente el <em>Site</em>, hay que cambiar la <a href="https://www.jenkins.io/doc/book/security/configuring-content-security-policy/" target="blank">configuración de seguridad</a> de Jenkins predeterminada que es muy restrictiva para prevenir de archivos HTML/JS maliciosos. Para modificar la configuración, abre la consola de scritps (<em>Manage Jenkins</em> / <em>Script Console</em>), y ejecuta estas líneas para desestablecer la cabecera:</p>
 </li>
 </ol>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="rouge highlight"><code data-lang="groovy"><span class="n">System</span><span class="o">.</span><span class="na">setProperty</span><span class="o">(</span><span class="s2">"hudson.model.DirectoryBrowserSupport.CSP"</span><span class="o">,</span> <span class="s2">"sandbox; default-src 'none'; img-src 'self'; style-src 'self' 'unsafe-inline'; "</span><span class="o">)</span>
+<pre class="rouge highlight"><code data-lang="groovy"><span class="n">System</span><span class="o">.</span><span class="na">setProperty</span><span class="o">(</span><span class="s2">"hudson.model.DirectoryBrowserSupport.CSP"</span><span class="o">,</span> <span class="s2">""</span><span class="o">)</span>
 <span class="n">System</span><span class="o">.</span><span class="na">getProperty</span><span class="o">(</span><span class="s2">"hudson.model.DirectoryBrowserSupport.CSP"</span><span class="o">)</span></code></pre>
 </div>
 </div>
@@ -1399,7 +1322,7 @@ Por consola se visualiza el resultado de la ejecución de maven.</p>
 <div class="title">Fig. 29. Script Console: permisos para visualizar <em>Site</em></div>
 </div>
 <div class="olist arabic">
-<ol class="arabic" start="13">
+<ol class="arabic" start="14">
 <li>
 <p>Tras ello ya podrás visualizar correctamente. Pero ten en cuenta que cada vez que reinicies Jenkins esta configuración  se pierde y vuelve a la configuración predeterminada.</p>
 </li>
@@ -1478,7 +1401,7 @@ Por consola se visualiza el resultado de la ejecución de maven.</p>
     <span class="n">stage</span><span class="o">(</span><span class="s1">'Git fetch'</span><span class="o">)</span> <span class="o">{</span> <i class="conum" data-value="1"></i><b>(1)</b>
       <span class="n">steps</span> <span class="o">{</span>
         <span class="c1">// Get some code from a GitHub repository</span>
-        <span class="n">git</span> <span class="s1">'https://github.com/ualhmis/MavenEjercicios.git'</span>
+        <span class="n">git</span> <span class="nl">branch:</span> <span class="s1">'main'</span><span class="o">,</span> <span class="nl">url:</span> <span class="s1">'https://github.com/ualhmis/MavenEjercicios'</span>
       <span class="o">}</span>
     <span class="o">}</span>
     <span class="n">stage</span><span class="o">(</span><span class="s1">'Compile, Test, Package'</span><span class="o">)</span> <span class="o">{</span> <i class="conum" data-value="2"></i><b>(2)</b>
@@ -1503,7 +1426,7 @@ Por consola se visualiza el resultado de la ejecución de maven.</p>
 <table>
 <tr>
 <td><i class="conum" data-value="1"></i><b>1</b></td>
-<td>El step <code>git</code> clona el <strong>repositorio <a href="https://www.jenkins.io/doc/pipeline/steps/git/">git</a></strong>. En este ejemplo se trata de un repositorio público. También, puedes clonar un <em>repo privado</em> o una rama concreta usando los parámetros adecuados, por ejemplo: <code><code>git credentialsId: 'my-private-key-credential-id', branch: 'main', url: 'https://github.com/usuario/repoPrivado.git'</code></code>. Previamente has debido <a href="https://www.jenkins.io/doc/book/using/using-credentials/#adding-new-global-credentials" target="<em>blank">crear una credencial</a> con el ID <code>my-private-key-credential-id</code>. Se recomienda usar credenciales de tipo <strong>Username and password</strong>, donde el _password</em> debe ser un <em>token</em> generado en GitHub. El token se genera en GitHub, sobre tu usuario: <em>Settings, Developer Settings, Personal Access tokens, Generate New Token</em>, y marcar las opciones de <em>repo</em>. Si necesitas hacer alguna otra parametrización, se recomienda usar el <a href="https://www.jenkins.io/doc/book/pipeline/getting-started/#snippet-generator" target="_blank" rel="noopener">Snippet Generator</a>.</td>
+<td>El step <code>git</code> clona el <strong>repositorio <a href="https://www.jenkins.io/doc/pipeline/steps/git/">git</a></strong>. En este ejemplo se trata de un repositorio público. También, puedes clonar un <em>repo privado</em> o una rama concreta usando los parámetros adecuados, por ejemplo: <code><code>git credentialsId: 'my-private-key-credential-id', branch: 'main', url: 'https://github.com/usuario/repoPrivado.git'</code></code>. Previamente has debido <a href="https://www.jenkins.io/doc/book/using/using-credentials/#adding-new-global-credentials" target="blank">crear una credencial</a> con el ID <code>my-private-key-credential-id</code>. Se recomienda usar credenciales de tipo <strong>Username and password</strong>, donde el <em>password</em> debe ser un <em>token</em> generado en GitHub. El token se genera en GitHub, sobre tu usuario: <em>Settings, Developer Settings, Personal Access tokens, Generate New Token</em>, y marcar las opciones de <em>repo</em>. Si necesitas hacer alguna otra parametrización, se recomienda usar el <a href="https://www.jenkins.io/doc/book/pipeline/getting-started/#snippet-generator" target="blank">Snippet Generator</a>.</td>
 </tr>
 <tr>
 <td><i class="conum" data-value="2"></i><b>2</b></td>
@@ -1896,6 +1819,17 @@ Por consola se visualiza el resultado de la ejecución de maven.</p>
 </ol>
 </div>
 </li>
+<li>
+<p><strong>La fase de documentación del pipeline da error JAVA_HOME</strong>:</p>
+<div class="olist loweralpha">
+<ol class="loweralpha" type="a">
+<li>
+<p>Si se muestra el error: <code>An error has occurred in Javadoc report generation: Unable to find javadoc command: The environment variable JAVA_HOME is not correctly set.</code>
+Debes añadir la variable de entorno <code>JAVA_HOME</code> en la configuración de Jenkins: Jenkins &gt; Manage Jenkins &gt; Configure System &gt; Global properties &gt; Add environment variable. Añade la variable <code>JAVA_HOME</code> con el valor de la ruta de instalación de Java, por ejemplo: <code>/usr/lib/jvm/java-11-openjdk-amd64/</code></p>
+</li>
+</ol>
+</div>
+</li>
 </ol>
 </div>
 </div>
@@ -1903,8 +1837,102 @@ Por consola se visualiza el resultado de la ejecución de maven.</p>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2022-06-07 10:58:27 +0200
+Last updated 2023-05-23 12:02:26 +0200
 </div>
 </div>
+<style>
+    .doc .listingblock > .content {
+      position: relative;
+    }
+
+    .doc .listingblock code[data-lang]::before {
+      content: none;
+    }
+
+    .doc .source-toolbox {
+      display: flex;
+      position: absolute;
+      visibility: hidden;
+      top: 0.25rem;
+      right: 0.5rem;
+      color: #808080;
+      white-space: nowrap;
+      font-size: 0.85em;
+    }
+
+    .doc .listingblock:hover .source-toolbox {
+      visibility: visible;
+    }
+
+    .doc .source-toolbox .source-lang {
+      font-family: "Droid Sans Mono", "DejaVu Sans Mono", monospace;
+      text-transform: uppercase;
+      letter-spacing: 0.075em;
+    }
+
+    .doc .source-toolbox > :not(:last-child)::after {
+      content: "|";
+      letter-spacing: 0;
+      padding: 0 1ch;
+    }
+
+    .doc .source-toolbox .copy-button {
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      background: none;
+      border: none;
+      color: inherit;
+      outline: none;
+      padding: 0;
+      font-family: inherit;
+      font-size: inherit;
+      line-height: inherit;
+      width: 1em;
+      height: 1em;
+    }
+
+    .doc .source-toolbox .copy-icon {
+      flex: none;
+      width: inherit;
+      height: inherit;
+      filter: invert(50.2%);
+      margin-top: 0.05em;
+    }
+
+    .doc .source-toolbox .copy-toast {
+      flex: none;
+      position: relative;
+      display: inline-flex;
+      justify-content: center;
+      margin-top: 1em;
+      border-radius: 0.25em;
+      padding: 0.5em;
+      cursor: auto;
+      opacity: 0;
+      transition: opacity 0.5s ease 0.75s;
+      background: rgba(0, 0, 0, 0.8);
+      color: #fff;
+    }
+
+    .doc .source-toolbox .copy-toast::after {
+      content: "";
+      position: absolute;
+      top: 0;
+      width: 1em;
+      height: 1em;
+      border: 0.55em solid transparent;
+      border-left-color: rgba(0, 0, 0, 0.8);
+      transform: rotate(-90deg) translateX(50%) translateY(50%);
+      transform-origin: left;
+    }
+
+    .doc .source-toolbox .copy-button.clicked .copy-toast {
+      opacity: 1;
+      transition: none;
+    }
+    </style>
+    <script src="copy-to-clipboard.js"></script>
 </body>
 </html>
